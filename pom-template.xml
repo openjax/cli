@@ -6,11 +6,11 @@
 	<parent>
 		<groupId>org.safris</groupId>
 		<artifactId>commons</artifactId>
-		<version>${org.safris.commons}</version>
+		<version>${dev:org.safris.commons}</version>
 	</parent>
 	<groupId>org.safris.commons</groupId>
 	<artifactId>cli</artifactId>
-	<version>${org.safris.commons.cli}</version>
+	<version>${dev:org.safris.commons.cli}</version>
 	<name>${groupId}.${artifactId}</name>
 	<description>
 		Command-line interface.
@@ -20,7 +20,7 @@
             <plugin>
                 <groupId>org.safris.xml.maven</groupId>
                 <artifactId>binding</artifactId>
-				<version>1.0.5</version>
+				<version>${stable:org.safris.xml.maven.binding}</version>
 				<executions>
 					<execution>
 						<phase>generate-sources</phase>
@@ -46,12 +46,12 @@
         <dependency>
             <groupId>org.safris.xml.toolkit</groupId>
             <artifactId>binding</artifactId>
-			<version>1.0.5</version>
+			<version>${stable:org.safris.xml.maven.binding}</version>
         </dependency>
         <dependency>
             <groupId>org.safris.commons</groupId>
             <artifactId>el</artifactId>
-			<version>${org.safris.commons.el}</version>
+			<version>${dev:org.safris.commons.el}</version>
         </dependency>
         <dependency>
             <groupId>commons-cli</groupId>
