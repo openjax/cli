@@ -15,6 +15,33 @@
 	<description>
 		Command-line interface.
 	</description>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.safris.xml.maven</groupId>
+                <artifactId>binding</artifactId>
+				<version>${stable:org.safris.xml.maven.binding}</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+                    <manifest xmlns="http://xml.safris.org/toolkit/binding/manifest.xsd">
+                        <destdir explodeJars="true" overwrite="true">
+                            ${project.build.directory}/generated-sources/xmlbinding
+                        </destdir>
+                        <schemas>
+                            <schema>${basedir}/src/main/resources/xsd/cli.xsd</schema>
+                        </schemas>
+                    </manifest>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 	<dependencies>
 		<dependency>
 			<groupId>org.safris.xml.toolkit</groupId>
