@@ -31,7 +31,7 @@
 				</executions>
 				<configuration>
                     <manifest xmlns="http://xml.safris.org/toolkit/binding/manifest.xsd">
-                        <destdir explodeJars="true" overwrite="true">
+                        <destdir explodeJars="true">
                             ${project.build.directory}/generated-sources/xmlbinding
                         </destdir>
                         <schemas>
