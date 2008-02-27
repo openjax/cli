@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<startingPoints
+	xmlns="http://ide.safris.org/common/starting-points.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://ide.safris.org/common/starting-points.xsd ../../ide/common/src/main/resources/xsd/starting-points.xsd">
+	<startingPoint>
+		<commandLineArguments/>
+		<name>OptionsTest</name>
+		<target>org.safris.commons.cli.OptionsTest</target>
+		<vmOtherOptions/>
+		<workingDir/>
+	</startingPoint>
+</startingPoints>

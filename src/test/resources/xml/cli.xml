@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<arguments
+	xmlns="http://commons.safris.org/cli.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://commons.safris.org/cli.xsd ../../../main/resources/xsd/cli.xsd">
+
+	<option required="true" valueSeparator="=">
+		<name long="date" short="D"/>
+		<argument name="yyMMdd" use="optional"/>
+		<description>use the yyMMdd date</description>
+	</option>
+
+	<option required="true">
+		<name long="user" short="U"/>
+		<argument name="USER" use="required" default="asgus"/>
+		<description>run on the specified USER</description>
+	</option>
+
+	<option>
+		<name long="silent" short="A"/>
+		<description>silent mode</description>
+	</option>
+
+	<option>
+		<name long="verbose" short="V"/>
+		<description>verbose mode</description>
+	</option>
+
+</arguments>
