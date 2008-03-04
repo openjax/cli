@@ -15,14 +15,14 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.PosixParser;
 import org.safris.commons.el.ELs;
 import org.safris.commons.el.ExpressionFormatException;
-import org.safris.commons.xml.validator.DefaultValidator;
 import org.safris.commons.xml.validator.Validator;
+import org.safris.xml.generator.compiler.runtime.BindingValidator;
 
 public final class Options
 {
 	static
 	{
-		Validator.setSystemValidator(new DefaultValidator());
+		Validator.setSystemValidator(new BindingValidator());
 		Validator.getSystemValidator().setValidateOnParse(true);
 	}
 
