@@ -15,8 +15,8 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.PosixParser;
 import org.safris.commons.el.ELs;
 import org.safris.commons.el.ExpressionFormatException;
-import org.safris.commons.xml.validation.DefaultValidator;
-import org.safris.commons.xml.validation.Validator;
+import org.safris.commons.xml.validator.DefaultValidator;
+import org.safris.commons.xml.validator.Validator;
 
 public final class Options
 {
