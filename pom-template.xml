@@ -18,9 +18,9 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.safris.xml.maven</groupId>
+                <groupId>org.safris.maven.plugin.xml</groupId>
                 <artifactId>binding</artifactId>
-				<version>${dev:org.safris.xml.maven.binding}</version>
+				<version>${dev:org.safris.maven.plugin.xml.binding}</version>
 				<executions>
 					<execution>
 						<phase>generate-sources</phase>
@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>org.safris.xml.toolkit</groupId>
 			<artifactId>binding</artifactId>
-			<version>${dev:org.safris.xml.maven.binding}</version>
+			<version>${dev:org.safris.xml.toolkit.binding}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.safris.commons</groupId>
