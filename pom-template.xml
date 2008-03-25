@@ -15,11 +15,11 @@
 	<description>
 		Command-line interface.
 	</description>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.safris.maven.plugin.xml</groupId>
-                <artifactId>binding</artifactId>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.safris.maven.plugin.xml</groupId>
+				<artifactId>binding</artifactId>
 				<version>${dev:org.safris.maven.plugin.xml.binding}</version>
 				<executions>
 					<execution>
@@ -30,18 +30,33 @@
 					</execution>
 				</executions>
 				<configuration>
-                    <manifest xmlns="http://xml.safris.org/toolkit/binding/manifest.xsd">
-                        <destdir explodeJars="true">
+					<manifest
+						xmlns="http://xml.safris.org/toolkit/binding/manifest.xsd">
+						<destdir
+							explodeJars="true">
                             ${project.build.directory}/generated-sources/xmlbinding
                         </destdir>
-                        <schemas>
-                            <schema>${basedir}/src/main/resources/xsd/cli.xsd</schema>
-                        </schemas>
-                    </manifest>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+						<schemas>
+							<schema>${basedir}/src/main/resources/xsd/cli.xsd</schema>
+						</schemas>
+					</manifest>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.safris.maven.plugin</groupId>
+				<artifactId>cobertura</artifactId>
+				<version>${dev:org.safris.maven.plugin.cobertura}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>instrument</goal>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 	<dependencies>
 		<dependency>
 			<groupId>org.safris.xml.toolkit</groupId>
