@@ -34,7 +34,7 @@ public class OptionsTest
 			"--verbose"
 		};
 
-		final CliArguments arguments = (CliArguments)Bindings.parse(new InputSource(new FileInputStream("src/test/resources/xml/cli.xml")));
+		final cli_arguments arguments = (cli_arguments)Bindings.parse(new InputSource(new FileInputStream("src/test/resources/xml/cli.xml")));
 		final Options options = Options.parse(arguments, args);
 		main(options);
 		assertEquals("user != someuser", "someuser", options.getOption("user").getValue());
