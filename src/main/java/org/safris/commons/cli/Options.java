@@ -43,8 +43,6 @@ public final class Options
 
 	public static Options parse(cli_arguments cliArguments, String[] args) throws OptionsException
 	{
-		if(cliArguments == null)
-			return null;
 
 		final Set<String> requiredLongNames = new HashSet<String>();
 		final Map<String,String> longNameToShortName = new HashMap<String,String>();
@@ -52,40 +50,43 @@ public final class Options
 		final org.apache.commons.cli.Options apacheOptions = new org.apache.commons.cli.Options();
 		apacheOptions.addOption("help", "help", false, "Print help and usage.");
 		final Map<String,cli_arguments._option> bgiOptions = new HashMap<String,cli_arguments._option>();
-		for(cli_arguments._option option : cliArguments.get_option())
+		if(cliArguments != null)
 		{
-			final cli_arguments._option._name name = option.get_name().get(0);
-			final String longName = name.get_long$().getText();
-			final String shortName = name.get_short$().getText();
-			longNameToShortName.put(longName, shortName);
-			bgiOptions.put(longName, option);
-			OptionBuilder optionBuilder = OptionBuilder.withLongOpt(longName);
-			if(option.get_argument() != null && option.get_argument().size() != 0)
+			for(cli_arguments._option option : cliArguments.get_option())
 			{
-				final cli_arguments._option._argument argument = option.get_argument().get(0);
-				final String use = argument.get_use$().getText();
-				if(cli_arguments._option._argument._use$.REQUIRED.getText().equals(use))
-					optionBuilder = optionBuilder.hasArg();
-				else if(cli_arguments._option._argument._use$.OPTIONAL.getText().equals(use))
-					optionBuilder = optionBuilder.hasOptionalArg();
+				final cli_arguments._option._name name = option.get_name().get(0);
+				final String longName = name.get_long$().getText();
+				final String shortName = name.get_short$().getText();
+				longNameToShortName.put(longName, shortName);
+				bgiOptions.put(longName, option);
+				OptionBuilder optionBuilder = OptionBuilder.withLongOpt(longName);
+				if(option.get_argument() != null && option.get_argument().size() != 0)
+				{
+					final cli_arguments._option._argument argument = option.get_argument().get(0);
+					final String use = argument.get_use$().getText();
+					if(cli_arguments._option._argument._use$.REQUIRED.getText().equals(use))
+						optionBuilder = optionBuilder.hasArg();
+					else if(cli_arguments._option._argument._use$.OPTIONAL.getText().equals(use))
+						optionBuilder = optionBuilder.hasOptionalArg();
 
-				final String argumentName = argument.get_name$().getText();
-				shortNameToArgumentName.put(shortName, argumentName);
-				optionBuilder = optionBuilder.withArgName(argumentName);
+					final String argumentName = argument.get_name$().getText();
+					shortNameToArgumentName.put(shortName, argumentName);
+					optionBuilder = optionBuilder.withArgName(argumentName);
+				}
+
+				// Record which arguments are required
+				if(option.get_required$() != null && option.get_required$().getText())
+					requiredLongNames.add(longName);
+
+				optionBuilder = optionBuilder.withValueSeparator(option.get_valueSeparator$() != null && option.get_valueSeparator$().getText() != null ? option.get_valueSeparator$().getText().charAt(0) : ' ');
+				// FIXME: Throw an error in case we dont match the condition!
+				if(option.get_description() != null && option.get_description().size() != 0)
+					optionBuilder = optionBuilder.withDescription(option.get_description().get(0).getText());
+
+				// FIXME: Throw an error in case we dont match the condition!
+				if(option.get_name() != null && option.get_name().size() != 0 && name.get_short$() != null)
+					apacheOptions.addOption(optionBuilder.create(name.get_short$().getText()));
 			}
-
-			// Record which arguments are required
-			if(option.get_required$() != null && option.get_required$().getText())
-				requiredLongNames.add(longName);
-
-			optionBuilder = optionBuilder.withValueSeparator(option.get_valueSeparator$() != null && option.get_valueSeparator$().getText() != null ? option.get_valueSeparator$().getText().charAt(0) : ' ');
-			// FIXME: Throw an error in case we dont match the condition!
-			if(option.get_description() != null && option.get_description().size() != 0)
-				optionBuilder = optionBuilder.withDescription(option.get_description().get(0).getText());
-
-			// FIXME: Throw an error in case we dont match the condition!
-			if(option.get_name() != null && option.get_name().size() != 0 && name.get_short$() != null)
-				apacheOptions.addOption(optionBuilder.create(name.get_short$().getText()));
 		}
 
 		final Map<String,Option> optionsMap = new HashMap<String,Option>();
@@ -144,36 +145,39 @@ public final class Options
 			}
 		}
 
-		try
+		if(cliArguments != null)
 		{
-			for(cli_arguments._option option : cliArguments.get_option())
+			try
 			{
-				if(option.get_name().size() == 0)
-					continue;
-
-				final cli_arguments._option._name name = option.get_name().get(0);
-				if(optionsMap.containsKey(name.get_long$().getText()))
-					continue;
-
-				final cli_arguments._option cliOption = bgiOptions.get(name.get_long$().getText());
-				String value = null;
-				if(cliOption.get_argument() != null && cliOption.get_argument().size() != 0 && cliOption.get_argument().get(0).get_default$() != null)
+				for(cli_arguments._option option : cliArguments.get_option())
 				{
-					value = cliOption.get_argument().get(0).get_default$().getText();
-					value = ELs.dereference(value, System.getenv());
-				}
-				else
-				{
-					value = null;
-				}
+					if(option.get_name().size() == 0)
+						continue;
 
-				optionsMap.put(name.get_long$().getText(), new Option(name.get_long$().getText(), value));
+					final cli_arguments._option._name name = option.get_name().get(0);
+					if(optionsMap.containsKey(name.get_long$().getText()))
+						continue;
+
+					final cli_arguments._option cliOption = bgiOptions.get(name.get_long$().getText());
+					String value = null;
+					if(cliOption.get_argument() != null && cliOption.get_argument().size() != 0 && cliOption.get_argument().get(0).get_default$() != null)
+					{
+						value = cliOption.get_argument().get(0).get_default$().getText();
+						value = ELs.dereference(value, System.getenv());
+					}
+					else
+					{
+						value = null;
+					}
+
+					optionsMap.put(name.get_long$().getText(), new Option(name.get_long$().getText(), value));
+				}
 			}
-		}
-		catch(ExpressionFormatException e)
-		{
-			System.err.println("Error in bootstrap.xml :" + e.getMessage());
-			System.exit(1);
+			catch(ExpressionFormatException e)
+			{
+				System.err.println("Error in bootstrap.xml :" + e.getMessage());
+				System.exit(1);
+			}
 		}
 
 		return new Options(optionsMap.values(), arguments, apacheOptions);
