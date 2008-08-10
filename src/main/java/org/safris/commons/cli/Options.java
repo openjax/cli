@@ -43,7 +43,6 @@ public final class Options
 
 	public static Options parse(cli_arguments cliArguments, String[] args) throws OptionsException
 	{
-
 		final Set<String> requiredLongNames = new HashSet<String>();
 		final Map<String,String> longNameToShortName = new HashMap<String,String>();
 		final Map<String,String> shortNameToArgumentName = new HashMap<String,String>();
@@ -63,11 +62,10 @@ public final class Options
 				if(option.get_argument() != null && option.get_argument().size() != 0)
 				{
 					final cli_arguments._option._argument argument = option.get_argument().get(0);
-					final String use = argument.get_use$().getText();
-					if(cli_arguments._option._argument._use$.REQUIRED.getText().equals(use))
-						optionBuilder = optionBuilder.hasArg();
-					else if(cli_arguments._option._argument._use$.OPTIONAL.getText().equals(use))
+					if(argument.get_use$() == null || cli_arguments._option._argument._use$.OPTIONAL.getText().equals(argument.get_use$().getText()))
 						optionBuilder = optionBuilder.hasOptionalArg();
+					else if(cli_arguments._option._argument._use$.REQUIRED.getText().equals(argument.get_use$().getText()))
+						optionBuilder = optionBuilder.hasArg();
 
 					final String argumentName = argument.get_name$().getText();
 					shortNameToArgumentName.put(shortName, argumentName);
