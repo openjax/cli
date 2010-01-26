@@ -1,4 +1,4 @@
-/*  Copyright 2008 Safris Technologies Inc.
+/*  Copyright 2010 Safris Technologies Inc.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,25 +15,20 @@
 
 package org.safris.commons.cli;
 
-public class OptionsException extends Exception
-{
-	public OptionsException()
-	{
-		super();
-	}
+public class OptionsException extends Exception {
+    public OptionsException() {
+        super();
+    }
 
-	public OptionsException(String message)
-	{
-		super(message);
-	}
+    public OptionsException(String message) {
+        super(message);
+    }
 
-	public OptionsException(String message, Throwable cause)
-	{
-		super(message, cause);
-	}
+    public OptionsException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	public OptionsException(Throwable cause)
-	{
-		super(cause);
-	}
+    public OptionsException(Throwable cause) {
+        super(cause);
+    }
 }
