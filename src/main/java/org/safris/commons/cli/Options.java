@@ -16,7 +16,10 @@
 package org.safris.commons.cli;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,8 +33,11 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.PosixParser;
 import org.safris.commons.el.ELs;
 import org.safris.commons.el.ExpressionFormatException;
+import org.safris.commons.xml.XMLException;
 import org.safris.commons.xml.validator.Validator;
 import org.safris.xml.generator.compiler.runtime.BindingValidator;
+import org.safris.xml.generator.compiler.runtime.Bindings;
+import org.xml.sax.InputSource;
 
 public final class Options {
     static {
@@ -39,20 +45,20 @@ public final class Options {
         Validator.getSystemValidator().setValidateOnParse(true);
     }
 
-    public static Options parse(cli_arguments cliArguments, String[] args) throws OptionsException {
+    public static Options parse(cli_arguments argsDefBinding, String[] args) throws OptionsException {
         final Set<String> requiredLongNames = new HashSet<String>();
         final Map<String,String> longNameToShortName = new HashMap<String,String>();
         final Map<String,String> shortNameToArgumentName = new HashMap<String,String>();
         final org.apache.commons.cli.Options apacheOptions = new org.apache.commons.cli.Options();
         apacheOptions.addOption("help", "help", false, "Print help and usage.");
-        final Map<String,cli_arguments._option> bgiOptions = new HashMap<String,cli_arguments._option>();
-        if (cliArguments != null) {
-            for (cli_arguments._option option : cliArguments.get_option()) {
+        final Map<String,cli_arguments._option> cliOptions = new HashMap<String,cli_arguments._option>();
+        if (argsDefBinding != null) {
+            for (cli_arguments._option option : argsDefBinding.get_option()) {
                 final cli_arguments._option._name name = option.get_name().get(0);
                 final String longName = name.get_long$().getText();
                 final String shortName = name.get_short$().getText();
                 longNameToShortName.put(longName, shortName);
-                bgiOptions.put(longName, option);
+                cliOptions.put(longName, option);
                 OptionBuilder optionBuilder = OptionBuilder.withLongOpt(longName);
                 if (option.get_argument() != null && option.get_argument().size() != 0) {
                     final cli_arguments._option._argument argument = option.get_argument().get(0);
@@ -129,9 +135,10 @@ public final class Options {
             }
         }
 
-        if (cliArguments != null) {
+		// Take care of the default values for unspecified options!
+        if (argsDefBinding != null) {
             try {
-                for (cli_arguments._option option : cliArguments.get_option()) {
+                for (cli_arguments._option option : argsDefBinding.get_option()) {
                     if (option.get_name().size() == 0)
                         continue;
 
@@ -139,14 +146,14 @@ public final class Options {
                     if (optionsMap.containsKey(name.get_long$().getText()))
                         continue;
 
-                    final cli_arguments._option cliOption = bgiOptions.get(name.get_long$().getText());
+                    final cli_arguments._option cliOption = cliOptions.get(name.get_long$().getText());
                     String value = null;
                     if (cliOption.get_argument() != null && cliOption.get_argument().size() != 0 && cliOption.get_argument().get(0).get_default$() != null) {
                         value = cliOption.get_argument().get(0).get_default$().getText();
                         value = ELs.dereference(value, System.getenv());
                     }
                     else {
-                        value = null;
+                        continue;
                     }
 
                     optionsMap.put(name.get_long$().getText(), new Option(name.get_long$().getText(), value));
@@ -161,17 +168,16 @@ public final class Options {
         return new Options(optionsMap.values(), arguments, apacheOptions);
     }
 
-    private final Map<String,Option> optionMap = new HashMap<String,Option>();
+    private Map<String,Option> optionMap = null;
+	private volatile boolean optionMapLock = false;
     private final Collection<Option> options;
     private final Collection<String> arguments;
     private final org.apache.commons.cli.Options apacheOptions;
 
     private Options(Collection<Option> options, Collection<String> arguments, org.apache.commons.cli.Options apacheOptions) {
-        this.options = options;
-        this.arguments = arguments;
+        this.options = Collections.<Option>unmodifiableCollection(options);
+        this.arguments = Collections.<String>unmodifiableCollection(arguments);
         this.apacheOptions = apacheOptions;
-        for (Option option : options)
-            optionMap.put(option.getName(), option);
     }
 
     public Collection<String> getArguments() {
@@ -179,11 +185,25 @@ public final class Options {
     }
 
     public Collection<Option> getOptions() {
-        return Collections.unmodifiableCollection(options);
+        return options;
     }
 
     public Option getOption(String name) {
-        return optionMap.get(name);
+		if (optionMapLock)
+        	return optionMap.get(name);
+
+		synchronized (options) {
+			if (optionMapLock)
+				return optionMap.get(name);
+
+			optionMap = new HashMap<String,Option>();
+			for (Option option : options)
+				optionMap.put(option.getName(), option);
+
+			optionMapLock = true;
+		}
+
+		return optionMap.get(name);
     }
 
     public String toString() {

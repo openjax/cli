@@ -50,6 +50,6 @@ public class OptionsTest {
         assertEquals("user != someuser", "someuser", options.getOption("user").getValue());
         assertEquals("verbose != true", true, Boolean.parseBoolean(options.getOption("verbose").getValue()));
         assertEquals("date != 070919", "070919", options.getOption("date").getValue());
-        assertEquals("silent != null", null, options.getOption("silent").getValue());
+        assertEquals("silent != null", null, options.getOption("silent"));
     }
 }
