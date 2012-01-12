@@ -176,7 +176,7 @@ public final class Options {
 
     private Options(Collection<Option> options, Collection<String> arguments, org.apache.commons.cli.Options apacheOptions) {
         this.options = Collections.<Option>unmodifiableCollection(options);
-        this.arguments = Collections.<String>unmodifiableCollection(arguments);
+        this.arguments = arguments != null ? Collections.<String>unmodifiableCollection(arguments) : null;
         this.apacheOptions = apacheOptions;
     }
 
