@@ -1,83 +1,84 @@
 <!--
-	Copyright 2010 Safris Technologies Inc.
-
-	Licensed under the Apache License, Version 2.0 (the "License");
-	you may not use this file except in compliance with the License.
-	You may obtain a copy of the License at
-
-			http://www.apache.org/licenses/LICENSE-2.0
-
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
+  Copyright Safris Software 2008
+  
+  This code is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <xs:schema
-	elementFormDefault="qualified"
-	targetNamespace="http://commons.safris.org/cli.xsd"
-	xmlns:cli="http://commons.safris.org/cli.xsd"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  elementFormDefault="qualified"
+  targetNamespace="http://commons.safris.org/cli.xsd"
+  xmlns:cli="http://commons.safris.org/cli.xsd"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-	<xs:element name="arguments">
-		<xs:complexType>
-			<xs:sequence minOccurs="0" maxOccurs="unbounded">
-				<xs:element name="option">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="name">
-								<xs:complexType>
-									<xs:attribute name="long" type="cli:NCWName" use="required"/>
-									<xs:attribute name="short" type="cli:NCWName" use="required"/>
-								</xs:complexType>
-							</xs:element>
-							<xs:element name="argument" minOccurs="0">
-								<xs:complexType>
-									<xs:attribute name="name" type="cli:NCWName" use="required"/>
-									<xs:attribute name="use" default="optional">
-										<xs:simpleType>
-											<xs:restriction base="xs:token">
-												<xs:enumeration value="required"/>
-												<xs:enumeration value="optional"/>
-											</xs:restriction>
-										</xs:simpleType>
-									</xs:attribute>
-									<xs:attribute name="default" type="xs:string"/>
-								</xs:complexType>
-							</xs:element>
-							<xs:element name="description" type="xs:string"/>
-						</xs:sequence>
-						<xs:attribute name="required" type="xs:boolean" default="false"/>
-						<xs:attribute name="valueSeparator" type="cli:char" default=" "/>
-					</xs:complexType>
-				</xs:element>
-			</xs:sequence>
-		</xs:complexType>
+  <xs:element name="arguments">
+    <xs:complexType>
+      <xs:sequence minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="option">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="name">
+                <xs:complexType>
+                	<xs:attribute name="long" type="cli:NCWName" use="required"/>
+                	<xs:attribute name="short" type="cli:NCWName" use="required"/>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="argument" minOccurs="0">
+                <xs:complexType>
+                	<xs:attribute name="name" type="cli:NCWName" use="required"/>
+                	<xs:attribute name="use" default="optional">
+                		<xs:simpleType>
+                			<xs:restriction base="xs:token">
+                				<xs:enumeration value="required"/>
+                				<xs:enumeration value="optional"/>
+                			</xs:restriction>
+                		</xs:simpleType>
+                	</xs:attribute>
+                	<xs:attribute name="default" type="xs:string"/>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="description" type="xs:string"/>
+            </xs:sequence>
+            <xs:attribute name="required" type="xs:boolean" default="false"/>
+            <xs:attribute name="valueSeparator" type="cli:char" default=" "/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
 
-		<xs:unique name="uniqueLongName">
-			<xs:selector xpath="cli:option/cli:name"/>
-			<xs:field xpath="@long"/>
-		</xs:unique>
+    <xs:unique name="uniqueLongName">
+      <xs:selector xpath="cli:option/cli:name"/>
+      <xs:field xpath="@long"/>
+    </xs:unique>
 
-		<xs:unique name="uniqueShortName">
-			<xs:selector xpath="cli:option/cli:name"/>
-			<xs:field xpath="@short"/>
-		</xs:unique>
+    <xs:unique name="uniqueShortName">
+      <xs:selector xpath="cli:option/cli:name"/>
+      <xs:field xpath="@short"/>
+    </xs:unique>
 
-	</xs:element>
+  </xs:element>
 
-	<xs:simpleType name="NCWName">
-		<xs:restriction base="xs:NCName">
-			<xs:pattern value="[\S]*"/>
-		</xs:restriction>
-	</xs:simpleType>
+  <xs:simpleType name="NCWName">
+    <xs:restriction base="xs:NCName">
+      <xs:pattern value="[\S]*"/>
+    </xs:restriction>
+  </xs:simpleType>
 
-	<xs:simpleType name="char">
-		<xs:restriction base="xs:normalizedString">
-			<xs:maxLength value="1"/>
-			<xs:minLength value="1"/>
-		</xs:restriction>
-	</xs:simpleType>
+  <xs:simpleType name="char">
+    <xs:restriction base="xs:normalizedString">
+      <xs:maxLength value="1"/>
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
 
 </xs:schema>
