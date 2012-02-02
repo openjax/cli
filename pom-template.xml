@@ -28,7 +28,7 @@
   <groupId>org.safris.commons</groupId>
   <artifactId>cli</artifactId>
   <version>${dev:org.safris.commons.cli}</version>
-  <name>${project.groupdId}.${project.artifactId}</name>
+  <name>${project.groupId}.${project.artifactId}</name>
   <description>
     Command-line interface.
   </description>
