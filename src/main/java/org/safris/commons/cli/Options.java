@@ -49,14 +49,14 @@ public final class Options {
     final Map<String,cli_arguments._option> cliOptions = new HashMap<String,cli_arguments._option>();
     if (argsDefBinding != null) {
       for (cli_arguments._option option : argsDefBinding.get_option()) {
-        final cli_arguments._option._name name = option.get_name().get(0);
+        final cli_arguments._option._name name = option.get_name(0);
         final String longName = name.get_long$().getText();
         final String shortName = name.get_short$().getText();
         longNameToShortName.put(longName, shortName);
         cliOptions.put(longName, option);
         OptionBuilder optionBuilder = OptionBuilder.withLongOpt(longName);
         if (option.get_argument() != null && option.get_argument().size() != 0) {
-          final cli_arguments._option._argument argument = option.get_argument().get(0);
+          final cli_arguments._option._argument argument = option.get_argument(0);
           if (argument.get_use$() == null || cli_arguments._option._argument._use$.OPTIONAL.getText().equals(argument.get_use$().getText()))
             optionBuilder = optionBuilder.hasOptionalArg();
           else if (cli_arguments._option._argument._use$.REQUIRED.getText().equals(argument.get_use$().getText()))
@@ -74,7 +74,7 @@ public final class Options {
         optionBuilder = optionBuilder.withValueSeparator(option.get_valueSeparator$() != null && option.get_valueSeparator$().getText() != null ? option.get_valueSeparator$().getText().charAt(0) : ' ');
         // FIXME: Throw an error in case we dont match the condition!
         if (option.get_description() != null && option.get_description().size() != 0)
-          optionBuilder = optionBuilder.withDescription(option.get_description().get(0).getText());
+          optionBuilder = optionBuilder.withDescription(option.get_description(0).getText());
 
         // FIXME: Throw an error in case we dont match the condition!
         if (option.get_name() != null && option.get_name().size() != 0 && name.get_short$() != null)
@@ -139,14 +139,14 @@ public final class Options {
           if (option.get_name().size() == 0)
             continue;
 
-          final cli_arguments._option._name name = option.get_name().get(0);
+          final cli_arguments._option._name name = option.get_name(0);
           if (optionsMap.containsKey(name.get_long$().getText()))
             continue;
 
           final cli_arguments._option cliOption = cliOptions.get(name.get_long$().getText());
           String value = null;
-          if (cliOption.get_argument() != null && cliOption.get_argument().size() != 0 && cliOption.get_argument().get(0).get_default$() != null) {
-            value = cliOption.get_argument().get(0).get_default$().getText();
+          if (cliOption.get_argument() != null && cliOption.get_argument().size() != 0 && cliOption.get_argument(0).get_default$() != null) {
+            value = cliOption.get_argument(0).get_default$().getText();
             value = ELs.dereference(value, System.getenv());
           }
           else {
