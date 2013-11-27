@@ -33,7 +33,7 @@ public class OptionsTest {
     assertNotNull(options);
     System.out.println(options.toString());
     System.out.println("------------------------------------------");
-    for (Option option : options.getOptions())
+    for (final Option option : options.getOptions())
       System.out.println("[" + option.getName() + "]: " + option.getValue());
   }
 

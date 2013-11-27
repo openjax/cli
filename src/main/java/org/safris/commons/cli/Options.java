@@ -48,7 +48,7 @@ public final class Options {
     apacheOptions.addOption("help", "help", false, "Print help and usage.");
     final Map<String,cli_arguments._option> cliOptions = new HashMap<String,cli_arguments._option>();
     if (argsDefBinding != null) {
-      for (cli_arguments._option option : argsDefBinding.get_option()) {
+      for (final cli_arguments._option option : argsDefBinding.get_option()) {
         final cli_arguments._option._name name = option.get_name(0);
         final String longName = name.get_long$().getText();
         final String shortName = name.get_short$().getText();
@@ -97,7 +97,7 @@ public final class Options {
       arguments = commandLine.getArgList();
       final Set<String> specifiedLongNames = new HashSet<String>();
       org.apache.commons.cli.Option[] optionArray = commandLine.getOptions();
-      for (org.apache.commons.cli.Option option : optionArray) {
+      for (final org.apache.commons.cli.Option option : optionArray) {
         specifiedLongNames.add(option.getLongOpt());
         if ("help".equals(option.getLongOpt())) {
           final HelpFormatter formatter = new HelpFormatter();
@@ -117,7 +117,7 @@ public final class Options {
         requiredLongNames.removeAll(specifiedLongNames);
         if (requiredLongNames.size() != 0) {
           final StringBuffer buffer = new StringBuffer();
-          for (String longName : requiredLongNames) {
+          for (final String longName : requiredLongNames) {
             final String shortName = longNameToShortName.get(longName);
             final String argumentName = shortNameToArgumentName.get(shortName);
             buffer.append("\nMissing argument: -").append(shortName).append(",--").append(longName);
@@ -135,7 +135,7 @@ public final class Options {
     // Take care of the default values for unspecified options!
     if (argsDefBinding != null) {
       try {
-        for (cli_arguments._option option : argsDefBinding.get_option()) {
+        for (final cli_arguments._option option : argsDefBinding.get_option()) {
           if (option.get_name().size() == 0)
             continue;
 
@@ -194,7 +194,7 @@ public final class Options {
         return optionMap.get(name);
 
       optionMap = new HashMap<String,Option>();
-      for (Option option : options)
+      for (final Option option : options)
         optionMap.put(option.getName(), option);
 
       optionMapLock = true;
