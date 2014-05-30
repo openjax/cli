@@ -20,7 +20,20 @@
   targetNamespace="http://commons.safris.org/cli.xsd"
   xmlns:cli="http://commons.safris.org/cli.xsd"
   xmlns:xs="http://www.w3.org/2001/XMLSchema">
-
+  
+  <xs:simpleType name="NCWName">
+    <xs:restriction base="xs:NCName">
+      <xs:pattern value="[\S]*"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="char">
+    <xs:restriction base="xs:normalizedString">
+      <xs:maxLength value="1"/>
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
   <xs:element name="arguments">
     <xs:complexType>
       <xs:sequence minOccurs="0" maxOccurs="unbounded">
@@ -29,8 +42,8 @@
             <xs:sequence>
               <xs:element name="name">
                 <xs:complexType>
-                	<xs:attribute name="long" type="cli:NCWName" use="required"/>
-                	<xs:attribute name="short" type="cli:NCWName" use="required"/>
+                	<xs:attribute name="long" type="cli:NCWName"/>
+                	<xs:attribute name="short" type="cli:NCWName"/>
                 </xs:complexType>
               </xs:element>
               <xs:element name="argument" minOccurs="0">
@@ -67,18 +80,5 @@
     </xs:unique>
 
   </xs:element>
-
-  <xs:simpleType name="NCWName">
-    <xs:restriction base="xs:NCName">
-      <xs:pattern value="[\S]*"/>
-    </xs:restriction>
-  </xs:simpleType>
-
-  <xs:simpleType name="char">
-    <xs:restriction base="xs:normalizedString">
-      <xs:maxLength value="1"/>
-      <xs:minLength value="1"/>
-    </xs:restriction>
-  </xs:simpleType>
 
 </xs:schema>

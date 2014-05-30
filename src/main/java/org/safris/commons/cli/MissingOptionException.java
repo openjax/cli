@@ -16,20 +16,22 @@
 
 package org.safris.commons.cli;
 
-public class MissingOptionException extends OptionsException {
+public final class MissingOptionException extends OptionsException {
+  private static final long serialVersionUID = 1752296328335010992L;
+
   public MissingOptionException() {
     super();
   }
 
-  public MissingOptionException(String message) {
+  public MissingOptionException(final String message) {
     super();
   }
 
-  public MissingOptionException(String message, Throwable cause) {
+  public MissingOptionException(final String message, final Throwable cause) {
     super(message, cause);
   }
 
-  public MissingOptionException(Throwable cause) {
+  public MissingOptionException(final Throwable cause) {
     super(cause);
   }
 }

@@ -17,19 +17,21 @@
 package org.safris.commons.cli;
 
 public class OptionsException extends Exception {
+  private static final long serialVersionUID = 5105269275616454628L;
+
   public OptionsException() {
     super();
   }
 
-  public OptionsException(String message) {
+  public OptionsException(final String message) {
     super(message);
   }
 
-  public OptionsException(String message, Throwable cause) {
+  public OptionsException(final String message, final Throwable cause) {
     super(message, cause);
   }
 
-  public OptionsException(Throwable cause) {
+  public OptionsException(final Throwable cause) {
     super(cause);
   }
 }

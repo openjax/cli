@@ -34,12 +34,12 @@
   </option>
 
   <option>
-    <name long="silent" short="A"/>
+    <name long="silent"/>
     <description>silent mode</description>
   </option>
 
   <option>
-    <name long="verbose" short="V"/>
+    <name short="V"/>
     <description>verbose mode</description>
   </option>
 

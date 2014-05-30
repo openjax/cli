@@ -20,7 +20,7 @@ public final class Option {
   private final String name;
   private final String value;
 
-  public Option(String name, String value) {
+  public Option(final String name, final String value) {
     this.name = name;
     this.value = value;
   }
@@ -31,5 +31,20 @@ public final class Option {
 
   public String getValue() {
     return value;
+  }
+
+  public boolean equals(final Object obj) {
+    if (obj == this)
+      return true;
+
+    if (!(obj instanceof Option))
+      return false;
+
+    final Option that = (Option)obj;
+    return (name != null ? name.equals(that.name) : that.name == null) && (value != null ? value.equals(that.value) : that.value == null);
+  }
+
+  public int hashCode() {
+    return (name != null ? name.hashCode() : 0) + (value != null ? value.hashCode() : 0);
   }
 }
