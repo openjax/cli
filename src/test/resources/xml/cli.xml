@@ -16,21 +16,21 @@
   program. If not, see <http://opensource.org/licenses/MIT/>.
 -->
 
-<arguments
+<cli
   xmlns="http://commons.safris.org/cli.xsd"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://commons.safris.org/cli.xsd ../../../main/resources/xsd/cli.xsd">
 
-  <option required="true" valueSeparator="=">
+  <option required="true">
     <name long="date" short="D"/>
-    <argument name="yyMMdd" use="optional"/>
+    <argument label="yyMMdd" use="optional"/>
     <description>use the yyMMdd date</description>
   </option>
 
-  <option required="true">
+  <option required="true" valueSeparator=",">
     <name long="user" short="U"/>
-    <argument name="USER" use="required" default="asgus"/>
-    <description>run on the specified USER</description>
+    <argument label="USER" use="required" default="asgus"/>
+    <description>run on the specified USERs</description>
   </option>
 
   <option>
@@ -42,5 +42,7 @@
     <name short="V"/>
     <description>verbose mode</description>
   </option>
+  
+  <arguments label="FILE" minOccurs="3" maxOccurs="unbounded"/>
 
-</arguments>
+</cli>

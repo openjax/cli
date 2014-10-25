@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   Copyright (c) 2008 Seva Safris
 
@@ -34,10 +35,10 @@
     </xs:restriction>
   </xs:simpleType>
   
-  <xs:element name="arguments">
+  <xs:element name="cli">
     <xs:complexType>
-      <xs:sequence minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="option">
+      <xs:sequence>
+        <xs:element name="option" minOccurs="0" maxOccurs="unbounded">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="name">
@@ -48,7 +49,7 @@
               </xs:element>
               <xs:element name="argument" minOccurs="0">
                 <xs:complexType>
-                	<xs:attribute name="name" type="cli:NCWName" use="required"/>
+                  <xs:attribute name="label" type="cli:NCWName" use="required"/>
                 	<xs:attribute name="use" default="optional">
                 		<xs:simpleType>
                 			<xs:restriction base="xs:token">
@@ -63,7 +64,20 @@
               <xs:element name="description" type="xs:string"/>
             </xs:sequence>
             <xs:attribute name="required" type="xs:boolean" default="false"/>
-            <xs:attribute name="valueSeparator" type="cli:char" default=" "/>
+            <xs:attribute name="valueSeparator" type="cli:char"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="arguments" minOccurs="0">
+          <xs:complexType>
+            <xs:attribute name="label" type="cli:NCWName" use="required"/>
+            <xs:attribute name="minOccurs" type="xs:nonNegativeInteger" default="1"/>
+            <xs:attribute name="maxOccurs" default="1">
+              <xs:simpleType>
+                <xs:restriction base="xs:token">
+                  <xs:pattern value="([0-9]+)|(unbounded)"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
           </xs:complexType>
         </xs:element>
       </xs:sequence>
