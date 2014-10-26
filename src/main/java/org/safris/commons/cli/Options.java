@@ -65,7 +65,7 @@ public final class Options {
         args += " [...]";
     }
 
-    formatter.printHelp(pw, formatter.defaultWidth, " ", args.substring(1), apacheOptions, formatter.defaultLeftPad, formatter.defaultDescPad, null, false);
+    formatter.printHelp(pw, HelpFormatter.DEFAULT_WIDTH, " ", args.substring(1), apacheOptions, HelpFormatter.DEFAULT_LEFT_PAD, HelpFormatter.DEFAULT_DESC_PAD, null, false);
     pw.flush();
   }
 
