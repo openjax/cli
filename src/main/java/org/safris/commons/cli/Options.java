@@ -37,6 +37,7 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
 import org.safris.commons.el.ELs;
 import org.safris.commons.el.ExpressionFormatException;
+import org.safris.commons.lang.reflect.Classes;
 import org.safris.commons.xml.validator.Validator;
 import org.safris.xml.generator.compiler.runtime.BindingValidator;
 import org.safris.xml.generator.compiler.runtime.Bindings;
@@ -189,12 +190,12 @@ public final class Options {
       while (commandLine == null);
 
       arguments = commandLine.getArgList();
-      if (arguments != null && arguments.size() > 0) {
+      if (arguments.size() > 0) {
         if (argumentsMaxOccurs == null || argumentsMinOccurs == null || argumentsMaxOccurs < arguments.size() || arguments.size() < argumentsMinOccurs) {
           Options.trapPrintHelp(apacheOptions, cliArguments, System.err);
         }
       }
-      else if (argumentsMaxOccurs != null || argumentsMinOccurs != null) {
+      else if (argumentsMinOccurs != null && argumentsMinOccurs > 0) {
         Options.trapPrintHelp(apacheOptions, cliArguments, System.err);
       }
 
@@ -260,7 +261,7 @@ public final class Options {
       }
     }
 
-    return new Options(args, optionsMap.values(), apacheOptions, arguments.toArray(new String[arguments.size()]), cliArguments);
+    return new Options(args, optionsMap.values(), apacheOptions, arguments.size() == 0 ? null : arguments.toArray(new String[arguments.size()]), cliArguments);
   }
 
   private final String[] args;
@@ -279,6 +280,10 @@ public final class Options {
     this.cliArguments = cliArguments;
   }
 
+  /**
+   * @return Returns an array of unnamed arguments, in original order.
+   *         Returns null in case there are no unnamed arguments.
+   */
   public String[] getArguments() {
     return arguments;
   }
@@ -317,7 +322,7 @@ public final class Options {
   }
 
   public void printCommand(final PrintStream ps) {
-    ps.print("java " + getClass().getSimpleName());
+    ps.print("java " + Classes.getCallerClass(2));
     for (final String arg : args)
       ps.print(" " + arg);
   }
