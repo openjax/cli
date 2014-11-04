@@ -37,19 +37,12 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
 import org.safris.commons.el.ELs;
 import org.safris.commons.el.ExpressionFormatException;
-import org.safris.commons.xml.validator.Validator;
-import org.safris.xml.generator.compiler.runtime.BindingValidator;
 import org.safris.xml.generator.compiler.runtime.Bindings;
 import org.xml.sax.InputSource;
 
 import sun.reflect.Reflection;
 
 public final class Options {
-  static {
-    Validator.setSystemValidator(new BindingValidator());
-    Validator.getSystemValidator().setValidateOnParse(true);
-  }
-
   private static void printHelp(org.apache.commons.cli.Options apacheOptions, final cli_cli._arguments cliArguments, final PrintStream ps) {
     final HelpFormatter formatter = new HelpFormatter();
     final PrintWriter pw = new PrintWriter(ps);
@@ -71,7 +64,10 @@ public final class Options {
     pw.flush();
   }
 
-  private static void trapPrintHelp(org.apache.commons.cli.Options apacheOptions, final cli_cli._arguments cliArguments, final PrintStream ps) {
+  private static void trapPrintHelp(org.apache.commons.cli.Options apacheOptions, final cli_cli._arguments cliArguments, final String message, final PrintStream ps) {
+    if (message != null)
+      ps.println(message);
+
     printHelp(apacheOptions, cliArguments, ps);
     System.exit(1);
   }
@@ -116,46 +112,48 @@ public final class Options {
         }
       }
 
-      for (final cli_cli._option option : argsDefBinding._option()) {
-        final cli_cli._option._name optionName = option._name(0);
-        final String longName = optionName._long$() != null ? optionName._long$().text() : null;
-        final String shortName = optionName._short$() != null ? optionName._short$().text() : null;
-        final String name = longName != null ? longName : shortName;
-        if (longName == null && shortName == null) {
-          System.err.println("[ERROR] both [long] and [short] option names are null in cli spec");
-          System.exit(1);
+      if (argsDefBinding._option() != null) {
+        for (final cli_cli._option option : argsDefBinding._option()) {
+          final cli_cli._option._name optionName = option._name(0);
+          final String longName = optionName._long$() != null ? optionName._long$().text() : null;
+          final String shortName = optionName._short$() != null ? optionName._short$().text() : null;
+          final String name = longName != null ? longName : shortName;
+          if (longName == null && shortName == null) {
+            System.err.println("[ERROR] both [long] and [short] option names are null in cli spec");
+            System.exit(1);
+          }
+
+          nameToAltName.put(name, shortName != null ? shortName : longName);
+          cliOptions.put(name, option);
+          OptionBuilder.withLongOpt(name == longName ? longName : null);
+          if (option._argument() != null && option._argument().size() != 0) {
+            final cli_cli._option._argument argument = option._argument(0);
+            if (argument._use$() == null || cli_cli._option._argument._use$.OPTIONAL.text().equals(argument._use$().text()))
+              OptionBuilder.hasOptionalArgs();
+            else if (cli_cli._option._argument._use$.REQUIRED.text().equals(argument._use$().text()))
+              OptionBuilder.hasArgs();
+
+            String argumentName = argument._label$().text();
+            shortNameToArgumentName.put(shortName, argumentName);
+            if (!option._valueSeparator$().isNull())
+              argumentName += option._valueSeparator$().text() + argumentName + option._valueSeparator$().text() + "...";
+
+            OptionBuilder.withArgName(argumentName);
+          }
+
+          // Record which arguments are required
+          if (option._required$() != null && option._required$().text())
+            requiredNames.add(longName);
+
+          OptionBuilder.withValueSeparator(option._valueSeparator$().text() != null ? option._valueSeparator$().text().charAt(0) : ' ');
+          // FIXME: Throw an error in case we don't match the condition!
+          if (option._description() != null && option._description().size() != 0)
+            OptionBuilder.withDescription(option._description(0).text());
+
+          // FIXME: Throw an error in case we don't match the condition!
+          if (option._name() != null && option._name().size() != 0 && optionName._short$() != null)
+            apacheOptions.addOption(OptionBuilder.create(optionName._short$().text()));
         }
-
-        nameToAltName.put(name, shortName != null ? shortName : longName);
-        cliOptions.put(name, option);
-        OptionBuilder.withLongOpt(name == longName ? longName : null);
-        if (option._argument() != null && option._argument().size() != 0) {
-          final cli_cli._option._argument argument = option._argument(0);
-          if (argument._use$() == null || cli_cli._option._argument._use$.OPTIONAL.text().equals(argument._use$().text()))
-            OptionBuilder.hasOptionalArgs();
-          else if (cli_cli._option._argument._use$.REQUIRED.text().equals(argument._use$().text()))
-            OptionBuilder.hasArgs();
-
-          String argumentName = argument._label$().text();
-          shortNameToArgumentName.put(shortName, argumentName);
-          if (!option._valueSeparator$().isNull())
-            argumentName += option._valueSeparator$().text() + argumentName + option._valueSeparator$().text() + "...";
-
-          OptionBuilder.withArgName(argumentName);
-        }
-
-        // Record which arguments are required
-        if (option._required$() != null && option._required$().text())
-          requiredNames.add(longName);
-
-        OptionBuilder.withValueSeparator(option._valueSeparator$().text() != null ? option._valueSeparator$().text().charAt(0) : ' ');
-        // FIXME: Throw an error in case we don't match the condition!
-        if (option._description() != null && option._description().size() != 0)
-          OptionBuilder.withDescription(option._description(0).text());
-
-        // FIXME: Throw an error in case we don't match the condition!
-        if (option._name() != null && option._name().size() != 0 && optionName._short$() != null)
-          apacheOptions.addOption(OptionBuilder.create(optionName._short$().text()));
       }
     }
     else {
@@ -164,6 +162,7 @@ public final class Options {
 
     final Map<String,Option> optionsMap = new HashMap<String,Option>();
     Collection<String> arguments = null;
+    final Set<String> specifiedLongNames = new HashSet<String>();
     if (args != null && args.length != 0) {
       final CommandLineParser parser = new PosixParser();
       CommandLine commandLine = null;
@@ -193,46 +192,41 @@ public final class Options {
       arguments = commandLine.getArgList();
       if (arguments.size() > 0) {
         if (argumentsMaxOccurs == null || argumentsMinOccurs == null || argumentsMaxOccurs < arguments.size() || arguments.size() < argumentsMinOccurs) {
-          Options.trapPrintHelp(apacheOptions, cliArguments, System.err);
+          Options.trapPrintHelp(apacheOptions, cliArguments, null, System.err);
         }
       }
       else if (argumentsMinOccurs != null && argumentsMinOccurs > 0) {
-        Options.trapPrintHelp(apacheOptions, cliArguments, System.err);
+        Options.trapPrintHelp(apacheOptions, cliArguments, null, System.err);
       }
 
-      final Set<String> specifiedLongNames = new HashSet<String>();
       org.apache.commons.cli.Option[] optionArray = commandLine.getOptions();
       for (final org.apache.commons.cli.Option option : optionArray) {
         specifiedLongNames.add(option.getLongOpt());
         if ("help".equals(option.getLongOpt()))
-          Options.trapPrintHelp(apacheOptions, cliArguments, System.out);
+          Options.trapPrintHelp(apacheOptions, cliArguments, null, System.out);
 
         final String opt = option.getLongOpt() != null ? option.getLongOpt() : option.getOpt();
         optionsMap.put(opt, option.getValue() != null ? new Option(opt, option.getValues()) : new Option(opt, "true"));
       }
+    }
 
-      // See if some arguments are missing
+    // See if some arguments are missing
+    if (requiredNames.size() != 0) {
+      requiredNames.removeAll(specifiedLongNames);
       if (requiredNames.size() != 0) {
-        requiredNames.removeAll(specifiedLongNames);
-        if (requiredNames.size() != 0) {
-          final StringBuffer buffer = new StringBuffer();
-          for (final String longName : requiredNames) {
-            final String shortName = nameToAltName.get(longName);
-            final String argumentName = shortNameToArgumentName.get(shortName);
-            buffer.append("\nMissing argument: -").append(shortName).append(",--").append(longName);
-            if (argumentName != null)
-              System.err.println(" <" + argumentName + ">");
-            else
-              System.err.println();
-          }
-
-          throw new MissingOptionException(buffer.toString());
+        final StringBuffer buffer = new StringBuffer();
+        for (final String longName : requiredNames) {
+          final String shortName = nameToAltName.get(longName);
+          buffer.append("\nMissing argument: -").append(shortName).append(",--").append(longName);
         }
+
+        Options.trapPrintHelp(apacheOptions, cliArguments, buffer.substring(1), System.out);
+        //throw new MissingOptionException(buffer.toString());
       }
     }
 
     // Take care of the default values for unspecified options!
-    if (argsDefBinding != null) {
+    if (argsDefBinding != null && argsDefBinding._option() != null) {
       try {
         for (final cli_cli._option option : argsDefBinding._option()) {
           if (option._name().size() == 0)
@@ -262,7 +256,7 @@ public final class Options {
       }
     }
 
-    return new Options(args, optionsMap.values(), apacheOptions, arguments.size() == 0 ? null : arguments.toArray(new String[arguments.size()]), cliArguments);
+    return new Options(args, optionsMap.values(), apacheOptions, arguments == null || arguments.size() == 0 ? null : arguments.toArray(new String[arguments.size()]), cliArguments);
   }
 
   private final String[] args;
@@ -323,7 +317,7 @@ public final class Options {
   }
 
   public void printCommand(final PrintStream ps) {
-    ps.print("java " + Reflection.getCallerClass());
+    ps.print("java " + Reflection.getCallerClass().getName());
     for (final String arg : args)
       ps.print(" " + arg);
   }

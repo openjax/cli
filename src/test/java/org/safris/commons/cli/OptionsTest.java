@@ -16,13 +16,13 @@
 
 package org.safris.commons.cli;
 
-import java.io.FileInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Arrays;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.safris.xml.generator.compiler.runtime.Bindings;
-import org.xml.sax.InputSource;
+import org.safris.commons.lang.Resources;
 
 public final class OptionsTest {
   public static void main(final String[] args) throws Exception {
@@ -55,13 +55,28 @@ public final class OptionsTest {
       System.out.print(" " + arg);
 
     System.out.println("\n");
-    final cli_cli cli = (cli_cli)Bindings.parse(new InputSource(new FileInputStream("src/test/resources/xml/cli.xml")));
-    final Options options = Options.parse(cli, args);
+    final Options options = Options.parse(Resources.getResource("xml/cli.xml").getURL(), args);
     main(options);
     Assert.assertArrayEquals("user != [user1, user2]", new String[] {"user1", "user2"}, options.getOptions("user"));
     Assert.assertEquals("verbose != true", true, Boolean.parseBoolean(options.getOption("V")));
     Assert.assertEquals("date != 070919", "070919", options.getOption("date"));
     Assert.assertEquals("silent != null", null, options.getOption("silent"));
     Assert.assertArrayEquals("arguments != [file1, file2, file3]", new String[] {"file1", "file2", "file3"}, options.getArguments());
+  }
+
+  @Test
+  public void testEmptyOptions() throws Exception {
+    final Options options = Options.parse(Resources.getResource("xml/empty.xml").getURL(), new String[0]);
+    options.printCommand(System.out);
+    Assert.assertEquals(0, options.getOptions().size());
+  }
+
+  @Test
+  public void testPrintCommand() throws Exception {
+    final Options options = Options.parse(Resources.getResource("xml/empty.xml").getURL(), new String[0]);
+    final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    final PrintStream ps = new PrintStream(baos);
+    options.printCommand(ps);
+    Assert.assertEquals("java org.safris.commons.cli.OptionsTest", baos.toString());
   }
 }

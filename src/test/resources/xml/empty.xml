@@ -19,30 +19,4 @@
 <cli
   xmlns="http://commons.safris.org/cli.xsd"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://commons.safris.org/cli.xsd http://commons.safris.org/cli.xsd">
-
-  <option required="true">
-    <name long="date" short="D"/>
-    <argument label="yyMMdd" use="optional"/>
-    <description>use the yyMMdd date</description>
-  </option>
-
-  <option required="true" valueSeparator=",">
-    <name long="user" short="U"/>
-    <argument label="USER" use="required" default="asgus"/>
-    <description>run on the specified USERs</description>
-  </option>
-
-  <option>
-    <name long="silent"/>
-    <description>silent mode</description>
-  </option>
-
-  <option>
-    <name short="V"/>
-    <description>verbose mode</description>
-  </option>
-  
-  <arguments label="FILE" minOccurs="3" maxOccurs="unbounded"/>
-
-</cli>
+  xsi:schemaLocation="http://commons.safris.org/cli.xsd http://commons.safris.org/cli.xsd"/>
