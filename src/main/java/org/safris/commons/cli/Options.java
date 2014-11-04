@@ -37,11 +37,12 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
 import org.safris.commons.el.ELs;
 import org.safris.commons.el.ExpressionFormatException;
-import org.safris.commons.lang.reflect.Classes;
 import org.safris.commons.xml.validator.Validator;
 import org.safris.xml.generator.compiler.runtime.BindingValidator;
 import org.safris.xml.generator.compiler.runtime.Bindings;
 import org.xml.sax.InputSource;
+
+import sun.reflect.Reflection;
 
 public final class Options {
   static {
@@ -322,7 +323,7 @@ public final class Options {
   }
 
   public void printCommand(final PrintStream ps) {
-    ps.print("java " + Classes.getCallerClass(2));
+    ps.print("java " + Reflection.getCallerClass());
     for (final String arg : args)
       ps.print(" " + arg);
   }
