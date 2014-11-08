@@ -160,10 +160,12 @@ public final class Options {
       cliArguments = null;
     }
 
-    final Map<String,Option> optionsMap = new HashMap<String,Option>();
+    final Map<String,Option> optionsMap;
     Collection<String> arguments = null;
-    final Set<String> specifiedLongNames = new HashSet<String>();
+    final Set<String> specifiedLongNames;
     if (args != null && args.length != 0) {
+      optionsMap = new HashMap<String,Option>();
+      specifiedLongNames = new HashSet<String>();
       final CommandLineParser parser = new PosixParser();
       CommandLine commandLine = null;
       do {
@@ -209,10 +211,16 @@ public final class Options {
         optionsMap.put(opt, option.getValue() != null ? new Option(opt, option.getValues()) : new Option(opt, "true"));
       }
     }
+    else {
+      optionsMap = null;
+      specifiedLongNames = null;
+    }
 
     // See if some arguments are missing
     if (requiredNames.size() != 0) {
-      requiredNames.removeAll(specifiedLongNames);
+      if (specifiedLongNames != null)
+        requiredNames.removeAll(specifiedLongNames);
+
       if (requiredNames.size() != 0) {
         final StringBuffer buffer = new StringBuffer();
         for (final String longName : requiredNames) {
@@ -221,7 +229,6 @@ public final class Options {
         }
 
         Options.trapPrintHelp(apacheOptions, cliArguments, buffer.substring(1), System.out);
-        //throw new MissingOptionException(buffer.toString());
       }
     }
 
@@ -251,12 +258,12 @@ public final class Options {
         }
       }
       catch (final ExpressionFormatException e) {
-        System.err.println("Error in bootstrap.xml :" + e.getMessage());
+        System.err.println("Error in xml :" + e.getMessage());
         System.exit(1);
       }
     }
 
-    return new Options(args, optionsMap.values(), apacheOptions, arguments == null || arguments.size() == 0 ? null : arguments.toArray(new String[arguments.size()]), cliArguments);
+    return new Options(args, optionsMap == null ? null : optionsMap.values(), apacheOptions, arguments == null || arguments.size() == 0 ? null : arguments.toArray(new String[arguments.size()]), cliArguments);
   }
 
   private final String[] args;
@@ -269,7 +276,7 @@ public final class Options {
 
   private Options(final String[] args, final Collection<Option> options, final org.apache.commons.cli.Options apacheOptions, final String[] arguments, final cli_cli._arguments cliArguments) {
     this.args = args;
-    this.options = Collections.<Option>unmodifiableCollection(options);
+    this.options = options == null ? Collections.<Option>emptyList() : Collections.<Option>unmodifiableCollection(options);
     this.apacheOptions = apacheOptions;
     this.arguments = arguments;
     this.cliArguments = cliArguments;
