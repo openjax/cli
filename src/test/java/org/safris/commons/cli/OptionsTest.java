@@ -25,10 +25,6 @@ import org.junit.Test;
 import org.safris.commons.lang.Resources;
 
 public final class OptionsTest {
-  public static void main(final String[] args) throws Exception {
-    new OptionsTest().testOptions();
-  }
-
   public static void main(final Options options) {
     Assert.assertNotNull(options);
     System.out.println(options.toString());
