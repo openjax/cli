@@ -21,13 +21,13 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://commons.safris.org/cli.xsd http://commons.safris.org/cli.xsd">
 
-  <option required="true">
+  <option use="required">
     <name long="date" short="D"/>
     <argument label="yyMMdd" use="optional"/>
     <description>use the yyMMdd date</description>
   </option>
 
-  <option required="true" valueSeparator=",">
+  <option use="required" valueSeparator=",">
     <name long="user" short="U"/>
     <argument label="USER" use="required" default="asgus"/>
     <description>run on the specified USERs</description>

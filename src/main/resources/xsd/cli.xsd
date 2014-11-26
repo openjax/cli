@@ -35,6 +35,13 @@
     </xs:restriction>
   </xs:simpleType>
   
+  <xs:simpleType name="use">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="required"/>
+      <xs:enumeration value="optional"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
   <xs:element name="cli">
     <xs:complexType>
       <xs:sequence>
@@ -50,20 +57,13 @@
               <xs:element name="argument" minOccurs="0">
                 <xs:complexType>
                   <xs:attribute name="label" type="cli:NCWName" use="required"/>
-                	<xs:attribute name="use" default="optional">
-                		<xs:simpleType>
-                			<xs:restriction base="xs:token">
-                				<xs:enumeration value="required"/>
-                				<xs:enumeration value="optional"/>
-                			</xs:restriction>
-                		</xs:simpleType>
-                	</xs:attribute>
+                	<xs:attribute name="use" default="optional" type="cli:use"/>
                 	<xs:attribute name="default" type="xs:string"/>
                 </xs:complexType>
               </xs:element>
               <xs:element name="description" type="xs:string"/>
             </xs:sequence>
-            <xs:attribute name="required" type="xs:boolean" default="false"/>
+            <xs:attribute name="use" default="optional" type="cli:use"/>
             <xs:attribute name="valueSeparator" type="cli:char"/>
           </xs:complexType>
         </xs:element>

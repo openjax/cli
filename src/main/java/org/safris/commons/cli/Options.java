@@ -142,7 +142,7 @@ public final class Options {
           }
 
           // Record which arguments are required
-          if (option._required$() != null && option._required$().text())
+          if ("required".equals(option._use$().text()))
             requiredNames.add(longName);
 
           OptionBuilder.withValueSeparator(option._valueSeparator$().text() != null ? option._valueSeparator$().text().charAt(0) : ' ');
@@ -160,11 +160,10 @@ public final class Options {
       cliArguments = null;
     }
 
-    final Map<String,Option> optionsMap;
+    final Map<String,Option> optionsMap = new HashMap<String,Option>();
     Collection<String> arguments = null;
     final Set<String> specifiedLongNames;
     if (args != null && args.length != 0) {
-      optionsMap = new HashMap<String,Option>();
       specifiedLongNames = new HashSet<String>();
       final CommandLineParser parser = new PosixParser();
       CommandLine commandLine = null;
@@ -212,7 +211,6 @@ public final class Options {
       }
     }
     else {
-      optionsMap = null;
       specifiedLongNames = null;
     }
 
