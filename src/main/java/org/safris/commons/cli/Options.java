@@ -40,8 +40,6 @@ import org.safris.commons.el.ExpressionFormatException;
 import org.safris.xml.generator.compiler.runtime.Bindings;
 import org.xml.sax.InputSource;
 
-import sun.reflect.Reflection;
-
 public final class Options {
   private static void printHelp(org.apache.commons.cli.Options apacheOptions, final cli_cli._arguments cliArguments, final PrintStream ps) {
     final HelpFormatter formatter = new HelpFormatter();
@@ -321,8 +319,8 @@ public final class Options {
     return reqOption != null ? reqOption.values : null;
   }
 
-  public void printCommand(final PrintStream ps) {
-    ps.print("java " + Reflection.getCallerClass().getName());
+  public void printCommand(final PrintStream ps, final Class<?> callerClass) {
+    ps.print("java " + callerClass.getName());
     for (final String arg : args)
       ps.print(" " + arg);
   }

@@ -63,7 +63,7 @@ public final class OptionsTest {
   @Test
   public void testEmptyOptions() throws Exception {
     final Options options = Options.parse(Resources.getResource("xml/empty.xml").getURL(), new String[0]);
-    options.printCommand(System.out);
+    options.printCommand(System.out, OptionsTest.class);
     Assert.assertEquals(0, options.getOptions().size());
   }
 
@@ -72,7 +72,7 @@ public final class OptionsTest {
     final Options options = Options.parse(Resources.getResource("xml/empty.xml").getURL(), new String[0]);
     final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     final PrintStream ps = new PrintStream(baos);
-    options.printCommand(ps);
+    options.printCommand(ps, OptionsTest.class);
     Assert.assertEquals("java org.safris.commons.cli.OptionsTest", baos.toString());
   }
 }
