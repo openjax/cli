@@ -126,9 +126,9 @@ public final class Options {
           OptionBuilder.withLongOpt(name == longName ? longName : null);
           if (option._argument() != null && option._argument().size() != 0) {
             final cli_cli._option._argument argument = option._argument(0);
-            if (argument._use$() == null || cli_cli._option._argument._use$.OPTIONAL.text().equals(argument._use$().text()))
+            if (argument._use$() == null || cli_cli._option._argument._use$.optional.text().equals(argument._use$().text()))
               OptionBuilder.hasOptionalArgs();
-            else if (cli_cli._option._argument._use$.REQUIRED.text().equals(argument._use$().text()))
+            else if (cli_cli._option._argument._use$.required.text().equals(argument._use$().text()))
               OptionBuilder.hasArgs();
 
             String argumentName = argument._label$().text();
