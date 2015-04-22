@@ -16,7 +16,6 @@
 
 package org.safris.commons.cli;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.PrintStream;
@@ -70,18 +69,18 @@ public final class Options {
     System.exit(1);
   }
 
-  public static Options parse(final File cliFile, final String[] args) throws OptionsException {
+  public static Options parse(final File cliFile, final Class<?> mainClass, final String[] args) throws OptionsException {
     try {
-      return parse((cli_cli)Bindings.parse(new InputSource(new FileInputStream(cliFile))), args);
+      return parse((cli_cli)Bindings.parse(new InputSource(new FileInputStream(cliFile))), mainClass, args);
     }
     catch (final Exception e) {
       throw new OptionsException(e);
     }
   }
 
-  public static Options parse(final URL cliURL, final String[] args) throws OptionsException {
+  public static Options parse(final URL cliURL, final Class<?> mainClass, final String[] args) throws OptionsException {
     try {
-      return parse((cli_cli)Bindings.parse(new InputSource(cliURL.openStream())), args);
+      return parse((cli_cli)Bindings.parse(new InputSource(cliURL.openStream())), mainClass, args);
     }
     catch (final Exception e) {
       throw new OptionsException(e);
@@ -89,7 +88,7 @@ public final class Options {
   }
 
   @SuppressWarnings("unchecked")
-  public static Options parse(final cli_cli argsDefBinding, final String[] args) throws OptionsException {
+  public static Options parse(final cli_cli argsDefBinding, final Class<?> mainClass, final String[] args) throws OptionsException {
     final Set<String> requiredNames = new HashSet<String>();
     final Map<String,String> nameToAltName = new HashMap<String,String>();
     final Map<String,String> shortNameToArgumentName = new HashMap<String,String>();
@@ -259,9 +258,10 @@ public final class Options {
       }
     }
 
-    return new Options(args, optionsMap == null ? null : optionsMap.values(), apacheOptions, arguments == null || arguments.size() == 0 ? null : arguments.toArray(new String[arguments.size()]), cliArguments);
+    return new Options(mainClass, args, optionsMap == null ? null : optionsMap.values(), apacheOptions, arguments == null || arguments.size() == 0 ? null : arguments.toArray(new String[arguments.size()]), cliArguments);
   }
 
+  private final Class<?> mainClass;
   private final String[] args;
   private Map<String,Option> optionMap = null;
   private volatile boolean optionMapInited = false;
@@ -270,7 +270,8 @@ public final class Options {
   private final String[] arguments;
   private final cli_cli._arguments cliArguments;
 
-  private Options(final String[] args, final Collection<Option> options, final org.apache.commons.cli.Options apacheOptions, final String[] arguments, final cli_cli._arguments cliArguments) {
+  private Options(final Class<?> mainClass, final String[] args, final Collection<Option> options, final org.apache.commons.cli.Options apacheOptions, final String[] arguments, final cli_cli._arguments cliArguments) {
+    this.mainClass = mainClass;
     this.args = args;
     this.options = options == null ? Collections.<Option>emptyList() : Collections.<Option>unmodifiableCollection(options);
     this.apacheOptions = apacheOptions;
@@ -326,8 +327,13 @@ public final class Options {
   }
 
   public String toString() {
-    final ByteArrayOutputStream out = new ByteArrayOutputStream();
-    printHelp(apacheOptions, cliArguments, new PrintStream(out));
-    return new String(out.toByteArray());
+    final StringBuilder buffer = new StringBuilder(mainClass.getName());
+    if (args.length == 0)
+      return buffer.toString();
+
+    for (final String arg : args)
+      buffer.append(" ").append(arg);
+
+    return buffer.toString();
   }
 }
