@@ -49,8 +49,8 @@ public final class Options {
         args += " <" + cliArguments._label$().text() + (i != 1 ? i : "") + ">";
 
       final boolean maxUnbounded = "unbounded".equals(cliArguments._maxOccurs$().text());
-      final int argsMax = maxUnbounded ? 2 + cliArguments._minOccurs$().text(): Integer.parseInt(cliArguments._maxOccurs$().text());
-      for (int i = cliArguments._minOccurs$().text() + 1; i <= argsMax; i++)
+      final long argsMax = maxUnbounded ? 2 + cliArguments._minOccurs$().text(): Integer.parseInt(cliArguments._maxOccurs$().text());
+      for (long i = cliArguments._minOccurs$().text() + 1; i <= argsMax; i++)
         args += " [" + cliArguments._label$().text() + (i != 1 ? i : "") + "]";
 
       if (maxUnbounded)
