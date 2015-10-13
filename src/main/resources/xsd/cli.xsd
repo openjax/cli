@@ -23,7 +23,7 @@
   xmlns:dt="http://commons.safris.org/datatypes.xsd"
   xmlns:xs="http://www.w3.org/2001/XMLSchema">
   
-  <xs:import namespace="http://commons.safris.org/datatypes.xsd" schemaLocation="file:/Users/seva/Work/safris/org/commons/xml/src/main/resources/datatypes.xsd"/>
+  <xs:import namespace="http://commons.safris.org/datatypes.xsd" schemaLocation="http://commons.safris.org/datatypes.xsd"/>
   
   <xs:simpleType name="use">
     <xs:restriction base="xs:token">
