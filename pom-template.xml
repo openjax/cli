@@ -29,9 +29,6 @@
   <artifactId>cli</artifactId>
   <version>${dev:org.safris.commons.cli}</version>
   <name>${project.groupId}.${project.artifactId}</name>
-  <description>
-    Command-line interface.
-  </description>
   <profiles>
     <profile>
       <activation>

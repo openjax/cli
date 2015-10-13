@@ -20,20 +20,10 @@
   elementFormDefault="qualified"
   targetNamespace="http://commons.safris.org/cli.xsd"
   xmlns:cli="http://commons.safris.org/cli.xsd"
+  xmlns:dt="http://commons.safris.org/datatypes.xsd"
   xmlns:xs="http://www.w3.org/2001/XMLSchema">
   
-  <xs:simpleType name="NCWName">
-    <xs:restriction base="xs:NCName">
-      <xs:pattern value="[\S]*"/>
-    </xs:restriction>
-  </xs:simpleType>
-  
-  <xs:simpleType name="char">
-    <xs:restriction base="xs:normalizedString">
-      <xs:maxLength value="1"/>
-      <xs:minLength value="1"/>
-    </xs:restriction>
-  </xs:simpleType>
+  <xs:import namespace="http://commons.safris.org/datatypes.xsd" schemaLocation="file:/Users/seva/Work/safris/org/commons/xml/src/main/resources/datatypes.xsd"/>
   
   <xs:simpleType name="use">
     <xs:restriction base="xs:token">
@@ -50,13 +40,13 @@
             <xs:sequence>
               <xs:element name="name">
                 <xs:complexType>
-                	<xs:attribute name="long" type="cli:NCWName"/>
-                	<xs:attribute name="short" type="cli:NCWName"/>
+                	<xs:attribute name="long" type="dt:NCWName"/>
+                  <xs:attribute name="short" type="dt:NCWName"/>
                 </xs:complexType>
               </xs:element>
               <xs:element name="argument" minOccurs="0">
                 <xs:complexType>
-                  <xs:attribute name="label" type="cli:NCWName" use="required"/>
+                  <xs:attribute name="label" type="dt:NCWName" use="required"/>
                 	<xs:attribute name="use" default="optional" type="cli:use"/>
                 	<xs:attribute name="default" type="xs:string"/>
                 </xs:complexType>
@@ -64,12 +54,12 @@
               <xs:element name="description" type="xs:string"/>
             </xs:sequence>
             <xs:attribute name="use" default="optional" type="cli:use"/>
-            <xs:attribute name="valueSeparator" type="cli:char"/>
+            <xs:attribute name="valueSeparator" type="dt:char"/>
           </xs:complexType>
         </xs:element>
         <xs:element name="arguments" minOccurs="0">
           <xs:complexType>
-            <xs:attribute name="label" type="cli:NCWName" use="required"/>
+            <xs:attribute name="label" type="dt:NCWName" use="required"/>
             <xs:attribute name="minOccurs" type="xs:nonNegativeInteger" default="1"/>
             <xs:attribute name="maxOccurs" default="1">
               <xs:simpleType>
