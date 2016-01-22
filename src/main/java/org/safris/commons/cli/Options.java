@@ -144,8 +144,13 @@ public final class Options {
 
           OptionBuilder.withValueSeparator(option._valueSeparator$().text() != null ? option._valueSeparator$().text().charAt(0) : ' ');
           // FIXME: Throw an error in case we don't match the condition!
-          if (option._description() != null && option._description().size() != 0)
-            OptionBuilder.withDescription(option._description(0).text());
+          if (option._description() != null && option._description().size() != 0) {
+            String description = option._description(0).text();
+            if (!option._argument(0).isNull())
+              description += "\ndefault: <" + option._argument(0)._default$().text() + ">";
+
+            OptionBuilder.withDescription(description);
+          }
 
           // FIXME: Throw an error in case we don't match the condition!
           if (option._name() != null && option._name().size() != 0 && optionName._short$() != null)
