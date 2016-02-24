@@ -331,6 +331,7 @@ public final class Options {
       ps.print(" " + arg);
   }
 
+  @Override
   public String toString() {
     final StringBuilder buffer = new StringBuilder(mainClass.getName());
     if (args.length == 0)

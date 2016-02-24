@@ -24,7 +24,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.safris.commons.lang.Resources;
 
-public final class OptionsTest {
+public class OptionsTest {
   public static void main(final Options options) {
     Assert.assertNotNull(options);
     System.out.println(options.toString());

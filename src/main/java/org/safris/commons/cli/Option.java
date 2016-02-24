@@ -29,6 +29,7 @@ public final class Option {
     this.values = values;
   }
 
+  @Override
   public boolean equals(final Object obj) {
     if (obj == this)
       return true;
@@ -40,6 +41,7 @@ public final class Option {
     return (name != null ? name.equals(that.name) : that.name == null) && (values != null ? Arrays.equals(values, that.values) : that.values == null);
   }
 
+  @Override
   public int hashCode() {
     return (name != null ? name.hashCode() : 0) + (values != null ? values.hashCode() : 0);
   }
