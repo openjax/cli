@@ -263,7 +263,7 @@ public final class Options {
       }
     }
 
-    return new Options(mainClass, args, optionsMap == null ? null : optionsMap.values(), apacheOptions, arguments == null || arguments.size() == 0 ? null : arguments.toArray(new String[arguments.size()]), cliArguments);
+    return new Options(mainClass, args, optionsMap == null ? null : optionsMap.values(), arguments == null || arguments.size() == 0 ? null : arguments.toArray(new String[arguments.size()]));
   }
 
   private final Class<?> mainClass;
@@ -271,17 +271,13 @@ public final class Options {
   private Map<String,Option> optionMap = null;
   private volatile boolean optionMapInited = false;
   private final Collection<Option> options;
-  private final org.apache.commons.cli.Options apacheOptions;
   private final String[] arguments;
-  private final cli_cli._arguments cliArguments;
 
-  private Options(final Class<?> mainClass, final String[] args, final Collection<Option> options, final org.apache.commons.cli.Options apacheOptions, final String[] arguments, final cli_cli._arguments cliArguments) {
+  private Options(final Class<?> mainClass, final String[] args, final Collection<Option> options, final String[] arguments) {
     this.mainClass = mainClass;
     this.args = args;
     this.options = options == null ? Collections.<Option>emptyList() : Collections.<Option>unmodifiableCollection(options);
-    this.apacheOptions = apacheOptions;
     this.arguments = arguments;
-    this.cliArguments = cliArguments;
   }
 
   /**

@@ -23,8 +23,9 @@ import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;
 import org.safris.commons.lang.Resources;
+import org.safris.commons.test.LoggableTest;
 
-public class OptionsTest {
+public class OptionsTest extends LoggableTest {
   public static void main(final Options options) {
     Assert.assertNotNull(options);
     System.out.println(options.toString());
@@ -50,7 +51,7 @@ public class OptionsTest {
     for (final String arg : args)
       System.out.print(" " + arg);
 
-    System.out.println("\n");
+    log("\n");
     final Options options = Options.parse(Resources.getResource("xml/cli.xml").getURL(), OptionsTest.class, args);
     main(options);
     Assert.assertArrayEquals("user != [user1, user2]", new String[] {"user1", "user2"}, options.getOptions("user"));
