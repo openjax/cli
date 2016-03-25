@@ -87,7 +87,6 @@ public final class Options {
     }
   }
 
-  @SuppressWarnings("unchecked")
   public static Options parse(final cli_cli argsDefBinding, final Class<?> mainClass, final String[] args) throws OptionsException {
     final Set<String> requiredNames = new HashSet<String>();
     final Map<String,String> nameToAltName = new HashMap<String,String>();
@@ -125,9 +124,9 @@ public final class Options {
           OptionBuilder.withLongOpt(name == longName ? longName : null);
           if (option._argument() != null && option._argument().size() != 0) {
             final cli_cli._option._argument argument = option._argument(0);
-            if (argument._use$() == null || cli_cli._option._argument._use$.optional.text().equals(argument._use$().text()))
+            if (argument._use$() == null || $cli_use.optional.text().equals(argument._use$().text()))
               OptionBuilder.hasOptionalArgs();
-            else if (cli_cli._option._argument._use$.required.text().equals(argument._use$().text()))
+            else if ($cli_use.required.text().equals(argument._use$().text()))
               OptionBuilder.hasArgs();
 
             String argumentName = argument._label$().text();
@@ -263,7 +262,7 @@ public final class Options {
       }
     }
 
-    return new Options(mainClass, args, optionsMap == null ? null : optionsMap.values(), arguments == null || arguments.size() == 0 ? null : arguments.toArray(new String[arguments.size()]));
+    return new Options(mainClass, args, optionsMap.values(), arguments == null || arguments.size() == 0 ? null : arguments.toArray(new String[arguments.size()]));
   }
 
   private final Class<?> mainClass;
