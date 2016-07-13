@@ -18,6 +18,7 @@ package org.safris.commons.cli;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.URL;
@@ -38,25 +39,28 @@ import org.safris.commons.cli.xe.$cli_use;
 import org.safris.commons.cli.xe.cli_cli;
 import org.safris.commons.el.ELs;
 import org.safris.commons.el.ExpressionFormatException;
+import org.safris.commons.maven.Log;
+import org.safris.commons.xml.validator.ValidationException;
 import org.safris.xml.generator.compiler.runtime.Bindings;
+import org.safris.xml.generator.compiler.runtime.ParseException;
 import org.xml.sax.InputSource;
 
 public final class Options {
   private static void printHelp(org.apache.commons.cli.Options apacheOptions, final cli_cli._arguments cliArguments, final PrintStream ps) {
     final HelpFormatter formatter = new HelpFormatter();
     final PrintWriter pw = new PrintWriter(ps);
-    String args = apacheOptions.getOptions().size() > 0 ? " [options]" : "";
+    final StringBuilder args = new StringBuilder(apacheOptions.getOptions().size() > 0 ? " [options]" : "");
     if (cliArguments != null && !cliArguments.isNull()) {
       for (int i = 1; i <= cliArguments._minOccurs$().text(); i++)
-        args += " <" + cliArguments._label$().text() + (i != 1 ? i : "") + ">";
+        args.append(" <").append(cliArguments._label$().text()).append((i != 1 ? i : "")).append(">");
 
       final boolean maxUnbounded = "unbounded".equals(cliArguments._maxOccurs$().text());
-      final long argsMax = maxUnbounded ? 2 + cliArguments._minOccurs$().text(): Integer.parseInt(cliArguments._maxOccurs$().text());
-      for (long i = cliArguments._minOccurs$().text() + 1; i <= argsMax; i++)
-        args += " [" + cliArguments._label$().text() + (i != 1 ? i : "") + "]";
+      final int argsMax = maxUnbounded ? 2 + cliArguments._minOccurs$().text(): Integer.parseInt(cliArguments._maxOccurs$().text());
+      for (int i = cliArguments._minOccurs$().text() + 1; i <= argsMax; i++)
+        args.append(" [").append(cliArguments._label$().text()).append((i != 1 ? i : "")).append("]");
 
       if (maxUnbounded)
-        args += " [...]";
+        args.append(" [...]");
     }
 
     formatter.printHelp(pw, HelpFormatter.DEFAULT_WIDTH, " ", args.substring(1), apacheOptions, HelpFormatter.DEFAULT_LEFT_PAD, HelpFormatter.DEFAULT_DESC_PAD, null, false);
@@ -75,7 +79,7 @@ public final class Options {
     try {
       return parse((cli_cli)Bindings.parse(new InputSource(new FileInputStream(cliFile))), mainClass, args);
     }
-    catch (final Exception e) {
+    catch (final IOException | ParseException | ValidationException e) {
       throw new OptionsException(e);
     }
   }
@@ -84,7 +88,7 @@ public final class Options {
     try {
       return parse((cli_cli)Bindings.parse(new InputSource(cliURL.openStream())), mainClass, args);
     }
-    catch (final Exception e) {
+    catch (final IOException | ParseException | ValidationException e) {
       throw new OptionsException(e);
     }
   }
@@ -95,7 +99,7 @@ public final class Options {
     final Map<String,String> shortNameToArgumentName = new HashMap<String,String>();
     final org.apache.commons.cli.Options apacheOptions = new org.apache.commons.cli.Options();
     apacheOptions.addOption(null, "help", false, "Print help and usage.");
-    final Map<String,cli_cli._option> cliOptions = new HashMap<String,cli_cli._option>();
+    final Map<String,cli_cli._option> options = new HashMap<String,cli_cli._option>();
     Integer argumentsMinOccurs = null;
     Integer argumentsMaxOccurs = null;
     final cli_cli._arguments cliArguments;
@@ -105,7 +109,7 @@ public final class Options {
         argumentsMinOccurs = cliArguments._minOccurs$().text();
         argumentsMaxOccurs = "unbounded".equals(cliArguments._maxOccurs$().text()) ? Integer.MAX_VALUE : Integer.parseInt(cliArguments._maxOccurs$().text());
         if (argumentsMaxOccurs < argumentsMinOccurs) {
-          System.err.println("[ERROR] minOccurs > maxOccurs on <arguments> element");
+          Log.error("minOccurs > maxOccurs on <arguments> element");
           System.exit(1);
         }
       }
@@ -117,12 +121,12 @@ public final class Options {
           final String shortName = optionName._short$() != null ? optionName._short$().text() : null;
           final String name = longName != null ? longName : shortName;
           if (longName == null && shortName == null) {
-            System.err.println("[ERROR] both [long] and [short] option names are null in cli spec");
+            Log.error("both [long] and [short] option names are null in cli spec");
             System.exit(1);
           }
 
           nameToAltName.put(name, shortName != null ? shortName : longName);
-          cliOptions.put(name, option);
+          options.put(name, option);
           OptionBuilder.withLongOpt(name == longName ? longName : null);
           if (option._argument() != null && option._argument().size() != 0) {
             final cli_cli._option._argument argument = option._argument(0);
@@ -131,12 +135,12 @@ public final class Options {
             else if ($cli_use.required.text().equals(argument._use$().text()))
               OptionBuilder.hasArgs();
 
-            String argumentName = argument._label$().text();
-            shortNameToArgumentName.put(shortName, argumentName);
+            final StringBuilder argumentName = new StringBuilder(argument._label$().text());
+            shortNameToArgumentName.put(shortName, argumentName.toString());
             if (!option._valueSeparator$().isNull())
-              argumentName += option._valueSeparator$().text() + argumentName + option._valueSeparator$().text() + "...";
+              argumentName.append(option._valueSeparator$().text()).append(argumentName).append(option._valueSeparator$().text()).append("...");
 
-            OptionBuilder.withArgName(argumentName);
+            OptionBuilder.withArgName(argumentName.toString());
           }
 
           // Record which arguments are required
@@ -146,11 +150,11 @@ public final class Options {
           OptionBuilder.withValueSeparator(option._valueSeparator$().text() != null ? option._valueSeparator$().text().charAt(0) : ' ');
           // FIXME: Throw an error in case we don't match the condition!
           if (option._description() != null && option._description().size() != 0) {
-            String description = option._description(0).text();
+            final StringBuilder description = new StringBuilder(option._description(0).text());
             if (!option._argument(0).isNull())
-              description += "\ndefault: <" + option._argument(0)._default$().text() + ">";
+              description.append("\ndefault: <").append(option._argument(0)._default$().text()).append(">");
 
-            OptionBuilder.withDescription(description);
+            OptionBuilder.withDescription(description.toString());
           }
 
           // FIXME: Throw an error in case we don't match the condition!
@@ -164,21 +168,19 @@ public final class Options {
     }
 
     final Map<String,Option> optionsMap = new HashMap<String,Option>();
-    Collection<String> arguments = null;
     final Set<String> specifiedLongNames;
+    CommandLine commandLine = null;
     if (args != null && args.length != 0) {
       specifiedLongNames = new HashSet<String>();
       final CommandLineParser parser = new PosixParser();
-      CommandLine commandLine = null;
       do {
         try {
           commandLine = parser.parse(apacheOptions, args);
         }
         catch (final UnrecognizedOptionException e) {
-          String unrecognizedOption;
           if (e.getMessage().startsWith("Unrecognized option: ")) {
-            unrecognizedOption = e.getMessage().substring(21);
-            System.err.println("Unrecognized option: " + unrecognizedOption);
+            final String unrecognizedOption = e.getMessage().substring(21);
+            Log.error("Unrecognized option: " + unrecognizedOption);
             for (int i = 0; i < args.length; i++)
               if (args[i].equals(unrecognizedOption))
                 args[i] = "--help";
@@ -192,19 +194,23 @@ public final class Options {
         }
       }
       while (commandLine == null);
+    }
+    else {
+      specifiedLongNames = null;
+    }
 
-      arguments = commandLine.getArgList();
-      if (arguments.size() > 0) {
-        if (argumentsMaxOccurs == null || argumentsMinOccurs == null || argumentsMaxOccurs < arguments.size() || arguments.size() < argumentsMinOccurs) {
-          Options.trapPrintHelp(apacheOptions, cliArguments, null, System.err);
-        }
-      }
-      else if (argumentsMinOccurs != null && argumentsMinOccurs > 0) {
+    final Collection<String> arguments = commandLine != null ? commandLine.getArgList() : null;
+    if (arguments != null && arguments.size() > 0) {
+      if (argumentsMaxOccurs == null || argumentsMinOccurs == null || argumentsMaxOccurs < arguments.size() || arguments.size() < argumentsMinOccurs) {
         Options.trapPrintHelp(apacheOptions, cliArguments, null, System.err);
       }
+    }
+    else if (argumentsMinOccurs != null && argumentsMinOccurs > 0) {
+      Options.trapPrintHelp(apacheOptions, cliArguments, null, System.err);
+    }
 
-      org.apache.commons.cli.Option[] optionArray = commandLine.getOptions();
-      for (final org.apache.commons.cli.Option option : optionArray) {
+    if (commandLine != null) {
+      for (final org.apache.commons.cli.Option option : commandLine.getOptions()) {
         specifiedLongNames.add(option.getLongOpt());
         if ("help".equals(option.getLongOpt()))
           Options.trapPrintHelp(apacheOptions, cliArguments, null, System.out);
@@ -212,9 +218,6 @@ public final class Options {
         final String opt = option.getLongOpt() != null ? option.getLongOpt() : option.getOpt();
         optionsMap.put(opt, option.getValue() != null ? new Option(opt, option.getValues()) : new Option(opt, "true"));
       }
-    }
-    else {
-      specifiedLongNames = null;
     }
 
     // See if some arguments are missing
@@ -245,7 +248,7 @@ public final class Options {
           if (optionsMap.containsKey(name))
             continue;
 
-          final cli_cli._option cliOption = cliOptions.get(name);
+          final cli_cli._option cliOption = options.get(name);
           String value = null;
           if (cliOption._argument() != null && cliOption._argument().size() != 0 && cliOption._argument(0)._default$() != null) {
             value = cliOption._argument(0)._default$().text();
@@ -259,7 +262,7 @@ public final class Options {
         }
       }
       catch (final ExpressionFormatException e) {
-        System.err.println("Error in xml :" + e.getMessage());
+        Log.error(e.getMessage(), e);
         System.exit(1);
       }
     }
@@ -267,10 +270,9 @@ public final class Options {
     return new Options(mainClass, args, optionsMap.values(), arguments == null || arguments.size() == 0 ? null : arguments.toArray(new String[arguments.size()]));
   }
 
+  private final Map<String,Option> optionNameToOption = new HashMap<String,Option>();
   private final Class<?> mainClass;
   private final String[] args;
-  private Map<String,Option> optionMap = null;
-  private volatile boolean optionMapInited = false;
   private final Collection<Option> options;
   private final String[] arguments;
 
@@ -279,6 +281,8 @@ public final class Options {
     this.args = args;
     this.options = options == null ? Collections.<Option>emptyList() : Collections.<Option>unmodifiableCollection(options);
     this.arguments = arguments;
+    for (final Option option : options)
+      optionNameToOption.put(option.name, option);
   }
 
   /**
@@ -299,26 +303,7 @@ public final class Options {
   }
 
   public String[] getOptions(final String name) {
-    Option reqOption;
-    if (optionMapInited) {
-      reqOption = optionMap.get(name);
-      return reqOption != null ? reqOption.values : null;
-    }
-
-    synchronized (options) {
-      if (optionMapInited) {
-        reqOption = optionMap.get(name);
-        return reqOption != null ? reqOption.values : null;
-      }
-
-      optionMap = new HashMap<String,Option>();
-      for (final Option option : options)
-        optionMap.put(option.name, option);
-
-      optionMapInited = true;
-    }
-
-    reqOption = optionMap.get(name);
+    final Option reqOption = optionNameToOption.get(name);
     return reqOption != null ? reqOption.values : null;
   }
 
