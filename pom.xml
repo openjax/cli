@@ -55,14 +55,14 @@
   </build>
   <dependencies>
     <dependency>
+      <groupId>org.safris.commons</groupId>
+      <artifactId>util</artifactId>
+      <version>0.4.14-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>org.safris.xml.toolkit</groupId>
       <artifactId>binding</artifactId>
       <version>2.0.1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.safris.commons</groupId>
-      <artifactId>el</artifactId>
-      <version>0.4.10-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>commons-cli</groupId>
