@@ -37,12 +37,12 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
 import org.safris.commons.cli.xe.$cli_use;
 import org.safris.commons.cli.xe.cli_cli;
-import org.safris.commons.maven.Log;
 import org.safris.commons.util.ELs;
 import org.safris.commons.util.ExpressionFormatException;
 import org.safris.commons.xml.validator.ValidationException;
-import org.safris.xml.generator.compiler.runtime.Bindings;
-import org.safris.xml.generator.compiler.runtime.ParseException;
+import org.safris.maven.common.Log;
+import org.safris.xsb.generator.compiler.runtime.Bindings;
+import org.safris.xsb.generator.compiler.runtime.ParseException;
 import org.xml.sax.InputSource;
 
 public final class Options {
