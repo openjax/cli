@@ -27,7 +27,7 @@
   <groupId>org.safris.commons</groupId>
   <artifactId>cli</artifactId>
   <version>2.1.5</version>
-  <name>${project.groupId}.${project.artifactId}</name>
+  <name>${project.groupId}:${project.artifactId}</name>
   <build>
     <plugins>
       <plugin>
