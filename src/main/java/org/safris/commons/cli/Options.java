@@ -41,8 +41,8 @@ import org.safris.commons.util.ELs;
 import org.safris.commons.util.ExpressionFormatException;
 import org.safris.commons.xml.validator.ValidationException;
 import org.safris.maven.common.Log;
-import org.safris.xsb.compiler.runtime.Bindings;
-import org.safris.xsb.compiler.runtime.ParseException;
+import org.safris.xsb.runtime.Bindings;
+import org.safris.xsb.runtime.ParseException;
 import org.xml.sax.InputSource;
 
 public final class Options {
