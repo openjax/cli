@@ -22,6 +22,8 @@ import java.util.Arrays;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.safris.commons.cli.Option;
+import org.safris.commons.cli.Options;
 import org.safris.commons.lang.Resources;
 import org.safris.commons.test.LoggableTest;
 
@@ -52,7 +54,7 @@ public class OptionsTest extends LoggableTest {
       System.out.print(" " + arg);
 
     log("\n");
-    final Options options = Options.parse(Resources.getResource("xml/cli.xml").getURL(), OptionsTest.class, args);
+    final Options options = Options.parse(Resources.getResource("cli.xml").getURL(), OptionsTest.class, args);
     main(options);
     Assert.assertArrayEquals("user != [user1, user2]", new String[] {"user1", "user2"}, options.getOptions("user"));
     Assert.assertEquals("verbose != true", true, Boolean.parseBoolean(options.getOption("V")));
@@ -63,14 +65,14 @@ public class OptionsTest extends LoggableTest {
 
   @Test
   public void testEmptyOptions() throws Exception {
-    final Options options = Options.parse(Resources.getResource("xml/empty.xml").getURL(), OptionsTest.class, new String[0]);
+    final Options options = Options.parse(Resources.getResource("empty.xml").getURL(), OptionsTest.class, new String[0]);
     options.printCommand(System.out, OptionsTest.class);
     Assert.assertEquals(0, options.getOptions().size());
   }
 
   @Test
   public void testPrintCommand() throws Exception {
-    final Options options = Options.parse(Resources.getResource("xml/empty.xml").getURL(), OptionsTest.class, new String[0]);
+    final Options options = Options.parse(Resources.getResource("empty.xml").getURL(), OptionsTest.class, new String[0]);
     final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     final PrintStream ps = new PrintStream(baos);
     options.printCommand(ps, OptionsTest.class);
