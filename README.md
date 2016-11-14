@@ -1,5 +1,5 @@
 <img src="http://safris.org/logo.png" align="right" />
-# CPI [![CohesionFirst](http://safris.org/cf2.svg)](https://cohesionfirst.com/)
+# CLI [![CohesionFirst](http://safris.org/cf2.svg)](https://cohesionfirst.com/)
 > Command Line Interface
 
 ## Introduction
