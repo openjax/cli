@@ -1,6 +1,6 @@
 <img src="http://safris.org/logo.png" align="right" />
 # CPI [![CohesionFirst](http://safris.org/cf2.svg)](https://cohesionfirst.com/)
-> Command-Line Interface
+> Command Line Interface
 
 ## Introduction
 
@@ -95,7 +95,8 @@ CLI is based on a [XML Schema](https://github.com/SevaSafris/java/blob/master/co
   ```
 
   Options can now be accessed as such: `options.getOption("config")`.
-  Arguments can now be accesses ad such: `options.getArguments()`
+
+  Arguments can now be accesses ad such: `options.getArguments()`.
 
 6. When you use CLI, you get a `--help` option automatically provided. After compiling your application, run the app with `App --help`, and you should see this:
 
