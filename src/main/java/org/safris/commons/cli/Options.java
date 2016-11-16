@@ -40,7 +40,7 @@ import org.safris.cf.xsb.runtime.Bindings;
 import org.safris.cf.xsb.runtime.ParseException;
 import org.safris.commons.cli.xe.$cli_use;
 import org.safris.commons.cli.xe.cli_cli;
-import org.safris.commons.util.ExpressionFormatException;
+import org.safris.commons.lang.Arrays;
 import org.safris.commons.xml.validator.ValidationException;
 import org.safris.maven.common.Log;
 import org.xml.sax.InputSource;
@@ -55,6 +55,9 @@ public final class Options {
 
     if (maxOccurs == 2)
       return buffer.append(label).append(2).toString();
+
+    if (maxOccurs == Integer.MAX_VALUE)
+      return buffer.append(label).append(2).append("...").toString();
 
     return buffer.append("...").append(valueSeparator).append(label).append(maxOccurs).toString();
   }
@@ -173,7 +176,7 @@ public final class Options {
             OptionBuilder.withArgName(formatArgumentName(argument._label$().text(), maxOccurs, valueSeparator));
             OptionBuilder.withValueSeparator(valueSeparator);
             // FIXME: Throw an error in case we don't match the condition!
-            if (option._description() != null && option._description().size() != 0)
+            if (!option._description(0).isNull())
               OptionBuilder.withDescription(option._description(0).text());
           }
 
@@ -236,7 +239,7 @@ public final class Options {
           Options.trapPrintHelp(apacheOptions, cliArguments, null, System.out);
 
         final String opt = option.getLongOpt() != null ? option.getLongOpt() : option.getOpt();
-        optionsMap.put(opt, option.getValue() != null ? new Option(opt, option.getValues()) : new Option(opt, "true"));
+        optionsMap.put(opt, option.getValue() != null ? new Option(opt, option.getValueSeparator(), option.getValues()) : new Option(opt, option.getValueSeparator(), "true"));
       }
     }
 
@@ -253,30 +256,6 @@ public final class Options {
         }
 
         Options.trapPrintHelp(apacheOptions, cliArguments, buffer.substring(1), System.out);
-      }
-    }
-
-    // Take care of the default values for unspecified options!
-    if (argsDefBinding != null && argsDefBinding._option() != null) {
-      try {
-        for (final cli_cli._option option : argsDefBinding._option()) {
-          if (option._name().size() == 0)
-            continue;
-
-          final cli_cli._option._name optionName = option._name(0);
-          final String name = !optionName._long$().isNull() ? optionName._long$().text() : optionName._short$().text();
-          if (optionsMap.containsKey(name))
-            continue;
-
-          final cli_cli._option cliOption = options.get(name);
-          String value = null;
-          if (cliOption._argument() != null && cliOption._argument().size() != 0)
-            optionsMap.put(name, new Option(name, value));
-        }
-      }
-      catch (final ExpressionFormatException e) {
-        Log.error(e.getMessage(), e);
-        System.exit(1);
       }
     }
 
@@ -311,8 +290,8 @@ public final class Options {
   }
 
   public String getOption(final String name) {
-    final String[] options = getOptions(name);
-    return options != null && options.length > 0 ? options[0] : null;
+    final Option options = optionNameToOption.get(name);
+    return options != null && options.values != null && options.values.length > 0 ? Arrays.toString(options.values, options.valueSeparator) : null;
   }
 
   public String[] getOptions(final String name) {
