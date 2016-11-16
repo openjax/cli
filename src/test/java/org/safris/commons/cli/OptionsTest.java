@@ -22,8 +22,6 @@ import java.util.Arrays;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.safris.commons.cli.Option;
-import org.safris.commons.cli.Options;
 import org.safris.commons.lang.Resources;
 import org.safris.commons.test.LoggableTest;
 
@@ -41,8 +39,7 @@ public class OptionsTest extends LoggableTest {
   @Test
   public void testOptions() throws Exception {
     final String[] args = new String[] {
-      "--user", "user1,user2",
-      "-D", "070919",
+      "--users", "user1,user2",
       "-V",
       "file1",
       "file2",
@@ -56,9 +53,8 @@ public class OptionsTest extends LoggableTest {
     log("\n");
     final Options options = Options.parse(Resources.getResource("cli.xml").getURL(), OptionsTest.class, args);
     main(options);
-    Assert.assertArrayEquals("user != [user1, user2]", new String[] {"user1", "user2"}, options.getOptions("user"));
+    Assert.assertArrayEquals("user != [user1, user2]", new String[] {"user1", "user2"}, options.getOptions("users"));
     Assert.assertEquals("verbose != true", true, Boolean.parseBoolean(options.getOption("V")));
-    Assert.assertEquals("date != 070919", "070919", options.getOption("date"));
     Assert.assertEquals("silent != null", null, options.getOption("silent"));
     Assert.assertArrayEquals("arguments != [file1, file2, file3]", new String[] {"file1", "file2", "file3"}, options.getArguments());
   }
@@ -77,5 +73,10 @@ public class OptionsTest extends LoggableTest {
     final PrintStream ps = new PrintStream(baos);
     options.printCommand(ps, OptionsTest.class);
     Assert.assertEquals("java org.safris.commons.cli.OptionsTest", baos.toString());
+  }
+
+  @Test
+  public void testExecuteSuccess() throws Exception {
+    Options.parse(Resources.getResource("cli.xml").getURL(), OptionsTest.class, new String[]{"--config", "config.xml", "--users", "bob,joe", "file1.txt", "file2.txt", "file3.txt"});
   }
 }

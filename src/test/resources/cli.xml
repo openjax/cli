@@ -17,15 +17,15 @@
 <cli
   xmlns="http://commons.safris.org/cli.xsd"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://commons.safris.org/cli.xsd http://commons.safris.org/cli.xsd">
-  <option use="required">
-    <name long="date" short="D"/>
-    <argument label="yyMMdd" use="optional"/>
-    <description>use the yyMMdd date</description>
+  xsi:schemaLocation="http://commons.safris.org/cli.xsd ../../main/resources/cli.xsd">
+  <option>
+    <name long="config" short="C"/>
+    <argument label="CONFIG_FILE"/>
+    <description>config file</description>
   </option>
-  <option use="required" valueSeparator=",">
-    <name long="user" short="U"/>
-    <argument label="USER" use="required" default="asgus"/>
+  <option>
+    <name long="users" short="U"/>
+    <argument label="USER" valueSeparator="," use="required" maxOccurs="2"/>
     <description>run on the specified USERs</description>
   </option>
   <option>

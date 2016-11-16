@@ -45,14 +45,19 @@
               <xs:element name="argument" minOccurs="0">
                 <xs:complexType>
                   <xs:attribute name="label" type="dt:NCWName" use="required"/>
-                	<xs:attribute name="use" default="optional" type="cli:use"/>
-                	<xs:attribute name="default" type="xs:string"/>
+                  <xs:attribute name="valueSeparator" type="dt:char"/>
+                  <xs:attribute name="use" default="optional" type="cli:use"/>
+                  <xs:attribute name="maxOccurs" default="1">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:pattern value="([0-9]+)|(unbounded)"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
                 </xs:complexType>
               </xs:element>
               <xs:element name="description" type="xs:string"/>
             </xs:sequence>
-            <xs:attribute name="use" default="optional" type="cli:use"/>
-            <xs:attribute name="valueSeparator" type="dt:char"/>
           </xs:complexType>
         </xs:element>
         <xs:element name="arguments" minOccurs="0">
