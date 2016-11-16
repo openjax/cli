@@ -112,8 +112,8 @@ public final class Options {
     final org.apache.commons.cli.Options apacheOptions = new org.apache.commons.cli.Options();
     apacheOptions.addOption(null, "help", false, "Print help and usage.");
     final Map<String,cli_cli._option> options = new HashMap<String,cli_cli._option>();
-    int argumentsMinOccurs = 1;
-    int argumentsMaxOccurs = 1;
+    int argumentsMinOccurs = 0;
+    int argumentsMaxOccurs = 0;
     final cli_cli._arguments cliArguments;
     if (argsDefBinding != null) {
       cliArguments = argsDefBinding._arguments(0);
