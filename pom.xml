@@ -25,7 +25,7 @@
     <version>1.8.2</version>
   </parent>
   <groupId>org.safris.commons</groupId>
-  <artifactId>cli</artifactId>
+  <artifactId>commons-cli</artifactId>
   <version>2.1.5</version>
   <name>${project.groupId}:${project.artifactId}</name>
   <build>
@@ -47,12 +47,12 @@
   <dependencies>
     <dependency>
       <groupId>org.safris.cf.xsb</groupId>
-      <artifactId>generator</artifactId>
+      <artifactId>xsb-generator</artifactId>
       <version>2.1.2</version>
     </dependency>
     <dependency>
       <groupId>org.safris.commons</groupId>
-      <artifactId>util</artifactId>
+      <artifactId>commons-util</artifactId>
       <version>1.5.7</version>
     </dependency>
     <dependency>
