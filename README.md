@@ -33,7 +33,8 @@ Developed with the CohesionFirst™ approach, **commons-cli** is an easy-to-use 
 
     ```tcsh
     mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app \
-    -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+    -DarchetypeGroupId=org.safris.maven.archetype -DarchetypeArtifactId=cli-maven-archetype \
+    -DarchetypeCatalog=http://mvn.repo.safris.org -DinteractiveMode=false
     ```
 
 ### Example (Hands-on)
