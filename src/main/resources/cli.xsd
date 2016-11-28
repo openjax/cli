@@ -38,7 +38,7 @@
             <xs:sequence>
               <xs:element name="name">
                 <xs:complexType>
-                	<xs:attribute name="long" type="dt:NCWName"/>
+                  <xs:attribute name="long" type="dt:NCWName"/>
                   <xs:attribute name="short" type="dt:NCWName"/>
                 </xs:complexType>
               </xs:element>
