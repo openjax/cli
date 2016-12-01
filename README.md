@@ -1,35 +1,35 @@
 <img src="http://safris.org/logo.png" align="right"/>
-# commons-cli<br>[![JavaCommons](https://img.shields.io/badge/java-commons-orange.svg)](https://cohesionfirst.com/) [![CohesionFirst](https://img.shields.io/badge/CohesionFirst%E2%84%A2--blue.svg)](https://cohesionfirst.com/)
+## commons-cli<br>![java-commons][java-commons] [![CohesionFirst™][cohesionfirst_badge]][cohesionfirst]
 > Commons Command Line Interface
 
-## Introduction
+### Introduction
 
-**commons-cli** is a light wrapper around the [Apache Commons CLI](https://commons.apache.org/proper/commons-cli/) library, which provides a simple API to specify and process command line arguments.
+**commons-cli** is a light wrapper around the [Apache Commons CLI][apache-commons-cli] library, which provides a simple API to specify and process command line arguments.
 
-## Why **commons-cli**?
+### Why **commons-cli**?
 
-### CohesionFirst™
+#### CohesionFirst™
 
 Developed with the CohesionFirst™ approach, **commons-cli** is an easy-to-use and simple solution that separates itself from the rest with the strength of its cohesion and ease of usability. Made possible by the rigorous conformance to best practices in every line of its implementation, **commons-cli** considers the needs of the developer as primary, and offers a complete solution for the command line arguments facet of an application.
 
-### Complete Solution
+#### Complete Solution
 
-**commons-cli** allows a developer the full range of variation of the command line arguments pattern, and removes the unnecessary boilerplate code present in other solutions. **commons-cli** uses the XSB framework for [XML Schema Binding](https://github.com/SevaSafris/xsb/) to create a **commons-cli** specification based on a [XSD specification][cli-schema], which can be used to create a custom set of CLI options and arguments for any application.
+**commons-cli** allows a developer the full range of variation of the command line arguments pattern, and removes the unnecessary boilerplate code present in other solutions. **commons-cli** uses the XSB framework for [XML Schema Binding][xsb] to create a **commons-cli** specification based on a [XSD specification][cli-schema], which can be used to create a custom set of CLI options and arguments for any application.
 
-### Validating and Fail-Fast
+#### Validating and Fail-Fast
 
 **commons-cli** is based on a [XML Schema][cli-schema] that is used to specify the format of XML documents that describe the command line options and arguments accepted by an application. The XML Schema is designed to use the full power of XML Validation to allow a developer to qiuckly determine errors in his draft. Once a `cli.xml` passes the validation checks, it thereafter provides a clear and simple API to access the options and arguments in the code.
 
-## Getting Started
+### Getting Started
 
-### Prerequisites
+#### Prerequisites
 
-* [Java 7](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html) - The minimum required JDK version.
-* [Maven](https://maven.apache.org/) - The dependency management system.
+* [Java 7][jdk7-download] - The minimum required JDK version.
+* [Maven][maven] - The dependency management system.
 
-### Example (Quick-&-Easy)
+#### Example (Quick-&-Easy)
 
-1. In your preferred development directory, create a [`cli-maven-archetype`](https://github.com/SevaSafris/cli-maven-archetype) project.
+1. In your preferred development directory, create a [`cli-maven-archetype`][cli-maven-archetype] project.
 
     ```tcsh
     mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app \
@@ -37,9 +37,9 @@ Developed with the CohesionFirst™ approach, **commons-cli** is an easy-to-use 
     -DarchetypeCatalog=http://mvn.repo.safris.org -DinteractiveMode=false
     ```
 
-### Example (Hands-on)
+#### Example (Hands-on)
 
-1. In your preferred development directory, create a [`maven-archetype-quickstart`](http://maven.apache.org/archetypes/maven-archetype-quickstart/) project.
+1. In your preferred development directory, create a [`maven-archetype-quickstart`][maven-archetype-quickstart] project.
 
     ```tcsh
     mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app \
@@ -121,8 +121,17 @@ Developed with the CohesionFirst™ approach, **commons-cli** is an easy-to-use 
      -V                           verbose mode
     ```
 
-## License
+### License
 
 This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
 
+[apache-commons-cli]: https://commons.apache.org/proper/commons-cli/
+[cli-maven-archetype]: https://github.com/SevaSafris/cli-maven-archetype
 [cli-schema]: https://github.com/SevaSafris/commons-cli/blob/master/src/main/resources/cli.xsd
+[cohesionfirst]: https://www.cohesionfirst.com/
+[cohesionfirst_badge]: https://img.shields.io/badge/CohesionFirst%E2%84%A2--blue.svg
+[java-commons]: https://img.shields.io/badge/java-commons-orange.svg
+[jdk7-download]: http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
+[maven-archetype-quickstart]: http://maven.apache.org/archetypes/maven-archetype-quickstart/
+[maven]: https://maven.apache.org/
+[xsb]: https://github.com/SevaSafris/xsb/
