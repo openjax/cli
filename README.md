@@ -1,5 +1,5 @@
 <img src="https://www.cohesionfirst.org/logo.png" align="right"/>
-## commons-cli<br>![java-commons][java-commons] [![CohesionFirst™][cohesionfirst_badge]][cohesionfirst]
+## commons-cli<br>![java-commons][java-commons] <a href="https://www.cohesionfirst.org/"><img src="https://img.shields.io/badge/CohesionFirst%E2%84%A2--blue.svg"></a>
 > Commons Command Line Interface
 
 ### Introduction
@@ -128,8 +128,6 @@ This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.t
 [apache-commons-cli]: https://commons.apache.org/proper/commons-cli/
 [cli-maven-archetype]: https://github.com/SevaSafris/cli-maven-archetype
 [cli-schema]: https://github.com/SevaSafris/commons-cli/blob/master/src/main/resources/cli.xsd
-[cohesionfirst]: https://www.cohesionfirst.com/
-[cohesionfirst_badge]: https://img.shields.io/badge/CohesionFirst%E2%84%A2--blue.svg
 [java-commons]: https://img.shields.io/badge/java-commons-orange.svg
 [jdk7-download]: http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
 [maven-archetype-quickstart]: http://maven.apache.org/archetypes/maven-archetype-quickstart/
