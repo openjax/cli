@@ -27,6 +27,11 @@
   <groupId>org.safris.commons</groupId>
   <artifactId>commons-cli</artifactId>
   <version>2.1.5</version>
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
   <name>${project.groupId}:${project.artifactId}</name>
   <build>
     <plugins>
