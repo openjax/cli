@@ -18,10 +18,10 @@
   elementFormDefault="qualified"
   targetNamespace="http://commons.safris.org/cli.xsd"
   xmlns:cli="http://commons.safris.org/cli.xsd"
-  xmlns:dt="http://commons.safris.org/datatypes.xsd"
+  xmlns:dt="http://commons.safris.org/xml/datatypes.xsd"
   xmlns:xs="http://www.w3.org/2001/XMLSchema">
   
-  <xs:import namespace="http://commons.safris.org/datatypes.xsd" schemaLocation="http://commons.safris.org/datatypes.xsd"/>
+  <xs:import namespace="http://commons.safris.org/xml/datatypes.xsd" schemaLocation="http://commons.safris.org/xml/datatypes.xsd"/>
   
   <xs:simpleType name="use">
     <xs:restriction base="xs:token">
