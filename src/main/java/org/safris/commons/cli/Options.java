@@ -39,7 +39,7 @@ import org.apache.commons.cli.UnrecognizedOptionException;
 import org.safris.commons.cli.xe.$cli_use;
 import org.safris.commons.cli.xe.cli_cli;
 import org.safris.commons.lang.Arrays;
-import org.safris.commons.xml.validator.ValidationException;
+import org.safris.commons.xml.validate.ValidationException;
 import org.safris.maven.common.Log;
 import org.safris.xsb.runtime.Bindings;
 import org.safris.xsb.runtime.ParseException;

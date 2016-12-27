@@ -24,7 +24,7 @@ Developed with the CohesionFirst™ approach, **commons-cli** is an easy-to-use 
 
 #### Prerequisites
 
-* [Java 7][jdk7-download] - The minimum required JDK version.
+* [Java 8][jdk8-download] - The minimum required JDK version.
 * [Maven][maven] - The dependency management system.
 
 #### Example (Quick-&-Easy)
@@ -129,7 +129,7 @@ This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.t
 [cli-maven-archetype]: https://github.com/SevaSafris/cli-maven-archetype
 [cli-schema]: https://github.com/SevaSafris/commons-cli/blob/master/src/main/resources/cli.xsd
 [java-commons]: https://img.shields.io/badge/java-commons-orange.svg
-[jdk7-download]: http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
+[jdk8-download]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 [maven-archetype-quickstart]: http://maven.apache.org/archetypes/maven-archetype-quickstart/
 [maven]: https://maven.apache.org/
 [xsb]: https://github.com/SevaSafris/xsb/
