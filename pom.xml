@@ -40,7 +40,7 @@
         <artifactId>xsb-maven-plugin</artifactId>
         <configuration>
           <manifest xmlns="http://maven.safris.org/common/manifest.xsd">
-            <destdir explodeJars="true">${project.build.directory}/generated-sources/xsb</destdir>
+            <destdir>${project.build.directory}/generated-sources/xsb</destdir>
             <schemas>
               <schema>${basedir}/src/main/resources/cli.xsd</schema>
             </schemas>
