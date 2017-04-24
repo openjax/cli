@@ -1,4 +1,5 @@
-<img src="https://www.cohesionfirst.org/logo.png" align="right"/>
+<img src="https://www.cohesionfirst.org/logo.png" align="right">
+
 ## commons-cli<br>![java-commons][java-commons] <a href="https://www.cohesionfirst.org/"><img src="https://img.shields.io/badge/CohesionFirst%E2%84%A2--blue.svg"></a>
 > Commons Command Line Interface
 
