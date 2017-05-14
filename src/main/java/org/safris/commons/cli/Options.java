@@ -40,12 +40,15 @@ import org.safris.commons.cli.xe.$cli_use;
 import org.safris.commons.cli.xe.cli_cli;
 import org.safris.commons.lang.Arrays;
 import org.safris.commons.xml.validate.ValidationException;
-import org.safris.maven.common.Log;
 import org.safris.xsb.runtime.Bindings;
 import org.safris.xsb.runtime.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
 public final class Options {
+  private static final Logger logger = LoggerFactory.getLogger(Options.class);
+
   private static String formatArgumentName(final String label, final int maxOccurs, final char valueSeparator) {
     if (maxOccurs == 1)
       return label;
@@ -124,7 +127,7 @@ public final class Options {
         argumentsMinOccurs = cliArguments._minOccurs$().text();
         argumentsMaxOccurs = "unbounded".equals(cliArguments._maxOccurs$().text()) ? Integer.MAX_VALUE : Integer.parseInt(cliArguments._maxOccurs$().text());
         if (argumentsMaxOccurs < argumentsMinOccurs) {
-          Log.error("minOccurs > maxOccurs on <arguments> element");
+          logger.error("minOccurs > maxOccurs on <arguments> element");
           System.exit(1);
         }
       }
@@ -136,7 +139,7 @@ public final class Options {
           final String shortName = optionName._short$().isNull() ? null : optionName._short$().text();
           final String name = longName != null ? longName : shortName;
           if (longName == null && shortName == null) {
-            Log.error("both [long] and [short] option names are null in cli spec");
+            logger.error("both [long] and [short] option names are null in cli spec");
             System.exit(1);
           }
 
@@ -203,7 +206,7 @@ public final class Options {
         catch (final UnrecognizedOptionException e) {
           if (e.getMessage().startsWith("Unrecognized option: ")) {
             final String unrecognizedOption = e.getMessage().substring(21);
-            Log.error("Unrecognized option: " + unrecognizedOption);
+            logger.error("Unrecognized option: " + unrecognizedOption);
             for (int i = 0; i < args.length; i++)
               if (args[i].equals(unrecognizedOption))
                 args[i] = "--help";
