@@ -23,9 +23,12 @@ import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;
 import org.safris.commons.lang.Resources;
-import org.safris.commons.test.LoggableTest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class OptionsTest extends LoggableTest {
+public class OptionsTest {
+  private static final Logger logger = LoggerFactory.getLogger(OptionsTest.class);
+
   public static void main(final Options options) {
     Assert.assertNotNull(options);
     System.out.println(options.toString());
@@ -50,7 +53,7 @@ public class OptionsTest extends LoggableTest {
     for (final String arg : args)
       System.out.print(" " + arg);
 
-    log("\n");
+    logger.info("\n");
     final Options options = Options.parse(Resources.getResource("cli.xml").getURL(), OptionsTest.class, args);
     main(options);
     Assert.assertArrayEquals("user != [user1, user2]", new String[] {"user1", "user2"}, options.getOptions("users"));
