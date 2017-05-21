@@ -105,7 +105,7 @@ public final class Options {
 
   public static Options parse(final URL cliURL, final Class<?> mainClass, final String[] args) throws OptionsException {
     try {
-      return parse((cli_cli)Bindings.parse(new InputSource(cliURL.openStream())), mainClass, args);
+      return parse((cli_cli)Bindings.parse(cliURL), mainClass, args);
     }
     catch (final IOException | ParseException | ValidationException e) {
       throw new OptionsException(e);
