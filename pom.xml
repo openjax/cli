@@ -20,12 +20,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd http://maven.safris.org/common/manifest.xsd http://maven.safris.org/common/manifest.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.safris</groupId>
-    <artifactId>commons</artifactId>
-    <version>1.8.2</version>
+    <groupId>org</groupId>
+    <artifactId>safris</artifactId>
+    <version>1.7.1</version>
   </parent>
-  <groupId>org.safris.commons</groupId>
-  <artifactId>commons-cli</artifactId>
+  <groupId>org.safris</groupId>
+  <artifactId>safris-cli</artifactId>
   <version>2.1.5</version>
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
