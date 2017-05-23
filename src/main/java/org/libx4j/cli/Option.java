@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.safris.commons.cli;
+package org.libx4j.cli;
 
 import java.util.Arrays;
 

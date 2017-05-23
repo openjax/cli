@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.safris.commons.cli;
+package org.libx4j.cli;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -75,7 +75,7 @@ public class OptionsTest {
     final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     final PrintStream ps = new PrintStream(baos);
     options.printCommand(ps, OptionsTest.class);
-    Assert.assertEquals("java org.safris.commons.cli.OptionsTest", baos.toString());
+    Assert.assertEquals("java " + OptionsTest.class.getName(), baos.toString());
   }
 
   @Test

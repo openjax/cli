@@ -14,24 +14,24 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.safris.commons.cli;
+package org.libx4j.cli;
 
-public class OptionsException extends Exception {
-  private static final long serialVersionUID = 5105269275616454628L;
+public final class MissingOptionException extends OptionsException {
+  private static final long serialVersionUID = 1752296328335010992L;
 
-  public OptionsException() {
+  public MissingOptionException() {
     super();
   }
 
-  public OptionsException(final String message) {
-    super(message);
+  public MissingOptionException(final String message) {
+    super();
   }
 
-  public OptionsException(final String message, final Throwable cause) {
+  public MissingOptionException(final String message, final Throwable cause) {
     super(message, cause);
   }
 
-  public OptionsException(final Throwable cause) {
+  public MissingOptionException(final Throwable cause) {
     super(cause);
   }
 }
