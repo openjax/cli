@@ -22,7 +22,7 @@ import java.util.Arrays;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.safris.commons.lang.Resources;
+import org.lib4j.lang.Resources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
