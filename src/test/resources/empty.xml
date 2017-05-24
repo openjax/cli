@@ -15,6 +15,6 @@
   program. If not, see <http://opensource.org/licenses/MIT/>.
 -->
 <cli
-  xmlns="http://commons.safris.org/cli.xsd"
+  xmlns="http://libx4j.org/cli.xsd"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://commons.safris.org/cli.xsd http://commons.safris.org/cli.xsd"/>
+  xsi:schemaLocation="http://libx4j.org/cli.xsd http://libx4j.org/cli.xsd"/>
