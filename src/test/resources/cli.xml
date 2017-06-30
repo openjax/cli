@@ -20,12 +20,12 @@
   xsi:schemaLocation="http://libx4j.org/cli.xsd ../../main/resources/cli.xsd">
   <option>
     <name long="config" short="C"/>
-    <argument label="CONFIG_FILE"/>
+    <argument label="CONFIG_FILE" default="config.xml"/>
     <description>config file</description>
   </option>
   <option>
     <name long="users" short="U"/>
-    <argument label="USER" valueSeparator="," use="required" maxOccurs="2"/>
+    <argument label="USER" valueSeparator="," use="required" maxOccurs="2" pattern="[ a-zA-Z0-9]+"/>
     <description>run on the specified USERs</description>
   </option>
   <option>

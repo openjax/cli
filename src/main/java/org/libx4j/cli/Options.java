@@ -65,18 +65,18 @@ public final class Options {
     return buffer.append("...").append(valueSeparator).append(label).append(maxOccurs).toString();
   }
 
-  private static void printHelp(org.apache.commons.cli.Options apacheOptions, final cli_cli._arguments cliArguments, final PrintStream ps) {
+  private static void printHelp(final org.apache.commons.cli.Options apacheOptions, final cli_cli._arguments cliArguments, final PrintStream ps) {
     final HelpFormatter formatter = new FixedHelpFormatter();
     final PrintWriter pw = new PrintWriter(ps);
     final StringBuilder args = new StringBuilder(apacheOptions.getOptions().size() > 0 ? " [options]" : "");
     if (cliArguments != null && !cliArguments.isNull()) {
       for (int i = 1; i <= cliArguments._minOccurs$().text(); i++)
-        args.append(" <").append(cliArguments._label$().text()).append((i != 1 ? i : "")).append(">");
+        args.append(" <").append(cliArguments._label$().text()).append(i != 1 ? i : "").append(">");
 
       final boolean maxUnbounded = "unbounded".equals(cliArguments._maxOccurs$().text());
       final int argsMax = maxUnbounded ? 2 + cliArguments._minOccurs$().text(): Integer.parseInt(cliArguments._maxOccurs$().text());
       for (int i = cliArguments._minOccurs$().text() + 1; i <= argsMax; i++)
-        args.append(" [").append(cliArguments._label$().text()).append((i != 1 ? i : "")).append("]");
+        args.append(" [").append(cliArguments._label$().text()).append(i != 1 ? i : "").append("]");
 
       if (maxUnbounded)
         args.append(" [...]");
@@ -86,7 +86,7 @@ public final class Options {
     pw.flush();
   }
 
-  private static void trapPrintHelp(org.apache.commons.cli.Options apacheOptions, final cli_cli._arguments cliArguments, final String message, final PrintStream ps) {
+  private static void trapPrintHelp(final org.apache.commons.cli.Options apacheOptions, final cli_cli._arguments cliArguments, final String message, final PrintStream ps) {
     if (message != null)
       ps.println(message);
 
@@ -112,17 +112,16 @@ public final class Options {
     }
   }
 
-  public static Options parse(final cli_cli argsDefBinding, final Class<?> mainClass, final String[] args) throws OptionsException {
+  public static Options parse(final cli_cli binding, final Class<?> mainClass, final String[] args) throws OptionsException {
     final Set<String> requiredNames = new HashSet<String>();
     final Map<String,String> nameToAltName = new HashMap<String,String>();
     final org.apache.commons.cli.Options apacheOptions = new org.apache.commons.cli.Options();
     apacheOptions.addOption(null, "help", false, "Print help and usage.");
-    final Map<String,cli_cli._option> options = new HashMap<String,cli_cli._option>();
     int argumentsMinOccurs = 0;
     int argumentsMaxOccurs = 0;
     final cli_cli._arguments cliArguments;
-    if (argsDefBinding != null) {
-      cliArguments = argsDefBinding._arguments(0);
+    if (binding != null) {
+      cliArguments = binding._arguments(0);
       if (!cliArguments.isNull()) {
         argumentsMinOccurs = cliArguments._minOccurs$().text();
         argumentsMaxOccurs = "unbounded".equals(cliArguments._maxOccurs$().text()) ? Integer.MAX_VALUE : Integer.parseInt(cliArguments._maxOccurs$().text());
@@ -132,8 +131,8 @@ public final class Options {
         }
       }
 
-      if (argsDefBinding._option() != null) {
-        for (final cli_cli._option option : argsDefBinding._option()) {
+      if (binding._option() != null) {
+        for (final cli_cli._option option : binding._option()) {
           final cli_cli._option._name optionName = option._name(0);
           final String longName = optionName._long$().isNull() ? null : optionName._long$().text();
           final String shortName = optionName._short$().isNull() ? null : optionName._short$().text();
@@ -144,8 +143,8 @@ public final class Options {
           }
 
           nameToAltName.put(name, shortName != null ? shortName : longName);
-          options.put(name, option);
           OptionBuilder.withLongOpt(name == longName ? longName : null);
+
           // Record which options are required
           if (option._argument() != null && option._argument().size() != 0) {
             final cli_cli._option._argument argument = option._argument(0);
@@ -178,14 +177,19 @@ public final class Options {
             final char valueSeparator = argument._valueSeparator$().text() != null ? argument._valueSeparator$().text().charAt(0) : ' ';
             OptionBuilder.withArgName(formatArgumentName(argument._label$().text(), maxOccurs, valueSeparator));
             OptionBuilder.withValueSeparator(valueSeparator);
-            // FIXME: Throw an error in case we don't match the condition!
-            if (!option._description(0).isNull())
-              OptionBuilder.withDescription(option._description(0).text());
+            if (option._description(0).isNull()) {
+              logger.error("missing <description> for " + name + " option");
+              System.exit(1);
+            }
+
+            final StringBuilder description = new StringBuilder(option._description(0).text());
+            if (!option._argument(0)._default$().isNull())
+              description.append("\nDefault: ").append(option._argument(0)._default$().text());
+
+            OptionBuilder.withDescription(description.toString());
           }
 
-          // FIXME: Throw an error in case we don't match the condition!
-          if (option._name() != null && option._name().size() != 0 && optionName._short$() != null)
-            apacheOptions.addOption(OptionBuilder.create(optionName._short$().text()));
+          apacheOptions.addOption(OptionBuilder.create(shortName));
         }
       }
     }
@@ -241,8 +245,8 @@ public final class Options {
         if ("help".equals(option.getLongOpt()))
           Options.trapPrintHelp(apacheOptions, cliArguments, null, System.out);
 
-        final String opt = option.getLongOpt() != null ? option.getLongOpt() : option.getOpt();
-        optionsMap.put(opt, option.getValue() != null ? new Option(opt, option.getValueSeparator(), option.getValues()) : new Option(opt, option.getValueSeparator(), "true"));
+        final String optionName = option.getLongOpt() != null ? option.getLongOpt() : option.getOpt();
+        optionsMap.put(optionName, option.getValue() != null ? new Option(optionName, option.getValueSeparator(), option.getValues()) : new Option(optionName, option.getValueSeparator(), "true"));
       }
     }
 
@@ -252,14 +256,57 @@ public final class Options {
         requiredNames.removeAll(specifiedLongNames);
 
       if (requiredNames.size() != 0) {
-        final StringBuilder buffer = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         for (final String longName : requiredNames) {
           final String shortName = nameToAltName.get(longName);
-          buffer.append("\nMissing argument: -").append(shortName).append(",--").append(longName);
+          if (shortName.equals(longName))
+            builder.append("\nMissing argument: -").append(shortName);
+          else
+            builder.append("\nMissing argument: -").append(shortName).append(",--").append(longName);
         }
 
-        Options.trapPrintHelp(apacheOptions, cliArguments, buffer.substring(1), System.out);
+        Options.trapPrintHelp(apacheOptions, cliArguments, builder.substring(1), System.out);
       }
+    }
+
+    // Include default values for options that are not specified
+    if (binding._option() != null) {
+      for (final cli_cli._option option : binding._option()) {
+        if (!option._argument(0)._default$().isNull()) {
+          final String optionName = !option._name(0)._long$().isNull() ? option._name(0)._long$().text() : option._name(0)._short$().text();
+          if (!optionsMap.containsKey(optionName)) {
+            final String valueSeparator = option._argument(0)._valueSeparator$().text();
+            final String defaultValue = option._argument(0)._default$().text();
+            optionsMap.put(optionName, valueSeparator != null ? new Option(optionName, valueSeparator.charAt(0), defaultValue) : new Option(optionName, defaultValue));
+          }
+        }
+      }
+    }
+
+    // Check pattern for specified and default options
+    if (binding._option() != null) {
+      final StringBuilder builder = new StringBuilder();
+      for (final cli_cli._option option : binding._option()) {
+        if (!option._argument(0)._pattern$().isNull()) {
+          final String optionName = !option._name(0)._long$().isNull() ? option._name(0)._long$().text() : option._name(0)._short$().text();
+          final Option opt = optionsMap.get(optionName);
+          if (opt != null) {
+            for (final String value : opt.getValues()) {
+              if (!value.matches(option._argument(0)._pattern$().text())) {
+                if (option._name(0)._long$().isNull() || option._name(0)._short$().isNull())
+                  builder.append("\nIncorrect argument form: -").append(optionName);
+                else
+                  builder.append("\nIncorrect argument form: -").append(option._name(0)._short$().text()).append(",--").append(option._name(0)._long$().text());
+
+                builder.append(" ").append(value).append("\n  Required: ").append(option._argument(0)._pattern$().text());
+              }
+            }
+          }
+        }
+      }
+
+      if (builder.length() > 0)
+        Options.trapPrintHelp(apacheOptions, cliArguments, builder.substring(1), System.out);
     }
 
     return new Options(mainClass, args, optionsMap.values(), arguments == null || arguments.size() == 0 ? null : arguments.toArray(new String[arguments.size()]));
@@ -277,7 +324,7 @@ public final class Options {
     this.options = options == null ? Collections.<Option>emptyList() : Collections.<Option>unmodifiableCollection(options);
     this.arguments = arguments;
     for (final Option option : options)
-      optionNameToOption.put(option.name, option);
+      optionNameToOption.put(option.getName(), option);
   }
 
   /**
@@ -294,12 +341,12 @@ public final class Options {
 
   public String getOption(final String name) {
     final Option options = optionNameToOption.get(name);
-    return options != null && options.values != null && options.values.length > 0 ? Arrays.toString(options.values, options.valueSeparator) : null;
+    return options == null || options.getValues().length == 0 ? null : options.getValues().length == 1 ? options.getValues()[0] : Arrays.toString(options.getValues(), options.getValueSeparator());
   }
 
   public String[] getOptions(final String name) {
     final Option reqOption = optionNameToOption.get(name);
-    return reqOption != null ? reqOption.values : null;
+    return reqOption != null ? reqOption.getValues() : null;
   }
 
   public void printCommand(final PrintStream ps, final Class<?> callerClass) {

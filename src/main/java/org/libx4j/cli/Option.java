@@ -19,17 +19,30 @@ package org.libx4j.cli;
 import java.util.Arrays;
 
 public final class Option {
-  public final String name;
-  public final String value;
-  public final String[] values;
-  public final char valueSeparator;
-
+  private final String name;
+  private final String[] values;
+  private final char valueSeparator;
 
   public Option(final String name, final char valueSeparator, final String ... values) {
     this.name = name;
     this.valueSeparator = valueSeparator;
-    this.value = values.length > 0 ? values[0] : null;
     this.values = values;
+  }
+
+  public Option(final String name, final String ... values) {
+    this(name, ' ', values);
+  }
+
+  public String getName() {
+    return this.name;
+  }
+
+  public String[] getValues() {
+    return this.values;
+  }
+
+  public char getValueSeparator() {
+    return this.valueSeparator;
   }
 
   @Override

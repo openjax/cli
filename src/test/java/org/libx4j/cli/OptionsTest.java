@@ -34,7 +34,7 @@ public class OptionsTest {
     System.out.println(options.toString());
     System.out.println("------------------------------------------");
     for (final Option option : options.getOptions())
-      System.out.println("[" + option.name + "]: " + Arrays.toString(option.values));
+      System.out.println("[" + option.getName() + "]: " + Arrays.toString(option.getValues()));
 
     System.out.println("[arguments]: " + Arrays.toString(options.getArguments()));
   }
@@ -44,6 +44,7 @@ public class OptionsTest {
     final String[] args = new String[] {
       "--users", "user1,user2",
       "-V",
+      "--help",
       "file1",
       "file2",
       "file3"
@@ -56,6 +57,7 @@ public class OptionsTest {
     logger.info("\n");
     final Options options = Options.parse(Resources.getResource("cli.xml").getURL(), OptionsTest.class, args);
     main(options);
+    Assert.assertEquals("config.xml", options.getOption("config"));
     Assert.assertArrayEquals("user != [user1, user2]", new String[] {"user1", "user2"}, options.getOptions("users"));
     Assert.assertEquals("verbose != true", true, Boolean.parseBoolean(options.getOption("V")));
     Assert.assertEquals("silent != null", null, options.getOption("silent"));

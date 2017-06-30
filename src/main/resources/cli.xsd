@@ -54,9 +54,11 @@
                       </xs:restriction>
                     </xs:simpleType>
                   </xs:attribute>
+                  <xs:attribute name="pattern" type="dt:stringNonEmpty"/>
+                  <xs:attribute name="default" type="dt:stringNonEmpty"/>
                 </xs:complexType>
               </xs:element>
-              <xs:element name="description" type="xs:string"/>
+              <xs:element name="description" type="dt:stringNonEmpty"/>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
