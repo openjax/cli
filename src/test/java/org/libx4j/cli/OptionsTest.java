@@ -44,7 +44,6 @@ public class OptionsTest {
     final String[] args = new String[] {
       "--users", "user1,user2",
       "-V",
-      "--help",
       "file1",
       "file2",
       "file3"
