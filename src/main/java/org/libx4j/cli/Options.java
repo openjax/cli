@@ -36,7 +36,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
-import org.lib4j.util.Arrays;
+import org.lib4j.lang.Arrays;
 import org.lib4j.xml.validate.ValidationException;
 import org.libx4j.cli.xe.$cli_use;
 import org.libx4j.cli.xe.cli_cli;
