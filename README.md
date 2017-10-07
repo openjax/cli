@@ -95,8 +95,8 @@ Developed with the CohesionFirst™ approach, **libx4j-cli** is an easy-to-use a
     ```xml
     <dependency>
       <groupId>org.libx4j</groupId>
-      <artifactId>cli</artifactId>
-      <version>2.1.5</version>
+      <artifactId>libx4j-cli</artifactId>
+      <version>2.1.6-SNAPSHOT</version>
     </dependency>
     ```
 
