@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.libx4j.cli;
+package org.lib4j.cli;
 
 import java.util.Arrays;
 

@@ -14,20 +14,33 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.libx4j.cli;
+package org.lib4j.cli;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -36,18 +49,13 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
-import org.lib4j.lang.Arrays;
-import org.lib4j.xml.validate.ValidationException;
-import org.libx4j.cli.xe.$cli_use;
-import org.libx4j.cli.xe.cli_cli;
-import org.libx4j.xsb.runtime.Bindings;
-import org.libx4j.xsb.runtime.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public final class Options {
   private static final Logger logger = LoggerFactory.getLogger(Options.class);
+  private static Schema schema;
 
   private static String formatArgumentName(final String label, final int maxOccurs, final char valueSeparator) {
     if (maxOccurs == 1)
@@ -65,18 +73,18 @@ public final class Options {
     return buffer.append("...").append(valueSeparator).append(label).append(maxOccurs).toString();
   }
 
-  private static void printHelp(final org.apache.commons.cli.Options apacheOptions, final cli_cli._arguments cliArguments, final PrintStream ps) {
+  private static void printHelp(final org.apache.commons.cli.Options apacheOptions, final Cli.Arguments cliArguments, final PrintStream ps) {
     final HelpFormatter formatter = new FixedHelpFormatter();
     final PrintWriter pw = new PrintWriter(ps);
     final StringBuilder args = new StringBuilder(apacheOptions.getOptions().size() > 0 ? " [options]" : "");
-    if (cliArguments != null && !cliArguments.isNull()) {
-      for (int i = 1; i <= cliArguments._minOccurs$().text(); i++)
-        args.append(" <").append(cliArguments._label$().text()).append(i != 1 ? i : "").append(">");
+    if (cliArguments != null) {
+      for (short i = 1; i <= cliArguments.getMinOccurs(); i++)
+        args.append(" <").append(cliArguments.getLabel()).append(i != 1 ? i : "").append(">");
 
-      final boolean maxUnbounded = "unbounded".equals(cliArguments._maxOccurs$().text());
-      final int argsMax = maxUnbounded ? 2 + cliArguments._minOccurs$().text(): Integer.parseInt(cliArguments._maxOccurs$().text());
-      for (int i = cliArguments._minOccurs$().text() + 1; i <= argsMax; i++)
-        args.append(" [").append(cliArguments._label$().text()).append(i != 1 ? i : "").append("]");
+      final boolean maxUnbounded = "unbounded".equals(cliArguments.getMaxOccurs());
+      final int argsMax = maxUnbounded ? 2 + cliArguments.getMinOccurs() : Short.parseShort(cliArguments.getMaxOccurs());
+      for (int i = cliArguments.getMinOccurs() + 1; i <= argsMax; i++)
+        args.append(" [").append(cliArguments.getLabel()).append(i != 1 ? i : "").append("]");
 
       if (maxUnbounded)
         args.append(" [...]");
@@ -86,7 +94,7 @@ public final class Options {
     pw.flush();
   }
 
-  private static void trapPrintHelp(final org.apache.commons.cli.Options apacheOptions, final cli_cli._arguments cliArguments, final String message, final PrintStream ps) {
+  private static void trapPrintHelp(final org.apache.commons.cli.Options apacheOptions, final Cli.Arguments cliArguments, final String message, final PrintStream ps) {
     if (message != null)
       ps.println(message);
 
@@ -94,48 +102,60 @@ public final class Options {
     System.exit(1);
   }
 
-  public static Options parse(final File cliFile, final Class<?> mainClass, final String[] args) throws OptionsException {
+  public static Options parse(final File cliFile, final Class<?> mainClass, final String[] args) {
     try {
-      return parse((cli_cli)Bindings.parse(new InputSource(new FileInputStream(cliFile))), mainClass, args);
+      return parse(cliFile.toURI().toURL(), mainClass, args);
     }
-    catch (final IOException | ParseException | ValidationException e) {
-      throw new OptionsException(e);
+    catch (final MalformedURLException e) {
+      throw new IllegalArgumentException(e);
     }
   }
 
-  public static Options parse(final URL cliURL, final Class<?> mainClass, final String[] args) throws OptionsException {
+  public static Options parse(final URL cliURL, final Class<?> mainClass, final String[] args) {
     try {
-      return parse((cli_cli)Bindings.parse(cliURL), mainClass, args);
+      final Unmarshaller unmarshaller = JAXBContext.newInstance(Cli.class).createUnmarshaller();
+      unmarshaller.setSchema(Options.schema == null ? Options.schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(Thread.currentThread().getContextClassLoader().getResource("cli.xsd")) : Options.schema);
+
+      try (final InputStream in = cliURL.openStream()) {
+        final JAXBElement<Cli> element = unmarshaller.unmarshal(XMLInputFactory.newInstance().createXMLStreamReader(in), Cli.class);
+        return parse(element.getValue(), mainClass, args);
+      }
     }
-    catch (final IOException | ParseException | ValidationException e) {
-      throw new OptionsException(e);
+    catch (final FactoryConfigurationError e) {
+      throw new UnsupportedOperationException(e);
+    }
+    catch (final IOException e) {
+      throw new RuntimeException(e);
+    }
+    catch (final JAXBException | SAXException | XMLStreamException e) {
+      throw new IllegalArgumentException(e);
     }
   }
 
-  public static Options parse(final cli_cli binding, final Class<?> mainClass, final String[] args) throws OptionsException {
+  public static Options parse(final Cli binding, final Class<?> mainClass, final String[] args) {
     final Set<String> requiredNames = new HashSet<String>();
     final Map<String,String> nameToAltName = new HashMap<String,String>();
     final org.apache.commons.cli.Options apacheOptions = new org.apache.commons.cli.Options();
     apacheOptions.addOption(null, "help", false, "Print help and usage.");
-    int argumentsMinOccurs = 0;
-    int argumentsMaxOccurs = 0;
-    final cli_cli._arguments cliArguments;
+    short argumentsMinOccurs = 0;
+    short argumentsMaxOccurs = 0;
+    final Cli.Arguments cliArguments;
     if (binding != null) {
-      cliArguments = binding._arguments(0);
-      if (!cliArguments.isNull()) {
-        argumentsMinOccurs = cliArguments._minOccurs$().text();
-        argumentsMaxOccurs = "unbounded".equals(cliArguments._maxOccurs$().text()) ? Integer.MAX_VALUE : Integer.parseInt(cliArguments._maxOccurs$().text());
+      cliArguments = binding.getArguments();
+      if (cliArguments != null) {
+        argumentsMinOccurs = cliArguments.getMinOccurs();
+        argumentsMaxOccurs = "unbounded".equals(cliArguments.getMaxOccurs()) ? Short.MAX_VALUE : Short.parseShort(cliArguments.getMaxOccurs());
         if (argumentsMaxOccurs < argumentsMinOccurs) {
           logger.error("minOccurs > maxOccurs on <arguments> element");
           System.exit(1);
         }
       }
 
-      if (binding._option() != null) {
-        for (final cli_cli._option option : binding._option()) {
-          final cli_cli._option._name optionName = option._name(0);
-          final String longName = optionName._long$().isNull() ? null : optionName._long$().text();
-          final String shortName = optionName._short$().isNull() ? null : optionName._short$().text();
+      if (binding.getOption() != null) {
+        for (final Cli.Option option : binding.getOption()) {
+          final Cli.Option.Name optionName = option.getName();
+          final String longName = optionName.getLong() == null ? null : optionName.getLong();
+          final String shortName = optionName.getShort() == null ? null : optionName.getShort();
           final String name = longName != null ? longName : shortName;
           if (longName == null && shortName == null) {
             logger.error("both [long] and [short] option names are null in cli spec");
@@ -146,15 +166,15 @@ public final class Options {
           OptionBuilder.withLongOpt(name == longName ? longName : null);
 
           // Record which options are required
-          if (option._argument() != null && option._argument().size() != 0) {
-            final cli_cli._option._argument argument = option._argument(0);
-            final boolean isRequired = $cli_use.required.text().equals(argument._use$().text());
+          if (option.getArgument() != null) {
+            final Cli.Option.Argument argument = option.getArgument();
+            final boolean isRequired = Use.REQUIRED == argument.getUse();
             if (isRequired) {
               OptionBuilder.isRequired();
               requiredNames.add(longName);
             }
 
-            final int maxOccurs = argument._maxOccurs$().isNull() ? 1 : "unbounded".equals(argument._maxOccurs$().text()) ? Integer.MAX_VALUE : Integer.parseInt(argument._maxOccurs$().text());
+            final int maxOccurs = argument.getMaxOccurs() == null ? 1 : "unbounded".equals(argument.getMaxOccurs()) ? Integer.MAX_VALUE : Integer.parseInt(argument.getMaxOccurs());
             if (maxOccurs == 1) {
               if (isRequired)
                 OptionBuilder.hasArgs(1);
@@ -174,17 +194,17 @@ public final class Options {
                 OptionBuilder.hasOptionalArgs(maxOccurs);
             }
 
-            final char valueSeparator = argument._valueSeparator$().text() != null ? argument._valueSeparator$().text().charAt(0) : ' ';
-            OptionBuilder.withArgName(formatArgumentName(argument._label$().text(), maxOccurs, valueSeparator));
+            final char valueSeparator = argument.getValueSeparator() != null ? argument.getValueSeparator().charAt(0) : ' ';
+            OptionBuilder.withArgName(formatArgumentName(argument.getLabel(), maxOccurs, valueSeparator));
             OptionBuilder.withValueSeparator(valueSeparator);
-            if (option._description(0).isNull()) {
+            if (option.getDescription() == null) {
               logger.error("missing <description> for " + name + " option");
               System.exit(1);
             }
 
-            final StringBuilder description = new StringBuilder(option._description(0).text());
-            if (!option._argument(0)._default$().isNull())
-              description.append("\nDefault: ").append(option._argument(0)._default$().text());
+            final StringBuilder description = new StringBuilder(option.getDescription());
+            if (option.getArgument().getDefault() != null)
+              description.append("\nDefault: ").append(option.getArgument().getDefault());
 
             OptionBuilder.withDescription(description.toString());
           }
@@ -216,7 +236,7 @@ public final class Options {
                 args[i] = "--help";
           }
           else {
-            throw new OptionsException(e);
+            throw new IllegalArgumentException(e);
           }
         }
         catch (final org.apache.commons.cli.ParseException e) {
@@ -270,13 +290,13 @@ public final class Options {
     }
 
     // Include default values for options that are not specified
-    if (binding._option() != null) {
-      for (final cli_cli._option option : binding._option()) {
-        if (!option._argument(0)._default$().isNull()) {
-          final String optionName = !option._name(0)._long$().isNull() ? option._name(0)._long$().text() : option._name(0)._short$().text();
+    if (binding.getOption() != null) {
+      for (final Cli.Option option : binding.getOption()) {
+        if (option.getArgument() != null && option.getArgument().getDefault() != null) {
+          final String optionName = option.getName().getLong() != null ? option.getName().getLong() : option.getName().getShort();
           if (!optionsMap.containsKey(optionName)) {
-            final String valueSeparator = option._argument(0)._valueSeparator$().text();
-            final String defaultValue = option._argument(0)._default$().text();
+            final String valueSeparator = option.getArgument().getValueSeparator();
+            final String defaultValue = option.getArgument().getDefault();
             optionsMap.put(optionName, valueSeparator != null ? new Option(optionName, valueSeparator.charAt(0), defaultValue) : new Option(optionName, defaultValue));
           }
         }
@@ -284,21 +304,21 @@ public final class Options {
     }
 
     // Check pattern for specified and default options
-    if (binding._option() != null) {
+    if (binding.getOption() != null) {
       final StringBuilder builder = new StringBuilder();
-      for (final cli_cli._option option : binding._option()) {
-        if (!option._argument(0)._pattern$().isNull()) {
-          final String optionName = !option._name(0)._long$().isNull() ? option._name(0)._long$().text() : option._name(0)._short$().text();
+      for (final Cli.Option option : binding.getOption()) {
+        if (option.getArgument() != null && option.getArgument().getPattern() != null) {
+          final String optionName = option.getName().getLong() != null ? option.getName().getLong() : option.getName().getShort();
           final Option opt = optionsMap.get(optionName);
           if (opt != null) {
             for (final String value : opt.getValues()) {
-              if (!value.matches(option._argument(0)._pattern$().text())) {
-                if (option._name(0)._long$().isNull() || option._name(0)._short$().isNull())
+              if (!value.matches(option.getArgument().getPattern())) {
+                if (option.getName().getLong() == null || option.getName().getShort() == null)
                   builder.append("\nIncorrect argument form: -").append(optionName);
                 else
-                  builder.append("\nIncorrect argument form: -").append(option._name(0)._short$().text()).append(",--").append(option._name(0)._long$().text());
+                  builder.append("\nIncorrect argument form: -").append(option.getName().getShort()).append(",--").append(option.getName().getLong());
 
-                builder.append(" ").append(value).append("\n  Required: ").append(option._argument(0)._pattern$().text());
+                builder.append(" ").append(value).append("\n  Required: ").append(option.getArgument().getPattern());
               }
             }
           }
@@ -341,7 +361,13 @@ public final class Options {
 
   public String getOption(final String name) {
     final Option options = optionNameToOption.get(name);
-    return options == null || options.getValues().length == 0 ? null : options.getValues().length == 1 ? options.getValues()[0] : Arrays.toString(options.getValues(), options.getValueSeparator());
+    if (options == null || options.getValues().length == 0)
+      return null;
+
+    if (options.getValues().length == 1)
+      return options.getValues()[0];
+
+    return Arrays.stream(options.getValues()).reduce(String.valueOf(options.getValueSeparator()), String::concat);
   }
 
   public String[] getOptions(final String name) {

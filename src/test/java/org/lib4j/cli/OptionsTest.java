@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.libx4j.cli;
+package org.lib4j.cli;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -22,7 +22,6 @@ import java.util.Arrays;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.lib4j.lang.Resources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +53,7 @@ public class OptionsTest {
       System.out.print(" " + arg);
 
     logger.info("\n");
-    final Options options = Options.parse(Resources.getResource("cli.xml").getURL(), OptionsTest.class, args);
+    final Options options = Options.parse(Thread.currentThread().getContextClassLoader().getResource("cli.xml"), OptionsTest.class, args);
     main(options);
     Assert.assertEquals("config.xml", options.getOption("config"));
     Assert.assertArrayEquals("user != [user1, user2]", new String[] {"user1", "user2"}, options.getOptions("users"));
@@ -65,14 +64,14 @@ public class OptionsTest {
 
   @Test
   public void testEmptyOptions() throws Exception {
-    final Options options = Options.parse(Resources.getResource("empty.xml").getURL(), OptionsTest.class, new String[0]);
+    final Options options = Options.parse(Thread.currentThread().getContextClassLoader().getResource("empty.xml"), OptionsTest.class, new String[0]);
     options.printCommand(System.out, OptionsTest.class);
     Assert.assertEquals(0, options.getOptions().size());
   }
 
   @Test
   public void testPrintCommand() throws Exception {
-    final Options options = Options.parse(Resources.getResource("empty.xml").getURL(), OptionsTest.class, new String[0]);
+    final Options options = Options.parse(Thread.currentThread().getContextClassLoader().getResource("empty.xml"), OptionsTest.class, new String[0]);
     final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     final PrintStream ps = new PrintStream(baos);
     options.printCommand(ps, OptionsTest.class);
@@ -81,6 +80,6 @@ public class OptionsTest {
 
   @Test
   public void testExecuteSuccess() throws Exception {
-    Options.parse(Resources.getResource("cli.xml").getURL(), OptionsTest.class, new String[]{"--config", "config.xml", "--users", "bob,joe", "file1.txt", "file2.txt", "file3.txt"});
+    Options.parse(Thread.currentThread().getContextClassLoader().getResource("cli.xml"), OptionsTest.class, new String[]{"--config", "config.xml", "--users", "bob,joe", "file1.txt", "file2.txt", "file3.txt"});
   }
 }
