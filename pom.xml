@@ -40,9 +40,9 @@
         <artifactId>xjc-maven-plugin</artifactId>
         <configuration>
           <destDir>${project.build.directory}/generated-sources/jaxb</destDir>
-          <resources>
-            <resource>src/main/resources/cli.xsd</resource>
-          </resources>
+          <schemas>
+            <schema>src/main/resources/cli.xsd</schema>
+          </schemas>
         </configuration>
       </plugin>
     </plugins>
