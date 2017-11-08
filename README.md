@@ -19,7 +19,7 @@ Developed with the CohesionFirst™ approach, **lib4j-cli** is an easy-to-use an
 
 #### Validating and Fail-Fast
 
-**lib4j-cli** is based on a [XML Schema][cli-schema] that is used to specify the format of XML documents that describe the command line options and arguments accepted by an application. The XML Schema is designed to use the full power of XML Validation to allow a developer to qiuckly determine errors in his draft. Once a `cli.xml` passes the validation checks, it thereafter provides a clear and simple API to access the options and arguments in the code.
+**lib4j-cli** is based on a [XML Schema][cli-schema] that is used to specify the format of XML documents that describe the command line options and arguments accepted by an application. The XML Schema is designed to use the full power of XML Validation to allow a developer to quickly determine errors in his draft. Once a `cli.xml` passes the validation checks, it thereafter provides a clear and simple API to access the options and arguments in the code.
 
 ### Getting Started
 
