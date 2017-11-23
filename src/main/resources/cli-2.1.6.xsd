@@ -16,12 +16,12 @@
 -->
 <xs:schema
   elementFormDefault="qualified"
-  targetNamespace="http://lib4j.org/cli.xsd"
-  xmlns:cli="http://lib4j.org/cli.xsd"
-  xmlns:dt="http://xml.lib4j.org/datatypes.xsd"
+  targetNamespace="http://lib4j.org/cli-2.1.6.xsd"
+  xmlns:cli="http://lib4j.org/cli-2.1.6.xsd"
+  xmlns:dt="http://xml.lib4j.org/datatypes-1.0.3.xsd"
   xmlns:xs="http://www.w3.org/2001/XMLSchema">
   
-  <xs:import namespace="http://xml.lib4j.org/datatypes.xsd" schemaLocation="http://xml.lib4j.org/datatypes.xsd"/>
+  <xs:import namespace="http://xml.lib4j.org/datatypes-1.0.3.xsd" schemaLocation="http://xml.lib4j.org/datatypes-1.0.3.xsd"/>
   
   <xs:simpleType name="use">
     <xs:restriction base="xs:token">
