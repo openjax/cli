@@ -41,7 +41,7 @@
         <configuration>
           <destDir>${project.build.directory}/generated-sources/jaxb</destDir>
           <schemas>
-            <schema>src/main/resources/cli.xsd</schema>
+            <schema>src/main/resources/cli-2.1.6.xsd</schema>
           </schemas>
         </configuration>
       </plugin>
@@ -56,6 +56,10 @@
     <dependency>
       <groupId>org.lib4j</groupId>
       <artifactId>lib4j-logging</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.lib4j</groupId>
+      <artifactId>lib4j-xml</artifactId>
     </dependency>
     <dependency>
       <groupId>org.lib4j</groupId>
