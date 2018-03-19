@@ -81,12 +81,12 @@ public final class Options {
     final StringBuilder args = new StringBuilder(apacheOptions.getOptions().size() > 0 ? " [options]" : "");
     if (cliArguments != null) {
       for (short i = 1; i <= cliArguments.getMinOccurs(); i++)
-        args.append(" <").append(cliArguments.getLabel()).append(i != 1 ? i : "").append(">");
+        args.append(" <").append(cliArguments.getLabel()).append(i != 1 ? i : "").append('>');
 
       final boolean maxUnbounded = "unbounded".equals(cliArguments.getMaxOccurs());
       final int argsMax = maxUnbounded ? 2 + cliArguments.getMinOccurs() : Short.parseShort(cliArguments.getMaxOccurs());
       for (int i = cliArguments.getMinOccurs() + 1; i <= argsMax; i++)
-        args.append(" [").append(cliArguments.getLabel()).append(i != 1 ? i : "").append("]");
+        args.append(" [").append(cliArguments.getLabel()).append(i != 1 ? i : "").append(']');
 
       if (maxUnbounded)
         args.append(" [...]");
@@ -320,7 +320,7 @@ public final class Options {
                 else
                   builder.append("\nIncorrect argument form: -").append(option.getName().getShort()).append(",--").append(option.getName().getLong());
 
-                builder.append(" ").append(value).append("\n  Required: ").append(option.getArgument().getPattern());
+                builder.append(' ').append(value).append("\n  Required: ").append(option.getArgument().getPattern());
               }
             }
           }
@@ -390,7 +390,7 @@ public final class Options {
       return buffer.toString();
 
     for (final String arg : args)
-      buffer.append(" ").append(arg);
+      buffer.append(' ').append(arg);
 
     return buffer.toString();
   }

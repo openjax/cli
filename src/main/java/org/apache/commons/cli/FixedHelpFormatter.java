@@ -56,9 +56,9 @@ public class FixedHelpFormatter extends HelpFormatter {
       if (option.hasArg()) {
         if (option.hasArgName()) {
           if (option.isRequired())
-            optBuf.append(" <").append(option.getArgName()).append(">");
+            optBuf.append(" <").append(option.getArgName()).append('>');
           else
-            optBuf.append(" [").append(option.getArgName()).append("]");
+            optBuf.append(" [").append(option.getArgName()).append(']');
         }
         else {
           optBuf.append(' ');
