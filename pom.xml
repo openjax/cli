@@ -22,11 +22,11 @@
   <parent>
     <groupId>org</groupId>
     <artifactId>lib4j</artifactId>
-    <version>3.2.2</version>
+    <version>3.2.3-SNAPSHOT</version>
   </parent>
   <groupId>org.lib4j</groupId>
   <artifactId>lib4j-cli</artifactId>
-  <version>2.1.6</version>
+  <version>2.1.7-SNAPSHOT</version>
   <name>${project.groupId}:${project.artifactId}</name>
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
@@ -41,7 +41,7 @@
         <configuration>
           <destDir>${project.build.directory}/generated-sources/jaxb</destDir>
           <schemas>
-            <schema>src/main/resources/cli-2.1.6.xsd</schema>
+            <schema>src/main/resources/cli.xsd</schema>
           </schemas>
         </configuration>
       </plugin>
