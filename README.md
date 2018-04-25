@@ -96,7 +96,7 @@ Developed with the CohesionFirst™ approach, **lib4j-cli** is an easy-to-use an
     <dependency>
       <groupId>org.lib4j</groupId>
       <artifactId>lib4j-cli</artifactId>
-      <version>2.1.6-SNAPSHOT</version>
+      <version>2.1.7-SNAPSHOT</version>
     </dependency>
     ```
 
