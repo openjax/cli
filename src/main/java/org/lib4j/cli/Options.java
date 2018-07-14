@@ -135,8 +135,8 @@ public final class Options {
   }
 
   public static Options parse(final Cli binding, final Class<?> mainClass, final String[] args) {
-    final Set<String> requiredNames = new HashSet<String>();
-    final Map<String,String> nameToAltName = new HashMap<String,String>();
+    final Set<String> requiredNames = new HashSet<>();
+    final Map<String,String> nameToAltName = new HashMap<>();
     final org.apache.commons.cli.Options apacheOptions = new org.apache.commons.cli.Options();
     apacheOptions.addOption(null, "help", false, "Print help and usage.");
     short argumentsMinOccurs = 0;
@@ -219,11 +219,11 @@ public final class Options {
       cliArguments = null;
     }
 
-    final Map<String,Option> optionsMap = new HashMap<String,Option>();
+    final Map<String,Option> optionsMap = new HashMap<>();
     final Set<String> specifiedLongNames;
     CommandLine commandLine = null;
     if (args != null && args.length != 0) {
-      specifiedLongNames = new HashSet<String>();
+      specifiedLongNames = new HashSet<>();
       final CommandLineParser parser = new PosixParser();
       do {
         try {
@@ -334,7 +334,7 @@ public final class Options {
     return new Options(mainClass, args, optionsMap.values(), arguments == null || arguments.size() == 0 ? null : arguments.toArray(new String[arguments.size()]));
   }
 
-  private final Map<String,Option> optionNameToOption = new HashMap<String,Option>();
+  private final Map<String,Option> optionNameToOption = new HashMap<>();
   private final Class<?> mainClass;
   private final String[] args;
   private final Collection<Option> options;
