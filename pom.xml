@@ -38,6 +38,7 @@
       <plugin>
         <groupId>org.fastjax.maven.plugin</groupId>
         <artifactId>xjc-maven-plugin</artifactId>
+        <version>0.8.1-SNAPSHOT</version>
         <configuration>
           <destDir>${project.build.directory}/generated-sources/jaxb</destDir>
           <schemas>
