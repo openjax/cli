@@ -15,6 +15,6 @@
   program. If not, see <http://opensource.org/licenses/MIT/>.
 -->
 <cli
-  xmlns="http://lib4j.org/cli-2.1.7.xsd"
+  xmlns="http://easyjax.org/cli-2.1.7.xsd"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://lib4j.org/cli.xsd ../../main/resources/cli.xsd"/>
+  xsi:schemaLocation="http://easyjax.org/cli-2.1.7.xsd ../../main/resources/cli.xsd"/>
