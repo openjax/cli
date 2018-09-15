@@ -1,6 +1,6 @@
-<img src="https://www.cohesionfirst.org/logo.png" align="right">
+<img src="https://images.cooltext.com/5195724.png" align="right">
 
-## easyjax-cli<br>![java-commons][java-commons] <a href="https://www.cohesionfirst.org/"><img src="https://img.shields.io/badge/CohesionFirst%E2%84%A2--blue.svg"></a>
+## easyjax-cli<br><a href="https://www.easyjax.org/"><img src="https://img.shields.io/badge/EasyJAX--blue.svg"></a>
 > Commons Command Line Interface
 
 ### Introduction
@@ -9,9 +9,9 @@
 
 ### Why **easyjax-cli**?
 
-#### CohesionFirst™
+#### CohesionFirst
 
-Developed with the CohesionFirst™ approach, **easyjax-cli** is an easy-to-use and simple solution that separates itself from the rest with the strength of its cohesion and ease of usability. Made possible by the rigorous conformance to best practices in every line of its implementation, **easyjax-cli** considers the needs of the developer as primary, and offers a complete solution for the command line arguments facet of an application.
+Developed with the CohesionFirst approach, **easyjax-cli** is an easy-to-use and simple solution that separates itself from the rest with the strength of its cohesion and ease of usability. Made possible by the rigorous conformance to best practices in every line of its implementation, **easyjax-cli** considers the needs of the developer as primary, and offers a complete solution for the command line arguments facet of an application.
 
 #### Complete Solution
 
@@ -68,9 +68,9 @@ Developed with the CohesionFirst™ approach, **easyjax-cli** is an easy-to-use 
 
     ```xml
     <cli
-      xmlns="http://easyjax.org/cli-1.0.4.xsd"
+      xmlns="http://easyjax.org/cli-1.1.7.xsd"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://easyjax.org/cli-1.0.4.xsd http://easyjax.org/cli.xsd">
+      xsi:schemaLocation="http://easyjax.org/cli-1.1.7.xsd http://easyjax.org/cli.xsd">
       <option>
         <name long="config" short="C"/>
         <argument label="CONFIG_FILE" use="required" default="config.xml"/>
@@ -96,14 +96,14 @@ Developed with the CohesionFirst™ approach, **easyjax-cli** is an easy-to-use 
     <dependency>
       <groupId>org.easyjax</groupId>
       <artifactId>easyjax-cli</artifactId>
-      <version>2.1.7-SNAPSHOT</version>
+      <version>1.1.7-SNAPSHOT</version>
     </dependency>
     ```
 
 5. Before any other code in the `main()` method in `App.java`, add the following line and let your IDE resolve the missing imports.
 
     ```java
-    final Options options = Options.parse(Resources.getResource("cli.xml").getURL(), App.class, args);
+    Options options = Options.parse(Thread.currentThread().getContextClassLoader().getResource("cli.xml").getURL(), App.class, args);
     ```
 
     Options can now be accessed as such: `options.getOption("config")`.
@@ -126,10 +126,11 @@ Developed with the CohesionFirst™ approach, **easyjax-cli** is an easy-to-use 
 
 This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
 
+<a href="http://cooltext.com" target="_top"><img src="https://cooltext.com/images/ct_pixel.gif" width="80" height="15" alt="Cool Text: Logo and Graphics Generator" border="0" /></a>
+
 [apache-commons-cli]: https://commons.apache.org/proper/commons-cli/
-[cli-maven-archetype]: https://github.com/easyjax/cli-maven-archetype
-[cli-schema]: https://github.com/easyjax/easyjax-cli/blob/master/src/main/resources/cli.xsd
-[java-commons]: https://img.shields.io/badge/java-easyjax-orange.svg
+[cli-maven-archetype]: /easyjax/cli-maven-archetype
+[cli-schema]: /easyjax/easyjax-cli/blob/master/src/main/resources/cli.xsd
 [jdk8-download]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 [maven-archetype-quickstart]: http://maven.apache.org/archetypes/maven-archetype-quickstart/
 [maven]: https://maven.apache.org/
