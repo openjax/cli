@@ -129,8 +129,8 @@ This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.t
 <a href="http://cooltext.com" target="_top"><img src="https://cooltext.com/images/ct_pixel.gif" width="80" height="15" alt="Cool Text: Logo and Graphics Generator" border="0" /></a>
 
 [apache-commons-cli]: https://commons.apache.org/proper/commons-cli/
-[cli-maven-archetype]: /easyjax/cli-maven-archetype
-[cli-schema]: /easyjax/easyjax-cli/blob/master/src/main/resources/cli.xsd
+[cli-maven-archetype]: /../../../../easyjax/cli-maven-archetype
+[cli-schema]: /../../../../easyjax/easyjax-cli/blob/master/src/main/resources/cli.xsd
 [jdk8-download]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 [maven-archetype-quickstart]: http://maven.apache.org/archetypes/maven-archetype-quickstart/
 [maven]: https://maven.apache.org/
