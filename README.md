@@ -1,25 +1,25 @@
 <img src="https://images.cooltext.com/5195724.png" align="right">
 
-## easyjax-cli<br><a href="https://www.easyjax.org/"><img src="https://img.shields.io/badge/EasyJAX--blue.svg"></a>
+## cli<br><a href="https://www.easyjax.org/"><img src="https://img.shields.io/badge/EasyJAX--blue.svg"></a>
 > Commons Command Line Interface
 
 ### Introduction
 
-**easyjax-cli** is a light wrapper around the [Apache Commons CLI][apache-commons-cli] library, which provides a simple API to specify and process command line arguments.
+**cli** is a light wrapper around the [Apache Commons CLI][apache-commons-cli] library, which provides a simple API to specify and process command line arguments.
 
-### Why **easyjax-cli**?
+### Why **cli**?
 
 #### CohesionFirst
 
-Developed with the CohesionFirst approach, **easyjax-cli** is an easy-to-use and simple solution that separates itself from the rest with the strength of its cohesion and ease of usability. Made possible by the rigorous conformance to best practices in every line of its implementation, **easyjax-cli** considers the needs of the developer as primary, and offers a complete solution for the command line arguments facet of an application.
+Developed with the CohesionFirst approach, **cli** is an easy-to-use and simple solution that separates itself from the rest with the strength of its cohesion and ease of usability. Made possible by the rigorous conformance to best practices in every line of its implementation, **cli** considers the needs of the developer as primary, and offers a complete solution for the command line arguments facet of an application.
 
 #### Complete Solution
 
-**easyjax-cli** allows a developer the full range of variation of the command line arguments pattern, and removes the unnecessary boilerplate code present in other solutions. **easyjax-cli** uses the JAXB framework to create a **easyjax-cli** specification based on a [XSD specification][cli-schema], which can be used to create a custom set of CLI options and arguments for any application.
+**cli** allows a developer the full range of variation of the command line arguments pattern, and removes the unnecessary boilerplate code present in other solutions. **cli** uses the JAXB framework to create a **cli** specification based on a [XSD specification][cli-schema], which can be used to create a custom set of CLI options and arguments for any application.
 
 #### Validating and Fail-Fast
 
-**easyjax-cli** is based on a [XML Schema][cli-schema] that is used to specify the format of XML documents that describe the command line options and arguments accepted by an application. The XML Schema is designed to use the full power of XML Validation to allow a developer to quickly determine errors in his draft. Once a `cli.xml` passes the validation checks, it thereafter provides a clear and simple API to access the options and arguments in the code.
+**cli** is based on a [XML Schema][cli-schema] that is used to specify the format of XML documents that describe the command line options and arguments accepted by an application. The XML Schema is designed to use the full power of XML Validation to allow a developer to quickly determine errors in his draft. Once a `cli.xml` passes the validation checks, it thereafter provides a clear and simple API to access the options and arguments in the code.
 
 ### Getting Started
 
@@ -90,12 +90,12 @@ Developed with the CohesionFirst approach, **easyjax-cli** is an easy-to-use and
   
     This `cli.xml` describes 3 options and 1 argument. The 3 options are "config", which has its own required argument of CONFIG_FILE, "silent", and "verbose." Lastly, the argument FILE is required with a cardinality of 3 or more.
 
-4. Add `org.easyjax:easyjax-cli` dependency to the POM.
+4. Add `org.easyjax:cli` dependency to the POM.
 
     ```xml
     <dependency>
       <groupId>org.easyjax</groupId>
-      <artifactId>easyjax-cli</artifactId>
+      <artifactId>cli</artifactId>
       <version>1.1.7-SNAPSHOT</version>
     </dependency>
     ```
@@ -130,7 +130,7 @@ This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.t
 
 [apache-commons-cli]: https://commons.apache.org/proper/commons-cli/
 [cli-maven-archetype]: /../../../../easyjax/cli-maven-archetype
-[cli-schema]: /../../../../easyjax/easyjax-cli/blob/master/src/main/resources/cli.xsd
+[cli-schema]: /../../../../easyjax/cli/blob/master/src/main/resources/cli.xsd
 [jdk8-download]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 [maven-archetype-quickstart]: http://maven.apache.org/archetypes/maven-archetype-quickstart/
 [maven]: https://maven.apache.org/
