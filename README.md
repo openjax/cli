@@ -130,7 +130,7 @@ This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.t
 
 [apache-commons-cli]: https://commons.apache.org/proper/commons-cli/
 [cli-maven-archetype]: /../../../../easyjax/cli-maven-archetype
-[cli-schema]: /../../../../easyjax/cli/blob/master/src/main/resources/cli.xsd
+[cli-schema]: /src/main/resources/cli.xsd
 [jdk8-download]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 [maven-archetype-quickstart]: http://maven.apache.org/archetypes/maven-archetype-quickstart/
 [maven]: https://maven.apache.org/
