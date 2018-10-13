@@ -16,13 +16,12 @@
 
 package org.easyjax.cli;
 
+import static org.junit.Assert.*;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Arrays;
 
-import org.easyjax.cli.Option;
-import org.easyjax.cli.Options;
-import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +30,7 @@ public class OptionsTest {
   private static final Logger logger = LoggerFactory.getLogger(OptionsTest.class);
 
   public static void main(final Options options) {
-    Assert.assertNotNull(options);
+    assertNotNull(options);
     System.out.println(options.toString());
     System.out.println("------------------------------------------");
     for (final Option option : options.getOptions())
@@ -57,18 +56,18 @@ public class OptionsTest {
     logger.info("\n");
     final Options options = Options.parse(Thread.currentThread().getContextClassLoader().getResource("cli.xml"), OptionsTest.class, args);
     main(options);
-    Assert.assertEquals("config.xml", options.getOption("config"));
-    Assert.assertArrayEquals("user != [user1, user2]", new String[] {"user1", "user2"}, options.getOptions("users"));
-    Assert.assertEquals("verbose != true", true, Boolean.parseBoolean(options.getOption("V")));
-    Assert.assertEquals("silent != null", null, options.getOption("silent"));
-    Assert.assertArrayEquals("arguments != [file1, file2, file3]", new String[] {"file1", "file2", "file3"}, options.getArguments());
+    assertEquals("config.xml", options.getOption("config"));
+    assertArrayEquals("user != [user1, user2]", new String[] {"user1", "user2"}, options.getOptions("users"));
+    assertEquals("verbose != true", true, Boolean.parseBoolean(options.getOption("V")));
+    assertEquals("silent != null", null, options.getOption("silent"));
+    assertArrayEquals("arguments != [file1, file2, file3]", new String[] {"file1", "file2", "file3"}, options.getArguments());
   }
 
   @Test
   public void testEmptyOptions() throws Exception {
     final Options options = Options.parse(Thread.currentThread().getContextClassLoader().getResource("empty.xml"), OptionsTest.class, new String[0]);
     options.printCommand(System.out, OptionsTest.class);
-    Assert.assertEquals(0, options.getOptions().size());
+    assertEquals(0, options.getOptions().size());
   }
 
   @Test
@@ -77,7 +76,7 @@ public class OptionsTest {
     final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     final PrintStream ps = new PrintStream(baos);
     options.printCommand(ps, OptionsTest.class);
-    Assert.assertEquals("java " + OptionsTest.class.getName(), baos.toString());
+    assertEquals("java " + OptionsTest.class.getName(), baos.toString());
   }
 
   @Test
