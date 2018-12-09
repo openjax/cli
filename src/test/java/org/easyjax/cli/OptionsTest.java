@@ -16,11 +16,11 @@
 
 package org.easyjax.cli;
 
-import static org.junit.Assert.*;
-
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Arrays;
+
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -58,8 +58,8 @@ public class OptionsTest {
     main(options);
     assertEquals("config.xml", options.getOption("config"));
     assertArrayEquals("user != [user1, user2]", new String[] {"user1", "user2"}, options.getOptions("users"));
-    assertEquals("verbose != true", true, Boolean.parseBoolean(options.getOption("V")));
-    assertEquals("silent != null", null, options.getOption("silent"));
+    assertTrue("verbose != true", Boolean.parseBoolean(options.getOption("V")));
+    assertNull("silent != null", options.getOption("silent"));
     assertArrayEquals("arguments != [file1, file2, file3]", new String[] {"file1", "file2", "file3"}, options.getArguments());
   }
 

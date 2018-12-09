@@ -43,7 +43,7 @@ public class FixedHelpFormatter extends HelpFormatter {
       optBuf = new StringBuffer(8);
 
       if (option.getOpt() == null) {
-        optBuf.append(lpad).append("   " + getLongOptPrefix()).append(option.getLongOpt());
+        optBuf.append(lpad).append("   ").append(getLongOptPrefix()).append(option.getLongOpt());
       }
       else {
         optBuf.append(lpad).append(getOptPrefix()).append(option.getOpt());

@@ -16,6 +16,16 @@
 
 package org.easyjax.cli;
 
+import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,17 +40,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import javax.xml.XMLConstants;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.stream.FactoryConfigurationError;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -156,8 +155,8 @@ public final class Options {
       if (binding.getOption() != null) {
         for (final Cli.Option option : binding.getOption()) {
           final Cli.Option.Name optionName = option.getName();
-          final String longName = optionName.getLong() == null ? null : optionName.getLong();
-          final String shortName = optionName.getShort() == null ? null : optionName.getShort();
+          final String longName = optionName.getLong();
+          final String shortName = optionName.getShort();
           final String name = longName != null ? longName : shortName;
           if (longName == null && shortName == null) {
             logger.error("both [long] and [short] option names are null in cli spec");
