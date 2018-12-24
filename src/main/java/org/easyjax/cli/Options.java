@@ -126,7 +126,7 @@ public final class Options {
       throw new UnsupportedOperationException(e);
     }
     catch (final IOException e) {
-      throw new RuntimeException(e);
+      throw new IllegalStateException(e);
     }
     catch (final JAXBException | SAXException | XMLStreamException e) {
       throw new IllegalArgumentException(e);
