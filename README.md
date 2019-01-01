@@ -1,4 +1,4 @@
-# EasyJAX CLI
+# OpenJAX Support CLI
 
 **Command Line Interface**
 
@@ -33,7 +33,7 @@ Developed with the CohesionFirst approach, **cli** is an easy-to-use and simple 
 
     ```tcsh
     mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app \
-    -DarchetypeGroupId=org.easyjax.maven.archetype -DarchetypeArtifactId=cli-maven-archetype \
+    -DarchetypeGroupId=org.openjax.support -DarchetypeArtifactId=cli-maven-archetype \
     -DarchetypeCatalog=http://mvn.repo.openjax.org -DinteractiveMode=false
     ```
 
@@ -67,9 +67,9 @@ Developed with the CohesionFirst approach, **cli** is an easy-to-use and simple 
 
     ```xml
     <cli
-      xmlns="http://easyjax.org/cli-1.1.7.xsd"
+      xmlns="http://support.openjax.org/cli-1.1.7.xsd"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://easyjax.org/cli-1.1.7.xsd http://easyjax.org/cli.xsd">
+      xsi:schemaLocation="http://support.openjax.org/cli-1.1.7.xsd http://support.openjax.org/cli.xsd">
       <option>
         <name long="config" short="C"/>
         <argument label="CONFIG_FILE" use="required" default="config.xml"/>
@@ -89,12 +89,12 @@ Developed with the CohesionFirst approach, **cli** is an easy-to-use and simple 
   
     This `cli.xml` describes 3 options and 1 argument. The 3 options are "config", which has its own required argument of CONFIG_FILE, "silent", and "verbose." Lastly, the argument FILE is required with a cardinality of 3 or more.
 
-4. Add `org.easyjax:cli` dependency to the POM.
+4. Add `org.openjax.support:cli` dependency to the POM.
 
     ```xml
     <dependency>
-      <groupId>org.easyjax</groupId>
-      <artifactId>cli</artifactId>
+      <groupId>org.openjax.support</groupId>
+      <artifactId>support-cli</artifactId>
       <version>1.1.7-SNAPSHOT</version>
     </dependency>
     ```
@@ -123,7 +123,7 @@ Developed with the CohesionFirst approach, **cli** is an easy-to-use and simple 
 
 ### JavaDocs
 
-JavaDocs are available [here](https://www.easyjax.org/cli/javadocs/).
+JavaDocs are available [here](https://support.openjax.org/cli/apidocs/).
 
 ## Contributing
 
@@ -138,7 +138,7 @@ This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.t
 <a href="http://cooltext.com" target="_top"><img src="https://cooltext.com/images/ct_pixel.gif" width="80" height="15" alt="Cool Text: Logo and Graphics Generator" border="0" /></a>
 
 [apache-commons-cli]: https://commons.apache.org/proper/commons-cli/
-[cli-maven-archetype]: /../../../../easyjax/cli-maven-archetype
+[cli-maven-archetype]: /../../../../openjax/cli-maven-archetype
 [cli-schema]: /src/main/resources/cli.xsd
 [jdk8-download]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 [maven-archetype-quickstart]: http://maven.apache.org/archetypes/maven-archetype-quickstart/

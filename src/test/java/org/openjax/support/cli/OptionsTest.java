@@ -1,4 +1,4 @@
-/* Copyright (c) 2008 EasyJAX
+/* Copyright (c) 2008 OpenJAX
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,13 +14,13 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.easyjax.cli;
+package org.openjax.support.cli;
+
+import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Arrays;
-
-import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.slf4j.Logger;

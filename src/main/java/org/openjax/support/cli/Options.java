@@ -1,4 +1,4 @@
-/* Copyright (c) 2008 EasyJAX
+/* Copyright (c) 2008 OpenJAX
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,18 +14,8 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.easyjax.cli;
+package org.openjax.support.cli;
 
-import javax.xml.XMLConstants;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.stream.FactoryConfigurationError;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +31,17 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.FixedHelpFormatter;
@@ -48,8 +49,8 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
-import org.easyjax.cli_1_1_7.Cli;
-import org.easyjax.cli_1_1_7.Use;
+import org.openjax.support.cli_1_1_7.Cli;
+import org.openjax.support.cli_1_1_7.Use;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -103,7 +104,7 @@ public final class Options {
     System.exit(1);
   }
 
-  public static Options parse(final File cliFile, final Class<?> mainClass, final String[] args) {
+  public static Options parse(final File cliFile, final Class<?> mainClass, final String[] args) throws IOException {
     try {
       return parse(cliFile.toURI().toURL(), mainClass, args);
     }
@@ -112,7 +113,7 @@ public final class Options {
     }
   }
 
-  public static Options parse(final URL cliURL, final Class<?> mainClass, final String[] args) {
+  public static Options parse(final URL cliURL, final Class<?> mainClass, final String[] args) throws IOException {
     try {
       final Unmarshaller unmarshaller = JAXBContext.newInstance(Cli.class).createUnmarshaller();
       unmarshaller.setSchema(Options.schema == null ? Options.schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(Thread.currentThread().getContextClassLoader().getResource("cli.xsd")) : Options.schema);
@@ -124,9 +125,6 @@ public final class Options {
     }
     catch (final FactoryConfigurationError e) {
       throw new UnsupportedOperationException(e);
-    }
-    catch (final IOException e) {
-      throw new IllegalStateException(e);
     }
     catch (final JAXBException | SAXException | XMLStreamException e) {
       throw new IllegalArgumentException(e);
