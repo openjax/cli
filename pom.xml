@@ -37,7 +37,7 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.openjax.classic.jaxb</groupId>
+        <groupId>org.openjax.standard.jaxb</groupId>
         <artifactId>jaxb-maven-plugin</artifactId>
         <configuration>
           <destDir>${project.build.directory}/generated-sources/jaxb</destDir>
@@ -47,7 +47,7 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.openjax.classic.xml</groupId>
+        <groupId>org.openjax.standard.xml</groupId>
         <artifactId>xml-maven-plugin</artifactId>
       </plugin>
     </plugins>
@@ -59,18 +59,18 @@
       <version>1.2</version> <!-- New versions available: https://mvnrepository.com/artifact/commons-cli/commons-cli -->
     </dependency>
     <dependency>
-      <groupId>org.openjax.classic</groupId>
-      <artifactId>classic-logging</artifactId>
+      <groupId>org.openjax.standard</groupId>
+      <artifactId>standard-logging</artifactId>
       <version>0.4.1-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>org.openjax.classic.jaxb</groupId>
+      <groupId>org.openjax.standard.jaxb</groupId>
       <artifactId>jaxb-xjc</artifactId>
       <version>0.8.1-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>org.openjax.classic</groupId>
-      <artifactId>classic-test</artifactId>
+      <groupId>org.openjax.standard</groupId>
+      <artifactId>standard-test</artifactId>
       <version>0.6.9-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
