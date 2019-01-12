@@ -1,6 +1,8 @@
 # OpenJAX Support CLI
 
-**Command Line Interface**
+> Command Line Interface
+
+[![Build Status](https://travis-ci.org/openjax/support-cli.png)](https://travis-ci.org/openjax/support-cli)
 
 ### Introduction
 
