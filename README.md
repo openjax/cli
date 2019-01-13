@@ -3,6 +3,7 @@
 > Command Line Interface
 
 [![Build Status](https://travis-ci.org/openjax/support-cli.png)](https://travis-ci.org/openjax/support-cli)
+[![Coverage Status](https://coveralls.io/repos/github/openjax/support-cli/badge.svg)](https://coveralls.io/github/openjax/support-cli)
 
 ### Introduction
 
