@@ -34,7 +34,7 @@ Developed with the CohesionFirst approach, **cli** is an easy-to-use and simple 
 
 1. In your preferred development directory, create a [`cli-maven-archetype`][cli-maven-archetype] project.
 
-    ```tcsh
+    ```bash
     mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app \
     -DarchetypeGroupId=org.openjax.support -DarchetypeArtifactId=cli-maven-archetype \
     -DarchetypeCatalog=http://mvn.repo.openjax.org -DinteractiveMode=false
@@ -44,7 +44,7 @@ Developed with the CohesionFirst approach, **cli** is an easy-to-use and simple 
 
 1. In your preferred development directory, create a [`maven-archetype-quickstart`][maven-archetype-quickstart] project.
 
-    ```tcsh
+    ```bash
     mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app \
     -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
     ```
@@ -114,7 +114,7 @@ Developed with the CohesionFirst approach, **cli** is an easy-to-use and simple 
 
 6. When you use CLI, you get a `--help` option automatically provided. After compiling your application, run the app with `App --help`, and you should see this:
 
-    ```tcsh
+    ```bash
     usage:
     [options] <FILE> <FILE2> <FILE3> [FILE4] [FILE5] [...]
      -C,--config <CONFIG_FILE>    config file to use instead of default
