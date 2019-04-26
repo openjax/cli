@@ -49,12 +49,29 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
+import org.openjax.standard.util.Classes;
 import org.openjax.support.cli_1_1_7.Cli;
 import org.openjax.support.cli_1_1_7.Use;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
+/**
+ * Utility class to parse options from the CLI. This class is intended to be
+ * used from {@code main(String[])}.
+ * <p>
+ * For example:
+ * <p>
+ *
+ * <pre>
+ * public class MyApp {
+ *   public void main(String[] args) {
+ *     Options options = Options.parse(ClassLoader.getSystemClassLoader().getResource("cli.xml"), MyApp.class, args);
+ *     ...
+ *   }
+ * }
+ * </pre>
+ */
 public final class Options {
   private static final Logger logger = LoggerFactory.getLogger(Options.class);
   private static Schema schema;
@@ -104,23 +121,41 @@ public final class Options {
     System.exit(1);
   }
 
-  public static Options parse(final File cliFile, final Class<?> mainClass, final String[] args) throws IOException {
+  /**
+   * Parses {@code args} as per the CLI XML specification at the provided
+   * {@code File}.
+   *
+   * @param cliFile The {@code File} pointing to the CLI XML.
+   * @param args The {@code main(String[] args)}.
+   * @return The parsed {@code Options}.
+   * @throws IOException If an I/O error has occurred.
+   */
+  public static Options parse(final File cliFile, final String[] args) throws IOException {
     try {
-      return parse(cliFile.toURI().toURL(), mainClass, args);
+      return parse(cliFile.toURI().toURL(), args);
     }
     catch (final MalformedURLException e) {
       throw new IllegalArgumentException(e);
     }
   }
 
-  public static Options parse(final URL cliURL, final Class<?> mainClass, final String[] args) throws IOException {
+  /**
+   * Parses {@code args} as per the CLI XML specification at the provided
+   * {@code URL}.
+   *
+   * @param cliURL The {@code URL} pointing to the CLI XML.
+   * @param args The {@code main(String[] args)}.
+   * @return The parsed {@code Options}.
+   * @throws IOException If an I/O error has occurred.
+   */
+  public static Options parse(final URL cliURL, final String[] args) throws IOException {
     try {
       final Unmarshaller unmarshaller = JAXBContext.newInstance(Cli.class).createUnmarshaller();
       unmarshaller.setSchema(Options.schema == null ? Options.schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(Thread.currentThread().getContextClassLoader().getResource("cli.xsd")) : Options.schema);
 
       try (final InputStream in = cliURL.openStream()) {
         final JAXBElement<Cli> element = unmarshaller.unmarshal(XMLInputFactory.newInstance().createXMLStreamReader(in), Cli.class);
-        return parse(element.getValue(), mainClass, args);
+        return parse(element.getValue(), args);
       }
     }
     catch (final FactoryConfigurationError e) {
@@ -131,7 +166,15 @@ public final class Options {
     }
   }
 
-  public static Options parse(final Cli binding, final Class<?> mainClass, final String[] args) {
+  /**
+   * Parses {@code args} as per the CLI XML specification in the provided
+   * {@code Cli} JAXB binding.
+   *
+   * @param binding The {@code Cli} JAXB binding representing the CLI XML.
+   * @param args The {@code main(String[] args)}.
+   * @return The parsed {@code Options}.
+   */
+  public static Options parse(final Cli binding, final String[] args) {
     final Set<String> requiredNames = new HashSet<>();
     final Map<String,String> nameToAltName = new HashMap<>();
     final org.apache.commons.cli.Options apacheOptions = new org.apache.commons.cli.Options();
@@ -328,6 +371,15 @@ public final class Options {
         Options.trapPrintHelp(apacheOptions, cliArguments, builder.substring(1), System.out);
     }
 
+    final Class<?>[] executionStack = Classes.getExecutionStack();
+    Class<?> mainClass = null;
+    for (int i = 0; i < executionStack.length && mainClass == null; ++i)
+      if (executionStack[i] != Options.class)
+        mainClass = executionStack[i];
+
+    if (mainClass == null)
+      throw new IllegalStateException("Could not determine main class");
+
     return new Options(mainClass, args, optionsMap.values(), arguments == null || arguments.size() == 0 ? null : arguments.toArray(new String[arguments.size()]));
   }
 
@@ -347,8 +399,8 @@ public final class Options {
   }
 
   /**
-   * @return Returns an array of unnamed arguments, in original order.
-   *         Returns null in case there are no unnamed arguments.
+   * @return Returns an array of unnamed arguments, in original order. Returns
+   *         {@code null} in case there are no unnamed arguments.
    */
   public String[] getArguments() {
     return arguments;

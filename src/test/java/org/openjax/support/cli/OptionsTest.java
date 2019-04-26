@@ -54,7 +54,7 @@ public class OptionsTest {
       System.out.print(" " + arg);
 
     logger.info("\n");
-    final Options options = Options.parse(ClassLoader.getSystemClassLoader().getResource("cli.xml"), OptionsTest.class, args);
+    final Options options = Options.parse(ClassLoader.getSystemClassLoader().getResource("cli.xml"), args);
     main(options);
     assertEquals("config.xml", options.getOption("config"));
     assertArrayEquals("user != [user1, user2]", new String[] {"user1", "user2"}, options.getOptions("users"));
@@ -65,14 +65,14 @@ public class OptionsTest {
 
   @Test
   public void testEmptyOptions() throws Exception {
-    final Options options = Options.parse(ClassLoader.getSystemClassLoader().getResource("empty.xml"), OptionsTest.class, new String[0]);
+    final Options options = Options.parse(ClassLoader.getSystemClassLoader().getResource("empty.xml"), new String[0]);
     options.printCommand(System.out, OptionsTest.class);
     assertEquals(0, options.getOptions().size());
   }
 
   @Test
   public void testPrintCommand() throws Exception {
-    final Options options = Options.parse(ClassLoader.getSystemClassLoader().getResource("empty.xml"), OptionsTest.class, new String[0]);
+    final Options options = Options.parse(ClassLoader.getSystemClassLoader().getResource("empty.xml"), new String[0]);
     final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     final PrintStream ps = new PrintStream(baos);
     options.printCommand(ps, OptionsTest.class);
@@ -81,6 +81,6 @@ public class OptionsTest {
 
   @Test
   public void testExecuteSuccess() throws Exception {
-    Options.parse(ClassLoader.getSystemClassLoader().getResource("cli.xml"), OptionsTest.class, new String[]{"--config", "config.xml", "--users", "bob,joe", "file1.txt", "file2.txt", "file3.txt"});
+    Options.parse(ClassLoader.getSystemClassLoader().getResource("cli.xml"), new String[] {"--config", "config.xml", "--users", "bob,joe", "file1.txt", "file2.txt", "file3.txt"});
   }
 }

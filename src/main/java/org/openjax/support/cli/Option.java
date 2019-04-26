@@ -18,29 +18,56 @@ package org.openjax.support.cli;
 
 import java.util.Arrays;
 
-public final class Option {
+/**
+ * Class representing an option on the CLI.
+ */
+public class Option {
   private final String name;
   private final String[] values;
   private final char valueSeparator;
 
+  /**
+   * Creates a new {@code Option} with the specified name, value separator, and
+   * an array of associated values.
+   *
+   * @param name The name.
+   * @param valueSeparator The value separator.
+   * @param values The associated values.
+   */
   public Option(final String name, final char valueSeparator, final String ... values) {
     this.name = name;
     this.valueSeparator = valueSeparator;
     this.values = values;
   }
 
+  /**
+   * Creates a new {@code Option} with the specified name, value separator, and
+   * single associated value.
+   *
+   * @param name The name.
+   * @param values The associated values.
+   */
   public Option(final String name, final String ... values) {
-    this(name, ' ', values);
+    this(name, '\0', values);
   }
 
+  /**
+   * @return The name.
+   */
   public String getName() {
     return this.name;
   }
 
+  /**
+   * @return The associated values.
+   */
   public String[] getValues() {
     return this.values;
   }
 
+  /**
+   * @return The value separator.
+   */
   public char getValueSeparator() {
     return this.valueSeparator;
   }
