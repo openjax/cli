@@ -4,6 +4,8 @@
 
 [![Build Status](https://travis-ci.org/openjax/support-cli.png)](https://travis-ci.org/openjax/support-cli)
 [![Coverage Status](https://coveralls.io/repos/github/openjax/support-cli/badge.svg)](https://coveralls.io/github/openjax/support-cli)
+[![Javadocs](https://www.javadoc.io/badge/org.openjax.support/cli.svg)](https://www.javadoc.io/doc/org.openjax.support/cli)
+[![Released Version](https://img.shields.io/maven-central/v/org.openjax.support/cli.svg)](https://mvnrepository.com/artifact/org.openjax.support/cli)
 
 ### Introduction
 
@@ -89,7 +91,7 @@ Developed with the CohesionFirst approach, **cli** is an easy-to-use and simple 
       <arguments label="FILE" minOccurs="3" maxOccurs="unbounded"/>
     </cli>
     ```
-  
+
     This `cli.xml` describes 3 options and 1 argument. The 3 options are "config", which has its own required argument of CONFIG_FILE, "silent", and "verbose." Lastly, the argument FILE is required with a cardinality of 3 or more.
 
 4. Add `org.openjax.support:cli` dependency to the POM.
@@ -123,10 +125,6 @@ Developed with the CohesionFirst approach, **cli** is an easy-to-use and simple 
         --silent                  silent mode
      -V                           verbose mode
     ```
-
-### JavaDocs
-
-JavaDocs are available [here](https://support.openjax.org/cli/apidocs/).
 
 ## Contributing
 
