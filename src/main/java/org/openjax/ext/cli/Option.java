@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.std.cli;
+package org.openjax.ext.cli;
 
 import java.util.Arrays;
 

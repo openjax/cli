@@ -1,11 +1,11 @@
-# OpenJAX Std CLI
+# OpenJAX Extensions CLI
 
 > Command Line Interface
 
-[![Build Status](https://travis-ci.org/openjax/std-cli.png)](https://travis-ci.org/openjax/std-cli)
-[![Coverage Status](https://coveralls.io/repos/github/openjax/std-cli/badge.svg)](https://coveralls.io/github/openjax/std-cli)
-[![Javadocs](https://www.javadoc.io/badge/org.openjax.std/cli.svg)](https://www.javadoc.io/doc/org.openjax.std/cli)
-[![Released Version](https://img.shields.io/maven-central/v/org.openjax.std/cli.svg)](https://mvnrepository.com/artifact/org.openjax.std/cli)
+[![Build Status](https://travis-ci.org/openjax/ext-cli.png)](https://travis-ci.org/openjax/ext-cli)
+[![Coverage Status](https://coveralls.io/repos/github/openjax/ext-cli/badge.svg)](https://coveralls.io/github/openjax/ext-cli)
+[![Javadocs](https://www.javadoc.io/badge/org.openjax.ext/cli.svg)](https://www.javadoc.io/doc/org.openjax.ext/cli)
+[![Released Version](https://img.shields.io/maven-central/v/org.openjax.ext/cli.svg)](https://mvnrepository.com/artifact/org.openjax.ext/cli)
 
 ### Introduction
 
@@ -38,7 +38,7 @@ Developed with the CohesionFirst approach, **cli** is an easy-to-use and simple 
 
     ```bash
     mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app \
-    -DarchetypeGroupId=org.openjax.std -DarchetypeArtifactId=cli-maven-archetype \
+    -DarchetypeGroupId=org.openjax.ext -DarchetypeArtifactId=cli-maven-archetype \
     -DarchetypeCatalog=http://mvn.repo.openjax.org -DinteractiveMode=false
     ```
 
@@ -72,9 +72,9 @@ Developed with the CohesionFirst approach, **cli** is an easy-to-use and simple 
 
     ```xml
     <cli
-      xmlns="http://std.openjax.org/cli-1.1.7.xsd"
+      xmlns="http://ext.openjax.org/cli-1.1.7.xsd"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://std.openjax.org/cli-1.1.7.xsd http://std.openjax.org/cli.xsd">
+      xsi:schemaLocation="http://ext.openjax.org/cli-1.1.7.xsd http://ext.openjax.org/cli.xsd">
       <option>
         <name long="config" short="C"/>
         <argument label="CONFIG_FILE" use="required" default="config.xml"/>
@@ -94,11 +94,11 @@ Developed with the CohesionFirst approach, **cli** is an easy-to-use and simple 
 
     This `cli.xml` describes 3 options and 1 argument. The 3 options are "config", which has its own required argument of CONFIG_FILE, "silent", and "verbose." Lastly, the argument FILE is required with a cardinality of 3 or more.
 
-4. Add `org.openjax.std:cli` dependency to the POM.
+4. Add `org.openjax.ext:cli` dependency to the POM.
 
     ```xml
     <dependency>
-      <groupId>org.openjax.std</groupId>
+      <groupId>org.openjax.ext</groupId>
       <artifactId>cli</artifactId>
       <version>1.1.7-SNAPSHOT</version>
     </dependency>
