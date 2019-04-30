@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.support.cli;
+package org.openjax.std.cli;
 
 import static org.junit.Assert.*;
 
