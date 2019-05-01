@@ -26,7 +26,10 @@
   </parent>
   <artifactId>cli</artifactId>
   <version>1.1.7-SNAPSHOT</version>
-  <name>${project.groupId}:${project.artifactId}</name>
+  <name>OpenJAX Extensions CLI</name>
+  <description>
+    CLI is a light wrapper around the Apache Commons CLI library, which provides a simple API to specify and process command line arguments.
+  </description>
   <build>
     <plugins>
       <plugin>
