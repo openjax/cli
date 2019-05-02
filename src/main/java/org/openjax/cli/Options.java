@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.ext.cli;
+package org.openjax.cli;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,9 +49,9 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
-import org.openjax.ext.util.Classes;
-import org.openjax.ext.cli_1_1_7.Cli;
-import org.openjax.ext.cli_1_1_7.Use;
+import org.openjax.util.Classes;
+import org.openjax.cli_1_1_7.Cli;
+import org.openjax.cli_1_1_7.Use;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
