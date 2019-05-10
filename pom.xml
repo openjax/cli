@@ -28,7 +28,7 @@
   <version>1.1.7-SNAPSHOT</version>
   <name>OpenJAX CLI</name>
   <description>
-    CLI is a light wrapper around the Apache Commons CLI library, which provides a simple API to specify and process command line arguments.
+    Wrapper of the "Apache Commons CLI" library that provides a simple API to specify and process command line arguments.
   </description>
   <build>
     <plugins>
