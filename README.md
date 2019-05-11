@@ -7,68 +7,33 @@
 [![Javadocs](https://www.javadoc.io/badge/org.openjax/cli.svg)](https://www.javadoc.io/doc/org.openjax/cli)
 [![Released Version](https://img.shields.io/maven-central/v/org.openjax/cli.svg)](https://mvnrepository.com/artifact/org.openjax/cli)
 
-### Introduction
+## Introduction
 
-**cli** is a light wrapper around the [Apache Commons CLI][apache-commons-cli] library, which provides a simple API to specify and process command line arguments.
+OpenJAX CLI is a light wrapper around the [Apache Commons CLI][apache-commons-cli] library, which provides a simple API to specify and process command line arguments.
 
-### Why **cli**?
+OpenJAX CLI allows a developer the full range of variation of the command line arguments pattern, and removes the unnecessary boilerplate code present in other solutions. **cli** uses the JAXB framework to create a **cli** specification based on a [XSD specification][cli-schema], which can be used to create a custom set of CLI options and arguments for any application.
 
-#### CohesionFirst
+### Validating and Fail-Fast
 
-Developed with the CohesionFirst approach, **cli** is an easy-to-use and simple solution that separates itself from the rest with the strength of its cohesion and ease of usability. Made possible by the rigorous conformance to best practices in every line of its implementation, **cli** considers the needs of the developer as primary, and offers a complete solution for the command line arguments facet of an application.
+OpenJAX CLI is based on a [XML Schema][cli-schema] that is used to specify the format of XML documents that describe the command line options and arguments accepted by an application. The XML Schema is designed to use the full power of XML Validation to allow a developer to quickly determine errors in his draft. Once a `cli.xml` passes the validation checks, it thereafter provides a clear and simple API to access the options and arguments in the code.
 
-#### Complete Solution
+## Getting Started
 
-**cli** allows a developer the full range of variation of the command line arguments pattern, and removes the unnecessary boilerplate code present in other solutions. **cli** uses the JAXB framework to create a **cli** specification based on a [XSD specification][cli-schema], which can be used to create a custom set of CLI options and arguments for any application.
-
-#### Validating and Fail-Fast
-
-**cli** is based on a [XML Schema][cli-schema] that is used to specify the format of XML documents that describe the command line options and arguments accepted by an application. The XML Schema is designed to use the full power of XML Validation to allow a developer to quickly determine errors in his draft. Once a `cli.xml` passes the validation checks, it thereafter provides a clear and simple API to access the options and arguments in the code.
-
-### Getting Started
-
-#### Prerequisites
+### Prerequisites
 
 * [Java 8][jdk8-download] - The minimum required JDK version.
 * [Maven][maven] - The dependency management system.
 
-#### Example (Quick-&-Easy)
-
-1. In your preferred development directory, create a [`cli-maven-archetype`][cli-maven-archetype] project.
-
-    ```bash
-    mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app \
-    -DarchetypeGroupId=org.openjax -DarchetypeArtifactId=cli-maven-archetype \
-    -DarchetypeCatalog=http://mvn.repo.openjax.org -DinteractiveMode=false
-    ```
-
-#### Example (Hands-on)
+### Example
 
 1. In your preferred development directory, create a [`maven-archetype-quickstart`][maven-archetype-quickstart] project.
 
     ```bash
     mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app \
-    -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+      -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
     ```
 
-2. Add the `mvn.repo.openjax.org` Maven repositories to the POM.
-
-    ```xml
-    <repositories>
-      <repository>
-        <id>mvn.repo.openjax.org</id>
-        <url>http://mvn.repo.openjax.org/m2</url>
-      </repository>
-    </repositories>
-    <pluginRepositories>
-      <pluginRepository>
-        <id>mvn.repo.openjax.org</id>
-        <url>http://mvn.repo.openjax.org/m2</url>
-      </pluginRepository>
-    </pluginRepositories>
-    ```
-
-3. Create a `cli.xml` in `src/main/resources/`.
+1. Create a `cli.xml` in `src/main/resources/`.
 
     ```xml
     <cli
@@ -94,7 +59,7 @@ Developed with the CohesionFirst approach, **cli** is an easy-to-use and simple 
 
     This `cli.xml` describes 3 options and 1 argument. The 3 options are "config", which has its own required argument of CONFIG_FILE, "silent", and "verbose." Lastly, the argument FILE is required with a cardinality of 3 or more.
 
-4. Add `org.openjax:cli` dependency to the POM.
+1. Add `org.openjax:cli` dependency to the POM.
 
     ```xml
     <dependency>
@@ -104,17 +69,17 @@ Developed with the CohesionFirst approach, **cli** is an easy-to-use and simple 
     </dependency>
     ```
 
-5. Before any other code in the `main()` method in `App.java`, add the following line and let your IDE resolve the missing imports.
+1. Before any other code in the `main()` method in `App.java`, add the following line and let your IDE resolve the missing imports.
 
     ```java
-    Options options = Options.parse(Thread.currentThread().getContextClassLoader().getResource("cli.xml").getURL(), App.class, args);
+    Options options = Options.parse(ClassLoader.getSystemClassLoader().getResource("cli.xml").getURL(), args);
     ```
 
     Options can now be accessed as such: `options.getOption("config")`.
 
     Arguments can now be accesses ad such: `options.getArguments()`.
 
-6. When you use CLI, you get a `--help` option automatically provided. After compiling your application, run the app with `App --help`, and you should see this:
+1. When you use CLI, you get a `--help` option automatically provided. After compiling your application, run the app with `App --help`, and you should see this:
 
     ```bash
     usage:
@@ -132,12 +97,11 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 Please make sure to update tests as appropriate.
 
-### License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
 
 [apache-commons-cli]: https://commons.apache.org/proper/commons-cli/
-[cli-maven-archetype]: /../../../../openjax/cli-maven-archetype
 [cli-schema]: /src/main/resources/cli.xsd
 [jdk8-download]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 [maven-archetype-quickstart]: http://maven.apache.org/archetypes/maven-archetype-quickstart/
