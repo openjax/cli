@@ -65,7 +65,7 @@ OpenJAX CLI is based on a [XML Schema][cli-schema] that is used to specify the f
     <dependency>
       <groupId>org.openjax</groupId>
       <artifactId>cli</artifactId>
-      <version>1.1.7-SNAPSHOT</version>
+      <version>1.1.7</version>
     </dependency>
     ```
 
