@@ -1,7 +1,5 @@
 # OpenJAX CLI
 
-> Command Line Interface
-
 [![Build Status](https://travis-ci.org/openjax/cli.png)](https://travis-ci.org/openjax/cli)
 [![Coverage Status](https://coveralls.io/repos/github/openjax/cli/badge.svg)](https://coveralls.io/github/openjax/cli)
 [![Javadocs](https://www.javadoc.io/badge/org.openjax/cli.svg)](https://www.javadoc.io/doc/org.openjax/cli)
@@ -28,61 +26,61 @@ OpenJAX CLI is based on a [XML Schema][cli-schema] that is used to specify the f
 
 1. Create a `cli.xml` in `src/main/resources/`.
 
-    ```xml
-    <cli
-      xmlns="http://www.openjax.org/cli-1.1.7.xsd"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.openjax.org/cli-1.1.7.xsd http://www.openjax.org/cli.xsd">
-      <option>
-        <name long="config" short="C"/>
-        <argument label="CONFIG_FILE" use="required" default="config.xml"/>
-        <description>config file to use instead of default</description>
-      </option>
-      <option>
-        <name long="silent"/>
-        <description>silent mode</description>
-      </option>
-      <option>
-        <name short="V"/>
-        <description>verbose mode</description>
-      </option>
-      <arguments label="FILE" minOccurs="3" maxOccurs="unbounded"/>
-    </cli>
-    ```
+   ```xml
+   <cli
+     xmlns="http://www.openjax.org/cli-1.1.7.xsd"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.openjax.org/cli-1.1.7.xsd http://www.openjax.org/cli.xsd">
+     <option>
+       <name long="config" short="C"/>
+       <argument label="CONFIG_FILE" use="required" default="config.xml"/>
+       <description>config file to use instead of default</description>
+     </option>
+     <option>
+       <name long="silent"/>
+       <description>silent mode</description>
+     </option>
+     <option>
+       <name short="V"/>
+       <description>verbose mode</description>
+     </option>
+     <arguments label="FILE" minOccurs="3" maxOccurs="unbounded"/>
+   </cli>
+   ```
 
-    This `cli.xml` describes 3 options and 1 argument. The 3 options are "config", which has its own required argument of CONFIG_FILE, "silent", and "verbose." Lastly, the argument FILE is required with a cardinality of 3 or more.
+   This `cli.xml` describes 3 options and 1 argument. The 3 options are "config", which has its own required argument of CONFIG_FILE, "silent", and "verbose." Lastly, the argument FILE is required with a cardinality of 3 or more.
 
 1. Add `org.openjax:cli` dependency to the POM.
 
-    ```xml
-    <dependency>
-      <groupId>org.openjax</groupId>
-      <artifactId>cli</artifactId>
-      <version>1.1.7</version>
-    </dependency>
-    ```
+   ```xml
+   <dependency>
+     <groupId>org.openjax</groupId>
+     <artifactId>cli</artifactId>
+     <version>1.1.7</version>
+   </dependency>
+   ```
 
 1. Before any other code in the `main()` method in `App.java`, add the following line and let your IDE resolve the missing imports.
 
-    ```java
-    Options options = Options.parse(ClassLoader.getSystemClassLoader().getResource("cli.xml").getURL(), args);
-    ```
+   ```java
+   Options options = Options.parse(ClassLoader.getSystemClassLoader().getResource("cli.xml").getURL(), args);
+   ```
 
-    Options can now be accessed as such: `options.getOption("config")`.
+   Options can now be accessed as such: `options.getOption("config")`.
 
-    Arguments can now be accesses ad such: `options.getArguments()`.
+   Arguments can now be accesses ad such: `options.getArguments()`.
 
 1. When you use CLI, you get a `--help` option automatically provided. After compiling your application, run the app with `App --help`, and you should see this:
 
-    ```bash
-    usage:
-    [options] <FILE> <FILE2> <FILE3> [FILE4] [FILE5] [...]
-     -C,--config <CONFIG_FILE>    config file to use instead of default
-                                  default: <config.xml>
-        --help                    Print help and usage.
-        --silent                  silent mode
-     -V                           verbose mode
-    ```
+   ```bash
+   usage:
+   [options] <FILE> <FILE2> <FILE3> [FILE4] [FILE5] [...]
+    -C,--config <CONFIG_FILE>    config file to use instead of default
+                                 default: <config.xml>
+       --help                    Print help and usage.
+       --silent                  silent mode
+    -V                           verbose mode
+   ```
 
 ## Contributing
 
