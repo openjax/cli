@@ -26,13 +26,6 @@ OpenJAX CLI is based on a [XML Schema][cli-schema] that is used to specify the f
 
 ### Example
 
-1. In your preferred development directory, create a [`maven-archetype-quickstart`][maven-archetype-quickstart] project.
-
-    ```bash
-    mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app \
-      -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
-    ```
-
 1. Create a `cli.xml` in `src/main/resources/`.
 
     ```xml
@@ -93,7 +86,7 @@ OpenJAX CLI is based on a [XML Schema][cli-schema] that is used to specify the f
 
 ## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Pull requests are welcome. For major changes, please [open an issue](../../issues) first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
 
