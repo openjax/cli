@@ -1,4 +1,4 @@
-# OpenJAX CLI
+# CLI
 
 [![Build Status](https://travis-ci.org/openjax/cli.png)](https://travis-ci.org/openjax/cli)
 [![Coverage Status](https://coveralls.io/repos/github/openjax/cli/badge.svg)](https://coveralls.io/github/openjax/cli)
