@@ -1,9 +1,9 @@
 # CLI
 
-[![Build Status](https://travis-ci.org/openjax/cli.png)](https://travis-ci.org/openjax/cli)
-[![Coverage Status](https://coveralls.io/repos/github/openjax/cli/badge.svg)](https://coveralls.io/github/openjax/cli)
-[![Javadocs](https://www.javadoc.io/badge/org.openjax/cli.svg)](https://www.javadoc.io/doc/org.openjax/cli)
-[![Released Version](https://img.shields.io/maven-central/v/org.openjax/cli.svg)](https://mvnrepository.com/artifact/org.openjax/cli)
+[![Build Status](https://travis-ci.org/openjax/cli.svg?1)](https://travis-ci.org/openjax/cli)
+[![Coverage Status](https://coveralls.io/repos/github/openjax/cli/badge.svg?1)](https://coveralls.io/github/openjax/cli)
+[![Javadocs](https://www.javadoc.io/badge/org.openjax/cli.svg?1)](https://www.javadoc.io/doc/org.openjax/cli)
+[![Released Version](https://img.shields.io/maven-central/v/org.openjax/cli.svg?1)](https://mvnrepository.com/artifact/org.openjax/cli)
 
 ## Introduction
 
