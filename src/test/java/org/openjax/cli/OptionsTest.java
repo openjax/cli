@@ -41,7 +41,7 @@ public class OptionsTest {
 
   @Test
   public void testOptions() throws Exception {
-    final String[] args = new String[] {
+    final String[] args = {
       "--users", "user1,user2",
       "-V",
       "file1",

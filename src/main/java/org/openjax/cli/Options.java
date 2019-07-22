@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
@@ -97,12 +96,12 @@ public final class Options {
     final PrintWriter pw = new PrintWriter(ps);
     final StringBuilder args = new StringBuilder(apacheOptions.getOptions().size() > 0 ? " [options]" : "");
     if (cliArguments != null) {
-      for (short i = 1; i <= cliArguments.getMinOccurs(); i++)
+      for (short i = 1; i <= cliArguments.getMinOccurs(); ++i)
         args.append(" <").append(cliArguments.getLabel()).append(i != 1 ? i : "").append('>');
 
       final boolean maxUnbounded = "unbounded".equals(cliArguments.getMaxOccurs());
       final int argsMax = maxUnbounded ? 2 + cliArguments.getMinOccurs() : Short.parseShort(cliArguments.getMaxOccurs());
-      for (int i = cliArguments.getMinOccurs() + 1; i <= argsMax; i++)
+      for (int i = cliArguments.getMinOccurs() + 1; i <= argsMax; ++i)
         args.append(" [").append(cliArguments.getLabel()).append(i != 1 ? i : "").append(']');
 
       if (maxUnbounded)
@@ -129,14 +128,15 @@ public final class Options {
    * @param args The {@code main(String[] args)}.
    * @return The parsed {@code Options}.
    * @throws IOException If an I/O error has occurred.
+   * @throws NullPointerException If {@code cliURL} or {@code args} is null.
+   * @throws IllegalArgumentException If an error was encountered while creating
+   *           the {@code JAXBContext}, or an {@code XMLStreamException} has
+   *           occurred.
+   * @throws IllegalStateException If an instance of this the
+   *           {@code XMLInputFactory} cannot be loaded.
    */
   public static Options parse(final File cliFile, final String[] args) throws IOException {
-    try {
-      return parse(cliFile.toURI().toURL(), args);
-    }
-    catch (final MalformedURLException e) {
-      throw new IllegalArgumentException(e);
-    }
+    return parse(cliFile.toURI().toURL(), args);
   }
 
   /**
@@ -147,6 +147,12 @@ public final class Options {
    * @param args The {@code main(String[] args)}.
    * @return The parsed {@code Options}.
    * @throws IOException If an I/O error has occurred.
+   * @throws NullPointerException If {@code cliURL} or {@code args} is null.
+   * @throws IllegalArgumentException If an error was encountered while creating
+   *           the {@code JAXBContext}, or an {@code XMLStreamException} has
+   *           occurred.
+   * @throws IllegalStateException If an instance of this the
+   *           {@code XMLInputFactory} cannot be loaded.
    */
   public static Options parse(final URL cliURL, final String[] args) throws IOException {
     try {
@@ -159,7 +165,7 @@ public final class Options {
       }
     }
     catch (final FactoryConfigurationError e) {
-      throw new UnsupportedOperationException(e);
+      throw new IllegalStateException(e);
     }
     catch (final JAXBException | SAXException | XMLStreamException e) {
       throw new IllegalArgumentException(e);
@@ -173,6 +179,9 @@ public final class Options {
    * @param binding The {@code Cli} JAXB binding representing the CLI XML.
    * @param args The {@code main(String[] args)}.
    * @return The parsed {@code Options}.
+   * @throws NullPointerException If {@code args} is null.
+   * @throws IllegalStateException If an the class with
+   *           {@code main(String[])} could not be determined.
    */
   public static Options parse(final Cli binding, final String[] args) {
     final Set<String> requiredNames = new HashSet<>();
@@ -273,7 +282,7 @@ public final class Options {
           if (e.getMessage().startsWith("Unrecognized option: ")) {
             final String unrecognizedOption = e.getMessage().substring(21);
             logger.error("Unrecognized option: " + unrecognizedOption);
-            for (int i = 0; i < args.length; i++)
+            for (int i = 0; i < args.length; ++i)
               if (args[i].equals(unrecognizedOption))
                 args[i] = "--help";
           }
@@ -399,17 +408,26 @@ public final class Options {
   }
 
   /**
-   * @return Returns an array of unnamed arguments, in original order. Returns
+   * @return Returns an array of unnamed arguments in original order, or
    *         {@code null} in case there are no unnamed arguments.
    */
   public String[] getArguments() {
     return arguments;
   }
 
+  /**
+   * @return All {@link Option}s in this instance.
+   */
   public Collection<Option> getOptions() {
     return options;
   }
 
+  /**
+   * Returns the first option string for the given {@code name}.
+   *
+   * @param name The name of the {@code Option}.
+   * @return The first option string for the given {@code name}.
+   */
   public String getOption(final String name) {
     final Option options = optionNameToOption.get(name);
     if (options == null || options.getValues().length == 0)
@@ -421,13 +439,27 @@ public final class Options {
     return Arrays.stream(options.getValues()).reduce(String.valueOf(options.getValueSeparator()), String::concat);
   }
 
+  /**
+   * Returns an array of all option strings for the given {@code name}.
+   *
+   * @param name The name of the {@code Option}.
+   * @return An array of all option strings for the given {@code name}.
+   */
   public String[] getOptions(final String name) {
     final Option reqOption = optionNameToOption.get(name);
     return reqOption != null ? reqOption.getValues() : null;
   }
 
-  public void printCommand(final PrintStream ps, final Class<?> callerClass) {
-    ps.print("java " + callerClass.getName());
+  /**
+   * Prints the command that would be used to execute a process with equivalent
+   * options as represented by this instance.
+   *
+   * @param ps The {@code PrintStream} to which the command is to be printed.
+   * @param mainClass The class with {@code main(String[])}.
+   * @throws NullPointerException If {@code ps} or {@code mainClass} is null.
+   */
+  public void printCommand(final PrintStream ps, final Class<?> mainClass) {
+    ps.print("java " + mainClass.getName());
     for (final String arg : args)
       ps.print(" " + arg);
   }
