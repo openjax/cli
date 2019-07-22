@@ -28,9 +28,9 @@ OpenJAX CLI is based on a [XML Schema][cli-schema] that is used to specify the f
 
    ```xml
    <cli
-     xmlns="http://www.openjax.org/cli-1.1.7.xsd"
+     xmlns="http://www.openjax.org/cli-1.1.xsd"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:schemaLocation="http://www.openjax.org/cli-1.1.7.xsd http://www.openjax.org/cli.xsd">
+     xsi:schemaLocation="http://www.openjax.org/cli-1.1.xsd http://www.openjax.org/cli.xsd">
      <option>
        <name long="config" short="C"/>
        <argument label="CONFIG_FILE" use="required" default="config.xml"/>
