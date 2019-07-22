@@ -15,9 +15,9 @@
   program. If not, see <http://opensource.org/licenses/MIT/>.
 -->
 <cli
-  xmlns="http://www.openjax.org/cli-1.1.8.xsd"
+  xmlns="http://www.openjax.org/cli-1.1.xsd"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.openjax.org/cli-1.1.8.xsd ../../main/resources/cli.xsd">
+  xsi:schemaLocation="http://www.openjax.org/cli-1.1.xsd ../../main/resources/cli.xsd">
   <option>
     <name long="config" short="C"/>
     <argument label="CONFIG_FILE" default="config.xml"/>
