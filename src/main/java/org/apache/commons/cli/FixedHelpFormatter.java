@@ -22,7 +22,6 @@ import java.util.List;
 
 public class FixedHelpFormatter extends HelpFormatter {
   @Override
-  @SuppressWarnings("unchecked")
   protected StringBuffer renderOptions(final StringBuffer sb, final int width, final Options options, final int leftPad, final int descPad) {
     final String lpad = createPadding(leftPad);
     final String dpad = createPadding(descPad);
