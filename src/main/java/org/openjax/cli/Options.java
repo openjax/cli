@@ -401,7 +401,7 @@ public final class Options {
   private Options(final Class<?> mainClass, final String[] args, final Collection<Option> options, final String[] arguments) {
     this.mainClass = mainClass;
     this.args = args;
-    this.options = options == null ? Collections.<Option>emptyList() : Collections.<Option>unmodifiableCollection(options);
+    this.options = options == null ? Collections.emptyList() : Collections.unmodifiableCollection(options);
     this.arguments = arguments;
     for (final Option option : options)
       optionNameToOption.put(option.getName(), option);

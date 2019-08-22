@@ -17,7 +17,6 @@
 package org.apache.commons.cli;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class FixedHelpFormatter extends HelpFormatter {
     // sort options ascending
     final List<StringBuffer> prefixList = new ArrayList<>();
     final List<Option> optList = options.helpOptions();
-    Collections.sort(optList, getOptionComparator());
+    optList.sort(getOptionComparator());
 
     int max = 0;
     StringBuffer optBuf;
