@@ -27,7 +27,7 @@ public class Option {
   private final char valueSeparator;
 
   /**
-   * Creates a new {@code Option} with the specified name, value separator, and
+   * Creates a new {@link Option} with the specified name, value separator, and
    * an array of associated values.
    *
    * @param name The name.
@@ -41,7 +41,7 @@ public class Option {
   }
 
   /**
-   * Creates a new {@code Option} with the specified name, value separator, and
+   * Creates a new {@link Option} with the specified name, value separator, and
    * single associated value.
    *
    * @param name The name.
@@ -52,6 +52,8 @@ public class Option {
   }
 
   /**
+   * Returns the name.
+   *
    * @return The name.
    */
   public String getName() {
@@ -59,6 +61,8 @@ public class Option {
   }
 
   /**
+   * Returns the associated values.
+   *
    * @return The associated values.
    */
   public String[] getValues() {
@@ -66,6 +70,8 @@ public class Option {
   }
 
   /**
+   * Returns the value separator.
+   *
    * @return The value separator.
    */
   public char getValueSeparator() {

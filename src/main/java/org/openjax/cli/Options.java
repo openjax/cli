@@ -122,18 +122,18 @@ public final class Options {
 
   /**
    * Parses {@code args} as per the CLI XML specification at the provided
-   * {@code File}.
+   * {@link File}.
    *
-   * @param cliFile The {@code File} pointing to the CLI XML.
+   * @param cliFile The {@link File} pointing to the CLI XML.
    * @param args The {@code main(String[] args)}.
-   * @return The parsed {@code Options}.
+   * @return The parsed {@link Options}.
    * @throws IOException If an I/O error has occurred.
    * @throws NullPointerException If {@code cliURL} or {@code args} is null.
    * @throws IllegalArgumentException If an error was encountered while creating
-   *           the {@code JAXBContext}, or an {@code XMLStreamException} has
+   *           the {@link JAXBContext}, or an {@link XMLStreamException} has
    *           occurred.
    * @throws IllegalStateException If an instance of this the
-   *           {@code XMLInputFactory} cannot be loaded.
+   *           {@link XMLInputFactory} cannot be loaded.
    */
   public static Options parse(final File cliFile, final String[] args) throws IOException {
     return parse(cliFile.toURI().toURL(), args);
@@ -141,18 +141,18 @@ public final class Options {
 
   /**
    * Parses {@code args} as per the CLI XML specification at the provided
-   * {@code URL}.
+   * {@link URL}.
    *
-   * @param cliURL The {@code URL} pointing to the CLI XML.
+   * @param cliURL The {@link URL} pointing to the CLI XML.
    * @param args The {@code main(String[] args)}.
-   * @return The parsed {@code Options}.
+   * @return The parsed {@link Options}.
    * @throws IOException If an I/O error has occurred.
    * @throws NullPointerException If {@code cliURL} or {@code args} is null.
    * @throws IllegalArgumentException If an error was encountered while creating
-   *           the {@code JAXBContext}, or an {@code XMLStreamException} has
+   *           the {@link JAXBContext}, or an {@link XMLStreamException} has
    *           occurred.
    * @throws IllegalStateException If an instance of this the
-   *           {@code XMLInputFactory} cannot be loaded.
+   *           {@link XMLInputFactory} cannot be loaded.
    */
   public static Options parse(final URL cliURL, final String[] args) throws IOException {
     try {
@@ -174,11 +174,11 @@ public final class Options {
 
   /**
    * Parses {@code args} as per the CLI XML specification in the provided
-   * {@code Cli} JAXB binding.
+   * {@link Cli} JAXB binding.
    *
-   * @param binding The {@code Cli} JAXB binding representing the CLI XML.
+   * @param binding The {@link Cli} JAXB binding representing the CLI XML.
    * @param args The {@code main(String[] args)}.
-   * @return The parsed {@code Options}.
+   * @return The parsed {@link Options}.
    * @throws NullPointerException If {@code args} is null.
    * @throws IllegalStateException If an the class with
    *           {@code main(String[])} could not be determined.
@@ -408,14 +408,19 @@ public final class Options {
   }
 
   /**
-   * @return Returns an array of unnamed arguments in original order, or
-   *         {@code null} in case there are no unnamed arguments.
+   * Returns an array of unnamed arguments in original order, or {@code null} in
+   * case there are no unnamed arguments.
+   *
+   * @return An array of unnamed arguments in original order, or {@code null} in
+   *         case there are no unnamed arguments.
    */
   public String[] getArguments() {
     return arguments;
   }
 
   /**
+   * Returns all {@link Option}s in this instance.
+   *
    * @return All {@link Option}s in this instance.
    */
   public Collection<Option> getOptions() {
@@ -425,7 +430,7 @@ public final class Options {
   /**
    * Returns the first option string for the given {@code name}.
    *
-   * @param name The name of the {@code Option}.
+   * @param name The name of the {@link Option}.
    * @return The first option string for the given {@code name}.
    */
   public String getOption(final String name) {
@@ -442,7 +447,7 @@ public final class Options {
   /**
    * Returns an array of all option strings for the given {@code name}.
    *
-   * @param name The name of the {@code Option}.
+   * @param name The name of the {@link Option}.
    * @return An array of all option strings for the given {@code name}.
    */
   public String[] getOptions(final String name) {
@@ -454,7 +459,7 @@ public final class Options {
    * Prints the command that would be used to execute a process with equivalent
    * options as represented by this instance.
    *
-   * @param ps The {@code PrintStream} to which the command is to be printed.
+   * @param ps The {@link PrintStream} to which the command is to be printed.
    * @param mainClass The class with {@code main(String[])}.
    * @throws NullPointerException If {@code ps} or {@code mainClass} is null.
    */
