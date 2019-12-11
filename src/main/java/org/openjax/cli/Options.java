@@ -63,11 +63,13 @@ import org.xml.sax.SAXException;
  * <p>
  *
  * <pre>
+ * {@code
  * public class MyApp {
  *   public void main(String[] args) {
  *     Options options = Options.parse(ClassLoader.getSystemClassLoader().getResource("cli.xml"), MyApp.class, args);
  *     ...
  *   }
+ * }
  * }
  * </pre>
  */
