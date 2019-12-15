@@ -92,6 +92,9 @@ public class Option {
 
   @Override
   public int hashCode() {
-    return (name != null ? name.hashCode() : 0) + (values != null ? values.hashCode() : 0);
+    int hashCode = 1;
+    hashCode = 31 * hashCode + (name == null ? 0 : name.hashCode());
+    hashCode = 31 * hashCode + (values == null ? 0 : values.hashCode());
+    return hashCode;
   }
 }
