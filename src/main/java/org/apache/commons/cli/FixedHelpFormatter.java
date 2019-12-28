@@ -64,7 +64,7 @@ public class FixedHelpFormatter extends HelpFormatter {
       }
 
       prefixList.add(optBuf);
-      max = optBuf.length() > max ? optBuf.length() : max;
+      max = Math.max(optBuf.length(), max);
     }
 
     int x = 0;

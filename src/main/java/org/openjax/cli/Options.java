@@ -75,6 +75,7 @@ import org.xml.sax.SAXException;
  */
 public final class Options {
   private static final Logger logger = LoggerFactory.getLogger(Options.class);
+  private static final String schemaFile = "cli.xsd";
   private static Schema schema;
 
   private static String formatArgumentName(final String label, final int maxOccurs, final char valueSeparator) {
@@ -159,7 +160,11 @@ public final class Options {
   public static Options parse(final URL cliURL, final String[] args) throws IOException {
     try {
       final Unmarshaller unmarshaller = JAXBContext.newInstance(Cli.class).createUnmarshaller();
-      unmarshaller.setSchema(Options.schema == null ? Options.schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(Thread.currentThread().getContextClassLoader().getResource("cli.xsd")) : Options.schema);
+      final URL resource = Thread.currentThread().getContextClassLoader().getResource(schemaFile);
+      if (resource == null)
+        throw new IllegalStateException("Unable to find " + schemaFile + " in class loader " + Thread.currentThread().getContextClassLoader());
+
+      unmarshaller.setSchema(Options.schema == null ? Options.schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(resource) : Options.schema);
 
       try (final InputStream in = cliURL.openStream()) {
         final JAXBElement<Cli> element = unmarshaller.unmarshal(XMLInputFactory.newInstance().createXMLStreamReader(in), Cli.class);
@@ -182,8 +187,8 @@ public final class Options {
    * @param args The {@code main(String[] args)}.
    * @return The parsed {@link Options}.
    * @throws NullPointerException If {@code args} is null.
-   * @throws IllegalStateException If an the class with
-   *           {@code main(String[])} could not be determined.
+   * @throws IllegalStateException If an the class with {@code main(String[])}
+   *           could not be determined.
    */
   public static Options parse(final Cli binding, final String[] args) {
     final Set<String> requiredNames = new HashSet<>();
@@ -216,7 +221,7 @@ public final class Options {
           }
 
           nameToAltName.put(name, shortName != null ? shortName : longName);
-          OptionBuilder.withLongOpt(name == longName ? longName : null);
+          OptionBuilder.withLongOpt(name.equals(longName) ? longName : null);
 
           // Record which options are required
           if (option.getArgument() != null) {
@@ -405,7 +410,7 @@ public final class Options {
     this.args = args;
     this.options = options == null ? Collections.emptyList() : Collections.unmodifiableCollection(options);
     this.arguments = arguments;
-    for (final Option option : options)
+    for (final Option option : this.options)
       optionNameToOption.put(option.getName(), option);
   }
 

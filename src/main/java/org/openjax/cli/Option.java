@@ -17,6 +17,7 @@
 package org.openjax.cli;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Class representing an option on the CLI.
@@ -87,14 +88,14 @@ public class Option {
       return false;
 
     final Option that = (Option)obj;
-    return (name != null ? name.equals(that.name) : that.name == null) && (values != null ? Arrays.equals(values, that.values) : that.values == null);
+    return Objects.equals(name, that.name) && (values != null ? Arrays.equals(values, that.values) : that.values == null);
   }
 
   @Override
   public int hashCode() {
     int hashCode = 1;
     hashCode = 31 * hashCode + (name == null ? 0 : name.hashCode());
-    hashCode = 31 * hashCode + (values == null ? 0 : values.hashCode());
+    hashCode = 31 * hashCode + (values == null ? 0 : Arrays.hashCode(values));
     return hashCode;
   }
 }
