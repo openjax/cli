@@ -186,7 +186,7 @@ public final class Options {
    * @param binding The {@link Cli} JAXB binding representing the CLI XML.
    * @param args The {@code main(String[] args)}.
    * @return The parsed {@link Options}.
-   * @throws NullPointerException If {@code args} is null.
+   * @throws NullPointerException If @{@code binding} or {@code args} is null.
    * @throws IllegalStateException If an the class with {@code main(String[])}
    *           could not be determined.
    */
@@ -198,85 +198,80 @@ public final class Options {
     short argumentsMinOccurs = 0;
     short argumentsMaxOccurs = 0;
     final Cli.Arguments cliArguments;
-    if (binding != null) {
-      cliArguments = binding.getArguments();
-      if (cliArguments != null) {
-        argumentsMinOccurs = cliArguments.getMinOccurs();
-        argumentsMaxOccurs = "unbounded".equals(cliArguments.getMaxOccurs()) ? Short.MAX_VALUE : Short.parseShort(cliArguments.getMaxOccurs());
-        if (argumentsMaxOccurs < argumentsMinOccurs) {
-          logger.error("minOccurs > maxOccurs on <arguments> element");
+    cliArguments = binding.getArguments();
+    if (cliArguments != null) {
+      argumentsMinOccurs = cliArguments.getMinOccurs();
+      argumentsMaxOccurs = "unbounded".equals(cliArguments.getMaxOccurs()) ? Short.MAX_VALUE : Short.parseShort(cliArguments.getMaxOccurs());
+      if (argumentsMaxOccurs < argumentsMinOccurs) {
+        logger.error("minOccurs > maxOccurs on <arguments> element");
+        System.exit(1);
+      }
+    }
+
+    if (binding.getOption() != null) {
+      for (final Cli.Option option : binding.getOption()) {
+        final Cli.Option.Name optionName = option.getName();
+        final String longName = optionName.getLong();
+        final String shortName = optionName.getShort();
+        final String name = longName != null ? longName : shortName;
+        if (longName == null && shortName == null) {
+          logger.error("both [long] and [short] option names are null in cli spec");
           System.exit(1);
         }
-      }
 
-      if (binding.getOption() != null) {
-        for (final Cli.Option option : binding.getOption()) {
-          final Cli.Option.Name optionName = option.getName();
-          final String longName = optionName.getLong();
-          final String shortName = optionName.getShort();
-          final String name = longName != null ? longName : shortName;
-          if (longName == null && shortName == null) {
-            logger.error("both [long] and [short] option names are null in cli spec");
+        nameToAltName.put(name, shortName != null ? shortName : longName);
+        OptionBuilder.withLongOpt(name.equals(longName) ? longName : null);
+
+        // Record which options are required
+        if (option.getArgument() != null) {
+          final Cli.Option.Argument argument = option.getArgument();
+          final boolean isRequired = Use.REQUIRED == argument.getUse();
+          if (isRequired) {
+            OptionBuilder.isRequired();
+            requiredNames.add(longName);
+          }
+
+          final int maxOccurs = argument.getMaxOccurs() == null ? 1 : "unbounded".equals(argument.getMaxOccurs()) ? Integer.MAX_VALUE : Integer.parseInt(argument.getMaxOccurs());
+          if (maxOccurs == 1) {
+            if (isRequired)
+              OptionBuilder.hasArgs(1);
+            else
+              OptionBuilder.hasOptionalArgs(1);
+          }
+          else if (maxOccurs == Integer.MAX_VALUE) {
+            if (isRequired)
+              OptionBuilder.hasArgs();
+            else
+              OptionBuilder.hasOptionalArgs();
+          }
+          else {
+            if (isRequired)
+              OptionBuilder.hasArgs(maxOccurs);
+            else
+              OptionBuilder.hasOptionalArgs(maxOccurs);
+          }
+
+          final char valueSeparator = argument.getValueSeparator() != null ? argument.getValueSeparator().charAt(0) : ' ';
+          OptionBuilder.withArgName(formatArgumentName(argument.getLabel(), maxOccurs, valueSeparator));
+          OptionBuilder.withValueSeparator(valueSeparator);
+          if (option.getDescription() == null) {
+            logger.error("missing <description> for " + name + " option");
             System.exit(1);
           }
 
-          nameToAltName.put(name, shortName != null ? shortName : longName);
-          OptionBuilder.withLongOpt(name.equals(longName) ? longName : null);
+          final StringBuilder description = new StringBuilder(option.getDescription());
+          if (option.getArgument().getDefault() != null)
+            description.append("\nDefault: ").append(option.getArgument().getDefault());
 
-          // Record which options are required
-          if (option.getArgument() != null) {
-            final Cli.Option.Argument argument = option.getArgument();
-            final boolean isRequired = Use.REQUIRED == argument.getUse();
-            if (isRequired) {
-              OptionBuilder.isRequired();
-              requiredNames.add(longName);
-            }
-
-            final int maxOccurs = argument.getMaxOccurs() == null ? 1 : "unbounded".equals(argument.getMaxOccurs()) ? Integer.MAX_VALUE : Integer.parseInt(argument.getMaxOccurs());
-            if (maxOccurs == 1) {
-              if (isRequired)
-                OptionBuilder.hasArgs(1);
-              else
-                OptionBuilder.hasOptionalArgs(1);
-            }
-            else if (maxOccurs == Integer.MAX_VALUE) {
-              if (isRequired)
-                OptionBuilder.hasArgs();
-              else
-                OptionBuilder.hasOptionalArgs();
-            }
-            else {
-              if (isRequired)
-                OptionBuilder.hasArgs(maxOccurs);
-              else
-                OptionBuilder.hasOptionalArgs(maxOccurs);
-            }
-
-            final char valueSeparator = argument.getValueSeparator() != null ? argument.getValueSeparator().charAt(0) : ' ';
-            OptionBuilder.withArgName(formatArgumentName(argument.getLabel(), maxOccurs, valueSeparator));
-            OptionBuilder.withValueSeparator(valueSeparator);
-            if (option.getDescription() == null) {
-              logger.error("missing <description> for " + name + " option");
-              System.exit(1);
-            }
-
-            final StringBuilder description = new StringBuilder(option.getDescription());
-            if (option.getArgument().getDefault() != null)
-              description.append("\nDefault: ").append(option.getArgument().getDefault());
-
-            OptionBuilder.withDescription(description.toString());
-          }
-
-          apacheOptions.addOption(OptionBuilder.create(shortName));
+          OptionBuilder.withDescription(description.toString());
         }
+
+        apacheOptions.addOption(OptionBuilder.create(shortName));
       }
-    }
-    else {
-      cliArguments = null;
     }
 
     final Map<String,Option> optionsMap = new HashMap<>();
-    final Set<String> specifiedLongNames;
+    Set<String> specifiedLongNames = null;
     CommandLine commandLine = null;
     if (args != null && args.length != 0) {
       specifiedLongNames = new HashSet<>();
@@ -303,9 +298,6 @@ public final class Options {
       }
       while (commandLine == null);
     }
-    else {
-      specifiedLongNames = null;
-    }
 
     final Collection<String> arguments = commandLine != null ? commandLine.getArgList() : null;
     if (arguments != null && arguments.size() > 0) {
@@ -319,6 +311,9 @@ public final class Options {
 
     if (commandLine != null) {
       for (final org.apache.commons.cli.Option option : commandLine.getOptions()) {
+        if (specifiedLongNames == null)
+          specifiedLongNames = new HashSet<>();
+
         specifiedLongNames.add(option.getLongOpt());
         if ("help".equals(option.getLongOpt()))
           Options.trapPrintHelp(apacheOptions, cliArguments, null, System.out);
