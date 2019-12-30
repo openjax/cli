@@ -60,17 +60,16 @@ import org.xml.sax.SAXException;
  * used from {@code main(String[])}.
  * <p>
  * For example:
- * <p>
  *
  * <pre>
- * {@code
+ * <code>
  * public class MyApp {
  *   public void main(String[] args) {
- *     Options options = Options.parse(ClassLoader.getSystemClassLoader().getResource("cli.xml"), MyApp.class, args);
+ *     Options options = Options.parse(ClassLoader.getSystemClassLoader().getResource("cli.xml"), args);
  *     ...
  *   }
  * }
- * }
+ * </code>
  * </pre>
  */
 public final class Options {
