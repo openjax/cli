@@ -48,7 +48,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
-import org.libj.util.Classes;
+import org.libj.lang.Classes;
 import org.openjax.cli_1_1.Cli;
 import org.openjax.cli_1_1.Use;
 import org.slf4j.Logger;
