@@ -4,6 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/openjax/cli/badge.svg?1)](https://coveralls.io/github/openjax/cli)
 [![Javadocs](https://www.javadoc.io/badge/org.openjax/cli.svg?1)](https://www.javadoc.io/doc/org.openjax/cli)
 [![Released Version](https://img.shields.io/maven-central/v/org.openjax/cli.svg?1)](https://mvnrepository.com/artifact/org.openjax/cli)
+![Snapshot Version](https://img.shields.io/nexus/s/org.openjax/cli?label=maven-snapshot&server=https%3A%2F%2Foss.sonatype.org)
 
 ## Introduction
 
