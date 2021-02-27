@@ -27,8 +27,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -185,13 +183,13 @@ public final class Options {
    * @param binding The {@link Cli} JAXB binding representing the CLI XML.
    * @param args The {@code main(String[] args)}.
    * @return The parsed {@link Options}.
-   * @throws NullPointerException If @{@code binding} or {@code args} is null.
+   * @throws NullPointerException If {@code binding} or {@code args} is null.
    * @throws IllegalStateException If an the class with {@code main(String[])}
    *           could not be determined.
    */
   public static Options parse(final Cli binding, final String[] args) {
-    final Set<String> requiredNames = new HashSet<>();
-    final Map<String,String> nameToAltName = new HashMap<>();
+    final HashSet<String> requiredNames = new HashSet<>();
+    final HashMap<String,String> nameToAltName = new HashMap<>();
     final org.apache.commons.cli.Options apacheOptions = new org.apache.commons.cli.Options();
     apacheOptions.addOption(null, "help", false, "Print help and usage.");
     short argumentsMinOccurs = 0;
@@ -269,8 +267,8 @@ public final class Options {
       }
     }
 
-    final Map<String,Option> optionsMap = new HashMap<>();
-    Set<String> specifiedLongNames = null;
+    final HashMap<String,Option> optionsMap = new HashMap<>();
+    HashSet<String> specifiedLongNames = null;
     CommandLine commandLine = null;
     if (args != null && args.length != 0) {
       specifiedLongNames = new HashSet<>();
@@ -393,7 +391,7 @@ public final class Options {
     return new Options(mainClass, args, optionsMap.values(), arguments == null || arguments.size() == 0 ? null : arguments.toArray(new String[arguments.size()]));
   }
 
-  private final Map<String,Option> optionNameToOption = new HashMap<>();
+  private final HashMap<String,Option> optionNameToOption = new HashMap<>();
   private final Class<?> mainClass;
   private final String[] args;
   private final Collection<Option> options;
