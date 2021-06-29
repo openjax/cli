@@ -1,6 +1,6 @@
 # CLI
 
-[![Build Status](https://travis-ic.org/openjax/cli.svg?branch=master)](https://travis-ic.org/openjax/cli)
+[![Build Status](https://github.com/openjax/cli/workflows/build.yml/badge.svg)](https://github.com/openjax/cli/actions/workflows/build.yml)
 [![Coverage Status](https://coveralls.io/repos/github/openjax/cli/badge.svg)](https://coveralls.io/github/openjax/cli)
 [![Javadocs](https://www.javadoc.io/badge/org.openjax/cli.svg)](https://www.javadoc.io/doc/org.openjax/cli)
 [![Released Version](https://img.shields.io/maven-central/v/org.openjax/cli.svg)](https://mvnrepository.com/artifact/org.openjax/cli)
