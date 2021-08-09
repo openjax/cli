@@ -128,7 +128,7 @@ public final class Options {
    * @param args The {@code main(String[] args)}.
    * @return The parsed {@link Options}.
    * @throws IOException If an I/O error has occurred.
-   * @throws NullPointerException If {@code cliURL} or {@code args} is null.
+   * @throws IllegalArgumentException If {@code cliURL} or {@code args} is null.
    * @throws IllegalArgumentException If an error was encountered while creating
    *           the {@link JAXBContext}, or an {@link XMLStreamException} has
    *           occurred.
@@ -147,7 +147,7 @@ public final class Options {
    * @param args The {@code main(String[] args)}.
    * @return The parsed {@link Options}.
    * @throws IOException If an I/O error has occurred.
-   * @throws NullPointerException If {@code cliURL} or {@code args} is null.
+   * @throws IllegalArgumentException If {@code cliURL} or {@code args} is null.
    * @throws IllegalArgumentException If an error was encountered while creating
    *           the {@link JAXBContext}, or an {@link XMLStreamException} has
    *           occurred.
@@ -183,7 +183,7 @@ public final class Options {
    * @param binding The {@link Cli} JAXB binding representing the CLI XML.
    * @param args The {@code main(String[] args)}.
    * @return The parsed {@link Options}.
-   * @throws NullPointerException If {@code binding} or {@code args} is null.
+   * @throws IllegalArgumentException If {@code binding} or {@code args} is null.
    * @throws IllegalStateException If an the class with {@code main(String[])}
    *           could not be determined.
    */
@@ -460,7 +460,7 @@ public final class Options {
    *
    * @param ps The {@link PrintStream} to which the command is to be printed.
    * @param mainClass The class with {@code main(String[])}.
-   * @throws NullPointerException If {@code ps} or {@code mainClass} is null.
+   * @throws IllegalArgumentException If {@code ps} or {@code mainClass} is null.
    */
   public void printCommand(final PrintStream ps, final Class<?> mainClass) {
     ps.print("java " + mainClass.getName());
