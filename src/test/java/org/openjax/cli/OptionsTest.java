@@ -23,6 +23,7 @@ import java.io.PrintStream;
 import java.util.Arrays;
 
 import org.junit.Test;
+import org.libj.lang.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,14 +66,14 @@ public class OptionsTest {
 
   @Test
   public void testEmptyOptions() throws Exception {
-    final Options options = Options.parse(ClassLoader.getSystemClassLoader().getResource("empty.xml"), new String[0]);
+    final Options options = Options.parse(ClassLoader.getSystemClassLoader().getResource("empty.xml"), Strings.EMPTY_ARRAY);
     options.printCommand(System.out, OptionsTest.class);
     assertEquals(0, options.getOptions().size());
   }
 
   @Test
   public void testPrintCommand() throws Exception {
-    final Options options = Options.parse(ClassLoader.getSystemClassLoader().getResource("empty.xml"), new String[0]);
+    final Options options = Options.parse(ClassLoader.getSystemClassLoader().getResource("empty.xml"), Strings.EMPTY_ARRAY);
     final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     final PrintStream ps = new PrintStream(baos);
     options.printCommand(ps, OptionsTest.class);
