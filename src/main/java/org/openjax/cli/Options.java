@@ -27,6 +27,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.RandomAccess;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -54,8 +56,7 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 /**
- * Utility class to parse options from the CLI. This class is intended to be
- * used from {@code main(String[])}.
+ * Utility class to parse options from the CLI. This class is intended to be used from {@code main(String[])}.
  * <p>
  * For example:
  *
@@ -96,12 +97,12 @@ public final class Options {
     final PrintWriter pw = new PrintWriter(ps);
     final StringBuilder args = new StringBuilder(apacheOptions.getOptions().size() > 0 ? " [options]" : "");
     if (cliArguments != null) {
-      for (short i = 1; i <= cliArguments.getMinOccurs(); ++i)
+      for (short i = 1; i <= cliArguments.getMinOccurs(); ++i) // [N]
         args.append(" <").append(cliArguments.getLabel()).append(i != 1 ? i : "").append('>');
 
       final boolean maxUnbounded = "unbounded".equals(cliArguments.getMaxOccurs());
       final int argsMax = maxUnbounded ? 2 + cliArguments.getMinOccurs() : Short.parseShort(cliArguments.getMaxOccurs());
-      for (int i = cliArguments.getMinOccurs() + 1; i <= argsMax; ++i)
+      for (int i = cliArguments.getMinOccurs() + 1; i <= argsMax; ++i) // [N]
         args.append(" [").append(cliArguments.getLabel()).append(i != 1 ? i : "").append(']');
 
       if (maxUnbounded)
@@ -121,38 +122,32 @@ public final class Options {
   }
 
   /**
-   * Parses {@code args} as per the CLI XML specification at the provided
-   * {@link File}.
+   * Parses {@code args} as per the CLI XML specification at the provided {@link File}.
    *
    * @param cliFile The {@link File} pointing to the CLI XML.
    * @param args The {@code main(String[] args)}.
    * @return The parsed {@link Options}.
    * @throws IOException If an I/O error has occurred.
    * @throws IllegalArgumentException If {@code cliURL} or {@code args} is null.
-   * @throws IllegalArgumentException If an error was encountered while creating
-   *           the {@link JAXBContext}, or an {@link XMLStreamException} has
-   *           occurred.
-   * @throws IllegalStateException If an instance of this the
-   *           {@link XMLInputFactory} cannot be loaded.
+   * @throws IllegalArgumentException If an error was encountered while creating the {@link JAXBContext}, or an
+   *           {@link XMLStreamException} has occurred.
+   * @throws IllegalStateException If an instance of this the {@link XMLInputFactory} cannot be loaded.
    */
   public static Options parse(final File cliFile, final String[] args) throws IOException {
     return parse(cliFile.toURI().toURL(), args);
   }
 
   /**
-   * Parses {@code args} as per the CLI XML specification at the provided
-   * {@link URL}.
+   * Parses {@code args} as per the CLI XML specification at the provided {@link URL}.
    *
    * @param cliURL The {@link URL} pointing to the CLI XML.
    * @param args The {@code main(String[] args)}.
    * @return The parsed {@link Options}.
    * @throws IOException If an I/O error has occurred.
    * @throws IllegalArgumentException If {@code cliURL} or {@code args} is null.
-   * @throws IllegalArgumentException If an error was encountered while creating
-   *           the {@link JAXBContext}, or an {@link XMLStreamException} has
-   *           occurred.
-   * @throws IllegalStateException If an instance of this the
-   *           {@link XMLInputFactory} cannot be loaded.
+   * @throws IllegalArgumentException If an error was encountered while creating the {@link JAXBContext}, or an
+   *           {@link XMLStreamException} has occurred.
+   * @throws IllegalStateException If an instance of this the {@link XMLInputFactory} cannot be loaded.
    */
   public static Options parse(final URL cliURL, final String[] args) throws IOException {
     try {
@@ -177,15 +172,13 @@ public final class Options {
   }
 
   /**
-   * Parses {@code args} as per the CLI XML specification in the provided
-   * {@link Cli} JAXB binding.
+   * Parses {@code args} as per the CLI XML specification in the provided {@link Cli} JAXB binding.
    *
    * @param binding The {@link Cli} JAXB binding representing the CLI XML.
    * @param args The {@code main(String[] args)}.
    * @return The parsed {@link Options}.
    * @throws IllegalArgumentException If {@code binding} or {@code args} is null.
-   * @throws IllegalStateException If an the class with {@code main(String[])}
-   *           could not be determined.
+   * @throws IllegalStateException If an the class with {@code main(String[])} could not be determined.
    */
   public static Options parse(final Cli binding, final String[] args) {
     final HashSet<String> requiredNames = new HashSet<>();
@@ -206,64 +199,14 @@ public final class Options {
     }
 
     if (binding.getOption() != null) {
-      for (final Cli.Option option : binding.getOption()) {
-        final Cli.Option.Name optionName = option.getName();
-        final String longName = optionName.getLong();
-        final String shortName = optionName.getShort();
-        final String name = longName != null ? longName : shortName;
-        if (longName == null && shortName == null) {
-          logger.error("both [long] and [short] option names are null in cli spec");
-          System.exit(1);
-        }
-
-        nameToAltName.put(name, shortName != null ? shortName : longName);
-        OptionBuilder.withLongOpt(name.equals(longName) ? longName : null);
-
-        // Record which options are required
-        if (option.getArgument() != null) {
-          final Cli.Option.Argument argument = option.getArgument();
-          final boolean isRequired = Use.REQUIRED == argument.getUse();
-          if (isRequired) {
-            OptionBuilder.isRequired();
-            requiredNames.add(longName);
-          }
-
-          final int maxOccurs = argument.getMaxOccurs() == null ? 1 : "unbounded".equals(argument.getMaxOccurs()) ? Integer.MAX_VALUE : Integer.parseInt(argument.getMaxOccurs());
-          if (maxOccurs == 1) {
-            if (isRequired)
-              OptionBuilder.hasArgs(1);
-            else
-              OptionBuilder.hasOptionalArgs(1);
-          }
-          else if (maxOccurs == Integer.MAX_VALUE) {
-            if (isRequired)
-              OptionBuilder.hasArgs();
-            else
-              OptionBuilder.hasOptionalArgs();
-          }
-          else {
-            if (isRequired)
-              OptionBuilder.hasArgs(maxOccurs);
-            else
-              OptionBuilder.hasOptionalArgs(maxOccurs);
-          }
-
-          final char valueSeparator = argument.getValueSeparator() != null ? argument.getValueSeparator().charAt(0) : ' ';
-          OptionBuilder.withArgName(formatArgumentName(argument.getLabel(), maxOccurs, valueSeparator));
-          OptionBuilder.withValueSeparator(valueSeparator);
-          if (option.getDescription() == null) {
-            logger.error("missing <description> for " + name + " option");
-            System.exit(1);
-          }
-
-          final StringBuilder description = new StringBuilder(option.getDescription());
-          if (option.getArgument().getDefault() != null)
-            description.append("\nDefault: ").append(option.getArgument().getDefault());
-
-          OptionBuilder.withDescription(description.toString());
-        }
-
-        apacheOptions.addOption(OptionBuilder.create(shortName));
+      final List<Cli.Option> options = binding.getOption();
+      if (options instanceof RandomAccess) {
+        for (int i = 0, i$ = options.size(); i < i$; ++i) // [RA]
+          parseOption(options.get(i), nameToAltName, requiredNames, apacheOptions);
+      }
+      else {
+        for (final Cli.Option option : options) // [L]
+          parseOption(option, nameToAltName, requiredNames, apacheOptions);
       }
     }
 
@@ -281,7 +224,7 @@ public final class Options {
           if (e.getMessage().startsWith("Unrecognized option: ")) {
             final String unrecognizedOption = e.getMessage().substring(21);
             logger.error("Unrecognized option: " + unrecognizedOption);
-            for (int i = 0; i < args.length; ++i)
+            for (int i = 0; i < args.length; ++i) // [A]
               if (args[i].equals(unrecognizedOption))
                 args[i] = "--help";
           }
@@ -307,7 +250,7 @@ public final class Options {
     }
 
     if (commandLine != null) {
-      for (final org.apache.commons.cli.Option option : commandLine.getOptions()) {
+      for (final org.apache.commons.cli.Option option : commandLine.getOptions()) { // [A]
         if (specifiedLongNames == null)
           specifiedLongNames = new HashSet<>();
 
@@ -327,7 +270,7 @@ public final class Options {
 
       if (requiredNames.size() != 0) {
         final StringBuilder builder = new StringBuilder();
-        for (final String longName : requiredNames) {
+        for (final String longName : requiredNames) { // [S]
           final String shortName = nameToAltName.get(longName);
           if (shortName.equals(longName))
             builder.append("\nMissing argument: -").append(shortName);
@@ -341,38 +284,28 @@ public final class Options {
 
     // Include default values for options that are not specified
     if (binding.getOption() != null) {
-      for (final Cli.Option option : binding.getOption()) {
-        if (option.getArgument() != null && option.getArgument().getDefault() != null) {
-          final String optionName = option.getName().getLong() != null ? option.getName().getLong() : option.getName().getShort();
-          if (!optionsMap.containsKey(optionName)) {
-            final String valueSeparator = option.getArgument().getValueSeparator();
-            final String defaultValue = option.getArgument().getDefault();
-            optionsMap.put(optionName, valueSeparator != null ? new Option(optionName, valueSeparator.charAt(0), defaultValue) : new Option(optionName, defaultValue));
-          }
-        }
+      final List<Cli.Option> options = binding.getOption();
+      if (options instanceof RandomAccess) {
+        for (int i = 0, i$ = options.size(); i < i$; ++i) // [RA]
+          parseOptionMap(options.get(i), optionsMap);
+      }
+      else {
+        for (final Cli.Option option : options) // [L]
+          parseOptionMap(option, optionsMap);
       }
     }
 
     // Check pattern for specified and default options
     if (binding.getOption() != null) {
       final StringBuilder builder = new StringBuilder();
-      for (final Cli.Option option : binding.getOption()) {
-        if (option.getArgument() != null && option.getArgument().getPattern() != null) {
-          final String optionName = option.getName().getLong() != null ? option.getName().getLong() : option.getName().getShort();
-          final Option opt = optionsMap.get(optionName);
-          if (opt != null) {
-            for (final String value : opt.getValues()) {
-              if (!value.matches(option.getArgument().getPattern())) {
-                if (option.getName().getLong() == null || option.getName().getShort() == null)
-                  builder.append("\nIncorrect argument form: -").append(optionName);
-                else
-                  builder.append("\nIncorrect argument form: -").append(option.getName().getShort()).append(",--").append(option.getName().getLong());
-
-                builder.append(' ').append(value).append("\n  Required: ").append(option.getArgument().getPattern());
-              }
-            }
-          }
-        }
+      final List<Cli.Option> options = binding.getOption();
+      if (options instanceof RandomAccess) {
+        for (int i = 0, i$ = options.size(); i < i$; ++i) // [RA]
+          parseAppendBuilder(options.get(i), optionsMap, builder);
+      }
+      else {
+        for (final Cli.Option option : options) // [L]
+          parseAppendBuilder(option, optionsMap, builder);
       }
 
       if (builder.length() > 0)
@@ -381,7 +314,7 @@ public final class Options {
 
     final Class<?>[] executionStack = Classes.getExecutionStack();
     Class<?> mainClass = null;
-    for (int i = 0; i < executionStack.length && mainClass == null; ++i)
+    for (int i = 0; i < executionStack.length && mainClass == null; ++i) // [A]
       if (executionStack[i] != Options.class)
         mainClass = executionStack[i];
 
@@ -389,6 +322,96 @@ public final class Options {
       throw new IllegalStateException("Could not determine main class");
 
     return new Options(mainClass, args, optionsMap.values(), arguments == null || arguments.size() == 0 ? null : arguments.toArray(new String[arguments.size()]));
+  }
+
+  private static void parseAppendBuilder(final Cli.Option option, final HashMap<String,Option> optionsMap, final StringBuilder builder) { // [L]
+    if (option.getArgument() != null && option.getArgument().getPattern() != null) {
+      final String optionName = option.getName().getLong() != null ? option.getName().getLong() : option.getName().getShort();
+      final Option opt = optionsMap.get(optionName);
+      if (opt != null) {
+        for (final String value : opt.getValues()) { // [A]
+          if (!value.matches(option.getArgument().getPattern())) {
+            if (option.getName().getLong() == null || option.getName().getShort() == null)
+              builder.append("\nIncorrect argument form: -").append(optionName);
+            else
+              builder.append("\nIncorrect argument form: -").append(option.getName().getShort()).append(",--").append(option.getName().getLong());
+
+            builder.append(' ').append(value).append("\n  Required: ").append(option.getArgument().getPattern());
+          }
+        }
+      }
+    }
+  }
+
+  private static void parseOptionMap(final Cli.Option option, final HashMap<String,Option> optionsMap) { // [L]
+    if (option.getArgument() != null && option.getArgument().getDefault() != null) {
+      final String optionName = option.getName().getLong() != null ? option.getName().getLong() : option.getName().getShort();
+      if (!optionsMap.containsKey(optionName)) {
+        final String valueSeparator = option.getArgument().getValueSeparator();
+        final String defaultValue = option.getArgument().getDefault();
+        optionsMap.put(optionName, valueSeparator != null ? new Option(optionName, valueSeparator.charAt(0), defaultValue) : new Option(optionName, defaultValue));
+      }
+    }
+  }
+
+  private static void parseOption(final Cli.Option option, final HashMap<String,String> nameToAltName, final HashSet<String> requiredNames, final org.apache.commons.cli.Options apacheOptions) { // [L]
+    final Cli.Option.Name optionName = option.getName();
+    final String longName = optionName.getLong();
+    final String shortName = optionName.getShort();
+    final String name = longName != null ? longName : shortName;
+    if (longName == null && shortName == null) {
+      logger.error("both [long] and [short] option names are null in cli spec");
+      System.exit(1);
+    }
+
+    nameToAltName.put(name, shortName != null ? shortName : longName);
+    OptionBuilder.withLongOpt(name.equals(longName) ? longName : null);
+
+    // Record which options are required
+    if (option.getArgument() != null) {
+      final Cli.Option.Argument argument = option.getArgument();
+      final boolean isRequired = Use.REQUIRED == argument.getUse();
+      if (isRequired) {
+        OptionBuilder.isRequired();
+        requiredNames.add(longName);
+      }
+
+      final int maxOccurs = argument.getMaxOccurs() == null ? 1 : "unbounded".equals(argument.getMaxOccurs()) ? Integer.MAX_VALUE : Integer.parseInt(argument.getMaxOccurs());
+      if (maxOccurs == 1) {
+        if (isRequired)
+          OptionBuilder.hasArgs(1);
+        else
+          OptionBuilder.hasOptionalArgs(1);
+      }
+      else if (maxOccurs == Integer.MAX_VALUE) {
+        if (isRequired)
+          OptionBuilder.hasArgs();
+        else
+          OptionBuilder.hasOptionalArgs();
+      }
+      else {
+        if (isRequired)
+          OptionBuilder.hasArgs(maxOccurs);
+        else
+          OptionBuilder.hasOptionalArgs(maxOccurs);
+      }
+
+      final char valueSeparator = argument.getValueSeparator() != null ? argument.getValueSeparator().charAt(0) : ' ';
+      OptionBuilder.withArgName(formatArgumentName(argument.getLabel(), maxOccurs, valueSeparator));
+      OptionBuilder.withValueSeparator(valueSeparator);
+      if (option.getDescription() == null) {
+        logger.error("missing <description> for " + name + " option");
+        System.exit(1);
+      }
+
+      final StringBuilder description = new StringBuilder(option.getDescription());
+      if (option.getArgument().getDefault() != null)
+        description.append("\nDefault: ").append(option.getArgument().getDefault());
+
+      OptionBuilder.withDescription(description.toString());
+    }
+
+    apacheOptions.addOption(OptionBuilder.create(shortName));
   }
 
   private final HashMap<String,Option> optionNameToOption = new HashMap<>();
@@ -402,16 +425,14 @@ public final class Options {
     this.args = args;
     this.options = options == null ? Collections.emptyList() : Collections.unmodifiableCollection(options);
     this.arguments = arguments;
-    for (final Option option : this.options)
+    for (final Option option : this.options) // [C]
       optionNameToOption.put(option.getName(), option);
   }
 
   /**
-   * Returns an array of unnamed arguments in original order, or {@code null} in
-   * case there are no unnamed arguments.
+   * Returns an array of unnamed arguments in original order, or {@code null} in case there are no unnamed arguments.
    *
-   * @return An array of unnamed arguments in original order, or {@code null} in
-   *         case there are no unnamed arguments.
+   * @return An array of unnamed arguments in original order, or {@code null} in case there are no unnamed arguments.
    */
   public String[] getArguments() {
     return arguments;
@@ -455,8 +476,7 @@ public final class Options {
   }
 
   /**
-   * Prints the command that would be used to execute a process with equivalent
-   * options as represented by this instance.
+   * Prints the command that would be used to execute a process with equivalent options as represented by this instance.
    *
    * @param ps The {@link PrintStream} to which the command is to be printed.
    * @param mainClass The class with {@code main(String[])}.
@@ -464,7 +484,7 @@ public final class Options {
    */
   public void printCommand(final PrintStream ps, final Class<?> mainClass) {
     ps.print("java " + mainClass.getName());
-    for (final String arg : args)
+    for (final String arg : args) // [A]
       ps.print(" " + arg);
   }
 
@@ -474,7 +494,7 @@ public final class Options {
     if (args.length == 0)
       return buffer.toString();
 
-    for (final String arg : args)
+    for (final String arg : args) // [A]
       buffer.append(' ').append(arg);
 
     return buffer.toString();

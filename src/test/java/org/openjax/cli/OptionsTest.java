@@ -34,7 +34,7 @@ public class OptionsTest {
     assertNotNull(options);
     System.out.println(options.toString());
     System.out.println("------------------------------------------");
-    for (final Option option : options.getOptions())
+    for (final Option option : options.getOptions()) // [C]
       System.out.println("[" + option.getName() + "]: " + Arrays.toString(option.getValues()));
 
     System.out.println("[arguments]: " + Arrays.toString(options.getArguments()));
@@ -51,7 +51,7 @@ public class OptionsTest {
     };
 
     System.out.print("java " + getClass().getSimpleName());
-    for (final String arg : args)
+    for (final String arg : args) // [A]
       System.out.print(" " + arg);
 
     logger.info("\n");

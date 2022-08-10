@@ -28,8 +28,7 @@ public class Option {
   private final char valueSeparator;
 
   /**
-   * Creates a new {@link Option} with the specified name, value separator, and
-   * an array of associated values.
+   * Creates a new {@link Option} with the specified name, value separator, and an array of associated values.
    *
    * @param name The name.
    * @param valueSeparator The value separator.
@@ -42,8 +41,7 @@ public class Option {
   }
 
   /**
-   * Creates a new {@link Option} with the specified name, value separator, and
-   * single associated value.
+   * Creates a new {@link Option} with the specified name, value separator, and single associated value.
    *
    * @param name The name.
    * @param values The associated values.

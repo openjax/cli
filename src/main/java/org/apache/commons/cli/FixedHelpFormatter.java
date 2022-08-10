@@ -36,7 +36,8 @@ public class FixedHelpFormatter extends HelpFormatter {
 
     int max = 0;
     StringBuffer optBuf;
-    for (final Iterator<Option> i = optList.iterator(); i.hasNext();) {
+    // FIXME: The implementation of this iteration is convoluted
+    for (final Iterator<Option> i = optList.iterator(); i.hasNext();) { // [X]
       final Option option = i.next();
       optBuf = new StringBuffer(8);
 
@@ -68,7 +69,8 @@ public class FixedHelpFormatter extends HelpFormatter {
     }
 
     int x = 0;
-    for (final Iterator<Option> i = optList.iterator(); i.hasNext();) {
+    // FIXME: The implementation of this iteration is convoluted
+    for (final Iterator<Option> i = optList.iterator(); i.hasNext();) { // [X]
       final Option option = i.next();
       optBuf = new StringBuffer(prefixList.get(x++).toString());
 
