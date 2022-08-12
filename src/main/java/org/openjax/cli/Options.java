@@ -97,7 +97,7 @@ public final class Options {
     final PrintWriter pw = new PrintWriter(ps);
     final StringBuilder args = new StringBuilder(apacheOptions.getOptions().size() > 0 ? " [options]" : "");
     if (cliArguments != null) {
-      for (short i = 1; i <= cliArguments.getMinOccurs(); ++i) // [N]
+      for (short i = 1, i$ = cliArguments.getMinOccurs(); i <= i$; ++i) // [N]
         args.append(" <").append(cliArguments.getLabel()).append(i != 1 ? i : "").append('>');
 
       final boolean maxUnbounded = "unbounded".equals(cliArguments.getMaxOccurs());
@@ -224,7 +224,7 @@ public final class Options {
           if (e.getMessage().startsWith("Unrecognized option: ")) {
             final String unrecognizedOption = e.getMessage().substring(21);
             logger.error("Unrecognized option: " + unrecognizedOption);
-            for (int i = 0; i < args.length; ++i) // [A]
+            for (int i = 0, i$ = args.length; i < i$; ++i) // [A]
               if (args[i].equals(unrecognizedOption))
                 args[i] = "--help";
           }
