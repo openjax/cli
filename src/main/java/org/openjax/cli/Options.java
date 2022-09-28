@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.RandomAccess;
 
 import javax.xml.XMLConstants;
@@ -198,10 +199,11 @@ public final class Options {
       }
     }
 
-    if (binding.getOption() != null) {
-      final List<Cli.Option> options = binding.getOption();
+    final List<Cli.Option> options = binding.getOption();
+    int i$ = 0;
+    if (options != null && (i$ = options.size()) > 0) {
       if (options instanceof RandomAccess) {
-        for (int i = 0, i$ = options.size(); i < i$; ++i) // [RA]
+        for (int i = 0; i < i$; ++i) // [RA]
           parseOption(options.get(i), nameToAltName, requiredNames, apacheOptions);
       }
       else {
@@ -224,9 +226,9 @@ public final class Options {
           if (e.getMessage().startsWith("Unrecognized option: ")) {
             final String unrecognizedOption = e.getMessage().substring(21);
             logger.error("Unrecognized option: " + unrecognizedOption);
-            for (int i = 0, i$ = args.length; i < i$; ++i) // [A]
-              if (args[i].equals(unrecognizedOption))
-                args[i] = "--help";
+            for (int j = 0, j$ = args.length; j < j$; ++j) // [A]
+              if (args[j].equals(unrecognizedOption))
+                args[j] = "--help";
           }
           else {
             throw new IllegalArgumentException(e);
@@ -283,27 +285,20 @@ public final class Options {
     }
 
     // Include default values for options that are not specified
-    if (binding.getOption() != null) {
-      final List<Cli.Option> options = binding.getOption();
+    // Check pattern for specified and default options
+    if (i$ > 0) {
+      final StringBuilder builder = new StringBuilder();
       if (options instanceof RandomAccess) {
-        for (int i = 0, i$ = options.size(); i < i$; ++i) // [RA]
+        for (int i = 0; i < i$; ++i) // [RA]
           parseOptionMap(options.get(i), optionsMap);
+
+        for (int i = 0; i < i$; ++i) // [RA]
+          parseAppendBuilder(options.get(i), optionsMap, builder);
       }
       else {
         for (final Cli.Option option : options) // [L]
           parseOptionMap(option, optionsMap);
-      }
-    }
 
-    // Check pattern for specified and default options
-    if (binding.getOption() != null) {
-      final StringBuilder builder = new StringBuilder();
-      final List<Cli.Option> options = binding.getOption();
-      if (options instanceof RandomAccess) {
-        for (int i = 0, i$ = options.size(); i < i$; ++i) // [RA]
-          parseAppendBuilder(options.get(i), optionsMap, builder);
-      }
-      else {
         for (final Cli.Option option : options) // [L]
           parseAppendBuilder(option, optionsMap, builder);
       }
@@ -324,7 +319,7 @@ public final class Options {
     return new Options(mainClass, args, optionsMap.values(), arguments == null || arguments.size() == 0 ? null : arguments.toArray(new String[arguments.size()]));
   }
 
-  private static void parseAppendBuilder(final Cli.Option option, final HashMap<String,Option> optionsMap, final StringBuilder builder) { // [L]
+  private static void parseAppendBuilder(final Cli.Option option, final HashMap<String,Option> optionsMap, final StringBuilder builder) {
     if (option.getArgument() != null && option.getArgument().getPattern() != null) {
       final String optionName = option.getName().getLong() != null ? option.getName().getLong() : option.getName().getShort();
       final Option opt = optionsMap.get(optionName);
@@ -343,7 +338,7 @@ public final class Options {
     }
   }
 
-  private static void parseOptionMap(final Cli.Option option, final HashMap<String,Option> optionsMap) { // [L]
+  private static void parseOptionMap(final Cli.Option option, final HashMap<String,Option> optionsMap) {
     if (option.getArgument() != null && option.getArgument().getDefault() != null) {
       final String optionName = option.getName().getLong() != null ? option.getName().getLong() : option.getName().getShort();
       if (!optionsMap.containsKey(optionName)) {
@@ -354,7 +349,7 @@ public final class Options {
     }
   }
 
-  private static void parseOption(final Cli.Option option, final HashMap<String,String> nameToAltName, final HashSet<String> requiredNames, final org.apache.commons.cli.Options apacheOptions) { // [L]
+  private static void parseOption(final Cli.Option option, final HashMap<String,String> nameToAltName, final HashSet<String> requiredNames, final org.apache.commons.cli.Options apacheOptions) {
     final Cli.Option.Name optionName = option.getName();
     final String longName = optionName.getLong();
     final String shortName = optionName.getShort();
@@ -414,7 +409,7 @@ public final class Options {
     apacheOptions.addOption(OptionBuilder.create(shortName));
   }
 
-  private final HashMap<String,Option> optionNameToOption = new HashMap<>();
+  private final Map<String,Option> optionNameToOption;
   private final Class<?> mainClass;
   private final String[] args;
   private final Collection<Option> options;
@@ -423,10 +418,18 @@ public final class Options {
   private Options(final Class<?> mainClass, final String[] args, final Collection<Option> options, final String[] arguments) {
     this.mainClass = mainClass;
     this.args = args;
-    this.options = options == null ? Collections.emptyList() : Collections.unmodifiableCollection(options);
+    final int i$;
+    if (options == null || (i$ = options.size()) == 0) {
+      this.options = Collections.EMPTY_LIST;
+      this.optionNameToOption = Collections.EMPTY_MAP;
+    }
+    else {
+      this.options = Collections.unmodifiableCollection(options);
+      this.optionNameToOption = new HashMap<>(i$);
+      for (final Option option : this.options) // [C]
+        optionNameToOption.put(option.getName(), option);
+    }
     this.arguments = arguments;
-    for (final Option option : this.options) // [C]
-      optionNameToOption.put(option.getName(), option);
   }
 
   /**
