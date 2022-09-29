@@ -37,57 +37,59 @@ public class FixedHelpFormatter extends HelpFormatter {
     int max = 0;
     StringBuffer optBuf;
     // FIXME: The implementation of this iteration is convoluted
-    for (final Iterator<Option> i = optList.iterator(); i.hasNext();) { // [X]
-      final Option option = i.next();
-      optBuf = new StringBuffer(8);
+    if (optList.size() > 0) {
+      for (final Iterator<Option> i = optList.iterator(); i.hasNext();) { // [I]
+        final Option option = i.next();
+        optBuf = new StringBuffer(8);
 
-      if (option.getOpt() == null) {
-        optBuf.append(lpad).append("   ").append(getLongOptPrefix()).append(option.getLongOpt());
-      }
-      else {
-        optBuf.append(lpad).append(getOptPrefix()).append(option.getOpt());
-
-        if (option.hasLongOpt()) {
-          optBuf.append(',').append(getLongOptPrefix()).append(option.getLongOpt());
-        }
-      }
-
-      if (option.hasArg()) {
-        if (option.hasArgName()) {
-          if (option.isRequired())
-            optBuf.append(" <").append(option.getArgName()).append('>');
-          else
-            optBuf.append(" [").append(option.getArgName()).append(']');
+        if (option.getOpt() == null) {
+          optBuf.append(lpad).append("   ").append(getLongOptPrefix()).append(option.getLongOpt());
         }
         else {
-          optBuf.append(' ');
+          optBuf.append(lpad).append(getOptPrefix()).append(option.getOpt());
+
+          if (option.hasLongOpt()) {
+            optBuf.append(',').append(getLongOptPrefix()).append(option.getLongOpt());
+          }
         }
+
+        if (option.hasArg()) {
+          if (option.hasArgName()) {
+            if (option.isRequired())
+              optBuf.append(" <").append(option.getArgName()).append('>');
+            else
+              optBuf.append(" [").append(option.getArgName()).append(']');
+          }
+          else {
+            optBuf.append(' ');
+          }
+        }
+
+        prefixList.add(optBuf);
+        max = Math.max(optBuf.length(), max);
       }
 
-      prefixList.add(optBuf);
-      max = Math.max(optBuf.length(), max);
-    }
+      int x = 0;
+      // FIXME: The implementation of this iteration is convoluted
+      for (final Iterator<Option> i = optList.iterator(); i.hasNext();) { // [I]
+        final Option option = i.next();
+        optBuf = new StringBuffer(prefixList.get(x++).toString());
 
-    int x = 0;
-    // FIXME: The implementation of this iteration is convoluted
-    for (final Iterator<Option> i = optList.iterator(); i.hasNext();) { // [X]
-      final Option option = i.next();
-      optBuf = new StringBuffer(prefixList.get(x++).toString());
+        if (optBuf.length() < max) {
+          optBuf.append(createPadding(max - optBuf.length()));
+        }
 
-      if (optBuf.length() < max) {
-        optBuf.append(createPadding(max - optBuf.length()));
-      }
+        optBuf.append(dpad);
 
-      optBuf.append(dpad);
+        final int nextLineTabStop = max + descPad;
+        if (option.getDescription() != null) {
+          optBuf.append(option.getDescription());
+        }
 
-      final int nextLineTabStop = max + descPad;
-      if (option.getDescription() != null) {
-        optBuf.append(option.getDescription());
-      }
-
-      renderWrappedText(sb, width, nextLineTabStop, optBuf.toString());
-      if (i.hasNext()) {
-        sb.append(getNewLine());
+        renderWrappedText(sb, width, nextLineTabStop, optBuf.toString());
+        if (i.hasNext()) {
+          sb.append(getNewLine());
+        }
       }
     }
 
