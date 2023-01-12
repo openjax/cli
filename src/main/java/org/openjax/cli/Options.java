@@ -194,7 +194,7 @@ public final class Options {
       argumentsMinOccurs = cliArguments.getMinOccurs();
       argumentsMaxOccurs = "unbounded".equals(cliArguments.getMaxOccurs()) ? Short.MAX_VALUE : Short.parseShort(cliArguments.getMaxOccurs());
       if (argumentsMaxOccurs < argumentsMinOccurs) {
-        logger.error("minOccurs > maxOccurs on <arguments> element");
+        if (logger.isErrorEnabled()) logger.error("minOccurs > maxOccurs on <arguments> element");
         System.exit(1);
       }
     }
@@ -225,7 +225,7 @@ public final class Options {
         catch (final UnrecognizedOptionException e) {
           if (e.getMessage().startsWith("Unrecognized option: ")) {
             final String unrecognizedOption = e.getMessage().substring(21);
-            logger.error("Unrecognized option: " + unrecognizedOption);
+            if (logger.isErrorEnabled()) logger.error("Unrecognized option: " + unrecognizedOption);
             for (int j = 0, j$ = args.length; j < j$; ++j) // [A]
               if (args[j].equals(unrecognizedOption))
                 args[j] = "--help";
@@ -355,7 +355,7 @@ public final class Options {
     final String shortName = optionName.getShort();
     final String name = longName != null ? longName : shortName;
     if (longName == null && shortName == null) {
-      logger.error("both [long] and [short] option names are null in cli spec");
+      if (logger.isErrorEnabled()) logger.error("both [long] and [short] option names are null in cli spec");
       System.exit(1);
     }
 
@@ -395,7 +395,7 @@ public final class Options {
       OptionBuilder.withArgName(formatArgumentName(argument.getLabel(), maxOccurs, valueSeparator));
       OptionBuilder.withValueSeparator(valueSeparator);
       if (option.getDescription() == null) {
-        logger.error("missing <description> for " + name + " option");
+        if (logger.isErrorEnabled()) logger.error("missing <description> for " + name + " option");
         System.exit(1);
       }
 
