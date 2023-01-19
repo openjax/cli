@@ -307,16 +307,19 @@ public final class Options {
         Options.trapPrintHelp(apacheOptions, cliArguments, builder.substring(1), System.out);
     }
 
-    final Class<?>[] executionStack = Classes.getExecutionStack();
-    Class<?> mainClass = null;
-    for (int i = 0; i < executionStack.length && mainClass == null; ++i) // [A]
-      if (executionStack[i] != Options.class)
-        mainClass = executionStack[i];
+    final StackTraceElement[] executionStack = new Throwable().getStackTrace();
+    String mainClassName = null;
+    for (int i = 0; i < executionStack.length; ++i) { // [A]
+      if (!executionStack[i].getClassName().equals(Options.class.getName())) {
+        mainClassName = executionStack[i].getClassName();
+        break;
+      }
+    }
 
-    if (mainClass == null)
+    if (mainClassName == null)
       throw new IllegalStateException("Could not determine main class");
 
-    return new Options(mainClass, args, optionsMap.values(), arguments == null || arguments.size() == 0 ? null : arguments.toArray(new String[arguments.size()]));
+    return new Options(mainClassName, args, optionsMap.values(), arguments == null || arguments.size() == 0 ? null : arguments.toArray(new String[arguments.size()]));
   }
 
   private static void parseAppendBuilder(final Cli.Option option, final HashMap<String,Option> optionsMap, final StringBuilder builder) {
@@ -410,13 +413,13 @@ public final class Options {
   }
 
   private final Map<String,Option> optionNameToOption;
-  private final Class<?> mainClass;
+  private final String mainClassName;
   private final String[] args;
   private final Collection<Option> options;
   private final String[] arguments;
 
-  private Options(final Class<?> mainClass, final String[] args, final Collection<Option> options, final String[] arguments) {
-    this.mainClass = mainClass;
+  private Options(final String mainClass, final String[] args, final Collection<Option> options, final String[] arguments) {
+    this.mainClassName = mainClass;
     this.args = args;
     final int i$;
     if (options == null || (i$ = options.size()) == 0) {
@@ -493,7 +496,7 @@ public final class Options {
 
   @Override
   public String toString() {
-    final StringBuilder buffer = new StringBuilder(mainClass.getName());
+    final StringBuilder buffer = new StringBuilder(mainClassName);
     if (args.length == 0)
       return buffer.toString();
 
