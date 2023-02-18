@@ -27,6 +27,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.RandomAccess;
@@ -49,7 +50,6 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
-import org.libj.lang.Classes;
 import org.openjax.cli_1_1.Cli;
 import org.openjax.cli_1_1.Use;
 import org.slf4j.Logger;
@@ -203,12 +203,14 @@ public final class Options {
     int i$ = 0;
     if (options != null && (i$ = options.size()) > 0) {
       if (options instanceof RandomAccess) {
-        for (int i = 0; i < i$; ++i) // [RA]
+        int i = 0; do // [RA]
           parseOption(options.get(i), nameToAltName, requiredNames, apacheOptions);
+        while (++i < i$);
       }
       else {
-        for (final Cli.Option option : options) // [L]
-          parseOption(option, nameToAltName, requiredNames, apacheOptions);
+        final Iterator<Cli.Option> i = options.iterator(); do // [I]
+          parseOption(i.next(), nameToAltName, requiredNames, apacheOptions);
+        while (i.hasNext());
       }
     }
 
@@ -289,18 +291,22 @@ public final class Options {
     if (i$ > 0) {
       final StringBuilder builder = new StringBuilder();
       if (options instanceof RandomAccess) {
-        for (int i = 0; i < i$; ++i) // [RA]
+        int i = 0; do // [RA]
           parseOptionMap(options.get(i), optionsMap);
+        while (++i < i$);
 
-        for (int i = 0; i < i$; ++i) // [RA]
+        i = 0; do // [RA]
           parseAppendBuilder(options.get(i), optionsMap, builder);
+        while (++i < i$);
       }
       else {
-        for (final Cli.Option option : options) // [L]
-          parseOptionMap(option, optionsMap);
+        Iterator<Cli.Option> i = options.iterator(); do // [I]
+          parseOptionMap(i.next(), optionsMap);
+        while (i.hasNext());
 
-        for (final Cli.Option option : options) // [L]
-          parseAppendBuilder(option, optionsMap, builder);
+        i = options.iterator(); do // [I]
+          parseAppendBuilder(i.next(), optionsMap, builder);
+        while (i.hasNext());
       }
 
       if (builder.length() > 0)
