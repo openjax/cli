@@ -54,7 +54,7 @@ public class OptionsTest {
     for (final String arg : args) // [A]
       System.out.print(" " + arg);
 
-    if (logger.isInfoEnabled()) logger.info("\n");
+    if (logger.isInfoEnabled()) { logger.info("\n"); }
     final Options options = Options.parse(ClassLoader.getSystemClassLoader().getResource("cli.xml"), args);
     main(options);
     assertEquals("config.xml", options.getOption("config"));

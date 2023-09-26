@@ -194,7 +194,7 @@ public final class Options {
       argumentsMinOccurs = cliArguments.getMinOccurs();
       argumentsMaxOccurs = "unbounded".equals(cliArguments.getMaxOccurs()) ? Short.MAX_VALUE : Short.parseShort(cliArguments.getMaxOccurs());
       if (argumentsMaxOccurs < argumentsMinOccurs) {
-        if (logger.isErrorEnabled()) logger.error("minOccurs > maxOccurs on <arguments> element");
+        if (logger.isErrorEnabled()) { logger.error("minOccurs > maxOccurs on <arguments> element"); }
         System.exit(1);
       }
     }
@@ -203,12 +203,14 @@ public final class Options {
     int i$ = 0;
     if (options != null && (i$ = options.size()) > 0) {
       if (options instanceof RandomAccess) {
-        int i = 0; do // [RA]
+        int i = 0;
+        do // [RA]
           parseOption(options.get(i), nameToAltName, requiredNames, apacheOptions);
         while (++i < i$);
       }
       else {
-        final Iterator<Cli.Option> i = options.iterator(); do // [I]
+        final Iterator<Cli.Option> i = options.iterator();
+        do // [I]
           parseOption(i.next(), nameToAltName, requiredNames, apacheOptions);
         while (i.hasNext());
       }
@@ -227,7 +229,7 @@ public final class Options {
         catch (final UnrecognizedOptionException e) {
           if (e.getMessage().startsWith("Unrecognized option: ")) {
             final String unrecognizedOption = e.getMessage().substring(21);
-            if (logger.isErrorEnabled()) logger.error("Unrecognized option: " + unrecognizedOption);
+            if (logger.isErrorEnabled()) { logger.error("Unrecognized option: " + unrecognizedOption); }
             for (int j = 0, j$ = args.length; j < j$; ++j) // [A]
               if (args[j].equals(unrecognizedOption))
                 args[j] = "--help";
@@ -291,20 +293,24 @@ public final class Options {
     if (i$ > 0) {
       final StringBuilder builder = new StringBuilder();
       if (options instanceof RandomAccess) {
-        int i = 0; do // [RA]
+        int i = 0;
+        do // [RA]
           parseOptionMap(options.get(i), optionsMap);
         while (++i < i$);
 
-        i = 0; do // [RA]
+        i = 0;
+        do // [RA]
           parseAppendBuilder(options.get(i), optionsMap, builder);
         while (++i < i$);
       }
       else {
-        Iterator<Cli.Option> i = options.iterator(); do // [I]
+        Iterator<Cli.Option> i = options.iterator();
+        do // [I]
           parseOptionMap(i.next(), optionsMap);
         while (i.hasNext());
 
-        i = options.iterator(); do // [I]
+        i = options.iterator();
+        do // [I]
           parseAppendBuilder(i.next(), optionsMap, builder);
         while (i.hasNext());
       }
@@ -364,7 +370,7 @@ public final class Options {
     final String shortName = optionName.getShort();
     final String name = longName != null ? longName : shortName;
     if (longName == null && shortName == null) {
-      if (logger.isErrorEnabled()) logger.error("both [long] and [short] option names are null in cli spec");
+      if (logger.isErrorEnabled()) { logger.error("both [long] and [short] option names are null in cli spec"); }
       System.exit(1);
     }
 
@@ -404,7 +410,7 @@ public final class Options {
       OptionBuilder.withArgName(formatArgumentName(argument.getLabel(), maxOccurs, valueSeparator));
       OptionBuilder.withValueSeparator(valueSeparator);
       if (option.getDescription() == null) {
-        if (logger.isErrorEnabled()) logger.error("missing <description> for " + name + " option");
+        if (logger.isErrorEnabled()) { logger.error("missing <description> for " + name + " option"); }
         System.exit(1);
       }
 
