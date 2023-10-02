@@ -30,7 +30,7 @@ public class FixedHelpFormatter extends HelpFormatter {
     // -a is opt and --aaa is long opt; in parallel look for
     // the longest opt string this list will be then used to
     // sort options ascending
-    final List<StringBuffer> prefixList = new ArrayList<>();
+    final ArrayList<StringBuffer> prefixList = new ArrayList<>();
     final List<Option> optList = options.helpOptions();
     optList.sort(getOptionComparator());
 
