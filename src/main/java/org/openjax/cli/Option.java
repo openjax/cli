@@ -56,7 +56,7 @@ public class Option {
    * @return The name.
    */
   public String getName() {
-    return this.name;
+    return name;
   }
 
   /**
@@ -65,7 +65,7 @@ public class Option {
    * @return The associated values.
    */
   public String[] getValues() {
-    return this.values;
+    return values;
   }
 
   /**
@@ -74,7 +74,7 @@ public class Option {
    * @return The value separator.
    */
   public char getValueSeparator() {
-    return this.valueSeparator;
+    return valueSeparator;
   }
 
   @Override
