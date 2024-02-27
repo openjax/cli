@@ -1,6 +1,9 @@
 # Changes by Version
 
-## [v1.1.11-SNAPSHOT](https://github.com/libj/util/compare/bd9eebe68ba0a4caeef6cd82ce1473a04744e9f9..HEAD)
+## [v1.1.12-SNAPSHOT](https://github.com/libj/util/compare/213817b5804a3ec7e280b28abc6eabd53612dfeb..HEAD)
+
+## [v1.1.11](https://github.com/libj/util/compare/bd9eebe68ba0a4caeef6cd82ce1473a04744e9f9..213817b5804a3ec7e280b28abc6eabd53612dfeb) (2024-02-27)
+* #3 Redeclare `List` as `ArrayList`
 
 ## [v1.1.10](https://github.com/openjax/cli/compare/fc4ac81543bfb6298be2707a90b73bced3a40043..bd9eebe68ba0a4caeef6cd82ce1473a04744e9f9) (2023-09-20)
 * #2 Upgrade Maven dependencies
